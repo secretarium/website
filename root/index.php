@@ -84,11 +84,11 @@
 								if(a) l.clone().css({ position: "absolute", left: nx, top: ny, height: "8%", "z-index": z }).appendTo(w).show();
 								p.push([nx, ny]);
 								setTimeout(() => {
-									if (Math.random() > .6) add(nx - r * rw * lnw, ny - r * rh * lnh * 2, 1);
+									if (Math.random() > .5) add(nx + r * rw * lnw, ny + r * rh * lnh * 2, 1);
+									if (Math.random() > .3) add(nx - r * rw * lnw, ny - r * rh * lnh * 2, 1);
 									add(nx - r * rw * lnw * 2, ny - r * rh * lnh, 1);
 									add(nx - r * rw * lnw, ny + r * rh * lnh, 1);
-									if (Math.random() > .7) add(nx + r * rw * lnw, ny + r * rh * lnh * 2, 1);
-								}, 100 + Math.random() * 100);
+								}, 40 + Math.random() * 80);
 							}
 						};
 					t.clone().css({ position: "absolute", left: x, top: y, height: "8%", "z-index": z++ }).appendTo(w).show();
