@@ -61,20 +61,14 @@ $(document).ready(function () {
 
     $('#fullpage').fullpage({
         menu: '#topMenu',
-        anchors: ['home', 'about'],
+        anchors: ['home', 'what', 'why', 'technology', 'about'],
         // scrollOverflow: false,
         autoScrolling: true,
         navigation: true,
         navigationPosition: 'left',
-        navigationTooltips: ['First page', 'Second page', 'Third and last page'],
+        navigationTooltips: ['Home', 'What', 'Why', 'Our Technology', 'About us'],
         licenseKey: '98AFD12E-428246E1-B7908FFE-69A37211'
     });
-
-    /* ------------------------------------- */
-    /* Animate scroll fade adding
-    /* ------------------------------------- */
-
-    $('.main-content').find('*').addClass('animate-element');
 
     /* ------------------------------------- */
     /* Menu button
@@ -103,13 +97,6 @@ $(document).ready(function () {
 
         else {
             $("#fp-nav").removeClass("transition-desktop-mobile");
-        }
-
-        if ($(this).width() < 481) {
-            $(".brand-logo").prependTo("#section0 .fp-tableCell");
-        }
-        else {
-            $(".brand-logo").prependTo("body");
         }
     });
 
