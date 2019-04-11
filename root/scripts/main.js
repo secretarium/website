@@ -61,12 +61,12 @@ $(document).ready(function () {
 
     $('#fullpage').fullpage({
         menu: '#topMenu',
-        anchors: ['home', 'what', 'what', 'why', 'technology', 'technology', 'about'],
+        anchors: ['home', 'what', 'what', 'what', 'why', 'whom', 'technology', 'technology', 'technology', 'about'],
         // scrollOverflow: false,
         autoScrolling: true,
         navigation: true,
         navigationPosition: 'left',
-        navigationTooltips: ['Home', 'What it is', 'What it does', 'Why', 'Our Technology', 'About us'],
+        navigationTooltips: ['Home', 'What it is', 'What it does', 'Scaling', 'Why', 'Whom for', 'Our Technology', 'Secret Processing', 'Secret Mixing', 'About us'],
         scrollBar: false,
         scrollOverflow: true,
         scrollOverflowReset: true,
