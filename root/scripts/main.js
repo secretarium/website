@@ -48,7 +48,7 @@ $(window).on('load', function () {
 
         $("#fp-nav").addClass('notransition');
 
-    }, 4800);
+    }, 3800);
 
 });
 
@@ -61,12 +61,21 @@ $(document).ready(function () {
 
     $('#fullpage').fullpage({
         menu: '#topMenu',
-        anchors: ['home', 'what', 'why', 'technology', 'about'],
+        anchors: ['home', 'what', 'what', 'why', 'technology', 'technology', 'about'],
         // scrollOverflow: false,
         autoScrolling: true,
         navigation: true,
         navigationPosition: 'left',
-        navigationTooltips: ['Home', 'What', 'Why', 'Our Technology', 'About us'],
+        navigationTooltips: ['Home', 'What it is', 'What it does', 'Why', 'Our Technology', 'About us'],
+        scrollBar: false,
+        scrollOverflow: true,
+        scrollOverflowReset: true,
+        scrollOverflowOptions: {
+            momentum: false
+        },
+        css3: true,
+        fitToSection: true,
+        fitToSectionDelay: 1000,
         licenseKey: '98AFD12E-428246E1-B7908FFE-69A37211'
     });
 
@@ -87,16 +96,10 @@ $(document).ready(function () {
     /* ------------------------------------- */
 
     $(window).on("load resize", function () {
-        if ($(this).width() < 1201) {
-            $("#fp-nav").addClass("transition-desktop-mobile");
-        }
-
-        else if ($(this).height() < 750) {
-            $("#fp-nav").addClass("transition-desktop-mobile");
-        }
-
-        else {
-            $("#fp-nav").removeClass("transition-desktop-mobile");
+        if ($(this).width() < 1001) {
+            $("header .row .col-md-9").removeClass("col-md-9").addClass("col-md-12");
+        } else {
+            $("header .row .col-md-12").removeClass("col-md-12").addClass("col-md-9");
         }
     });
 
