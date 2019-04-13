@@ -522,6 +522,48 @@ sup {
     -webkit-transition: all 0.3s ease-in-out !important;
     transition: all 0.3s ease-in-out !important;
 }
+body.fp-viewing-home .brand-logo {
+    left: -200px;
+}
+
+/* ------------------------------------- */
+/* ANIMATION 
+/* ------------------------------------- */
+
+#liquid-scene, .veil {
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    margin: auto;
+}
+#liquid-scene {
+    z-index: -30;
+    background-image: linear-gradient(-206deg, #f5f5f5 0%, #eeeeee 100%);
+}
+#liquid {
+    width: 100%;
+    height: 100%;
+}
+.veil {
+    background-image: url('../images/inverse_pattern.svg');
+    background-size: 100px;
+    /* z-index: -20 */
+}
+.veil-overlay {
+    position: fixed;
+    top: 313px;
+    left: 201px;
+    width: 434px;
+    height: 200px;
+    background-color: white;
+    background-image: url('../images/inverse_overlay.svg');
+    background-size: 304px auto;
+    background-repeat: no-repeat;
+    background-position: 70px 67px;
+}
 
 /* ------------------------------------- */
 /* HEADER 
@@ -543,6 +585,9 @@ header {
     transform: translate3d(0, -100px, 0);
     background-color: #ffffff;
     white-space: nowrap;
+}
+body.fp-viewing-home header {
+    padding-left: 50px;
 }
 header.loaded {
     opacity: 1;
@@ -742,6 +787,9 @@ header .header-nav ul li a i {
 }
 #fp-nav ul li:first-of-type {
     opacity: 0;
+}
+body.fp-viewing-home #fp-nav.fp-left {
+    left: -50px;
 }
 
 /* ------------------------------------- */
