@@ -556,13 +556,19 @@ body.fp-viewing-home .brand-logo {
     position: fixed;
     top: 313px;
     left: 201px;
-    width: 434px;
-    height: 200px;
-    background-color: white;
+    width: 302px;
+    height: 54px;
+    /* background-color: white; */
     background-image: url('../images/inverse_overlay.svg');
-    background-size: 304px auto;
+    background-size: 301px auto;
     background-repeat: no-repeat;
-    background-position: 70px 67px;
+    /* background-position: 70px 67px;     */
+    opacity: 0;
+    -webkit-transition: all 0.3s ease-in-out !important;
+    transition: all 0.3s ease-in-out !important;
+}
+body.fp-viewing-home .veil-overlay {
+    opacity: 1;
 }
 
 /* ------------------------------------- */
@@ -745,7 +751,7 @@ header .header-nav ul li a i {
     opacity: 1;
 }
 #fullpage .section:not(#section0) {
-    background: #f2f2f2;
+    background: #f2f2f2db;
 }
 #fullpage .section.active {
     visibility: visible;

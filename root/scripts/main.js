@@ -101,6 +101,11 @@ $(document).ready(function () {
         } else {
             $("header .row .col-md-12").removeClass("col-md-12").addClass("col-md-9");
         }
+        var veil = $('.veil-overlay');
+        veil.css({
+            left: `${Math.round(($(window).width() / 2 - veil.width() / 2) / 33) * 33 + 5}px`,
+            top: `${Math.round(($(window).height() / 2 - veil.height() / 2) / 33) * 33 - 16}px`
+        })
     });
 
     /* ------------------------------------- */

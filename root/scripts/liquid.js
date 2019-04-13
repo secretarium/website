@@ -58,7 +58,7 @@
         var min = .1;
         var max = 1.5;
         this.vel = new Point(
-            (Math.random() > 0.5 ? 1 : -1) * (0.2 + Math.random() * 0.25), (Math.random() > 0.5 ? 1 : -1) * (0.2 + Math.random())
+            (Math.random() > 0.5 ? 1 : -1) * (0.5 + Math.random() * 0.25), (Math.random() > 0.5 ? 1 : -1) * (0.5 + Math.random())
         );
         this.pos = new Point(
             parent.width * 0.2 + Math.random() * parent.width * 0.6,
@@ -96,7 +96,7 @@
 
     // lavalamp constructor
     var LavaLamp = function (width, height, numBalls, c0, c1) {
-        this.step = 5;
+        this.step = 30;
         this.width = width;
         this.height = height;
         this.wh = Math.min(width, height);
@@ -258,7 +258,7 @@
     screen.resize();
 
     // create LavaLamps
-    lava0 = new LavaLamp(screen.width, screen.height, 3, "#cccccc", "#dddddd");
+    lava0 = new LavaLamp(screen.width, screen.height, 5, "#fff", "#fff");
 
     run();
 
