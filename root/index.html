@@ -31,24 +31,24 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-12 col-md-9 header-nav">
-						<ul class="on-left">
+						<ul id="menu" class="on-left">
 							<li data-menuanchor="home" class="logo">
 								<a href="#home"></a>
 							</li>
-							<li data-menuanchor="what">
-								<a href="#what">What</a>
+							<li data-menuanchor="what-it-is">
+								<a href="#what-it-is">What</a>
 							</li>
 							<li data-menuanchor="why">
 								<a href="#why">Why</a>
 							</li>
-							<li data-menuanchor="whom">
-								<a href="#whom">Whom for</a>
+							<li data-menuanchor="for-whom">
+								<a href="#for-whom">Whom for</a>
 							</li>
 							<li data-menuanchor="technology">
 								<a href="#technology">Technology</a>
 							</li>
-							<li data-menuanchor="about">
-								<a href="#about">About us</a>
+							<li data-menuanchor="team">
+								<a href="#team">About us</a>
 							</li>
 						</ul>
 					</div>
@@ -82,9 +82,9 @@
 			<img src="images/secretarium_logo_grey.png" class="stage-logo" />
 			<div id="stage"></div>
 			<full-page ref="fullpage" :options="options" id="fullpage">
-				<div class="section">
+				<div class="section" data-anchor="home">
 				</div>
-				<div class="section">
+				<div class="section" data-anchor="what-it-is">
 					<section>
 						<div class="container">
 							<div class="container-inside">
@@ -122,7 +122,7 @@
 						</div>
 					</section>
 				</div>
-				<div class="section">
+				<div class="section" data-anchor="what-it-does">
 					<section>
 						<div class="container">
 							<div class="container-inside">
@@ -163,7 +163,7 @@
 						</div>
 					</section>
 				</div>
-				<div class="section">
+				<div class="section" data-anchor="scaling">
 					<section>
 						<div class="container">
 							<div class="container-inside">
@@ -188,7 +188,7 @@
 						</div>
 					</section>
 				</div>
-				<div class="section">
+				<div class="section" data-anchor="why">
 					<section>
 						<div class="container">
 							<div class="container-inside">
@@ -223,7 +223,7 @@
 						</div>
 					</section>
 				</div>
-				<div class="section">
+				<div class="section" data-anchor="for-whom">
 					<section>
 						<div class="container">
 							<div class="container-inside">
@@ -244,7 +244,7 @@
 						</div>
 					</section>
 				</div>
-				<div class="section">
+				<div class="section" data-anchor="technology">
 					<section>
 						<div class="container">
 							<div class="container-inside">
@@ -292,7 +292,7 @@
 						</div>
 					</section>
 				</div>
-				<div class="section">
+				<div class="section" data-anchor="secret-processing">
 					<section>
 						<div class="container">
 							<div class="container-inside">
@@ -326,7 +326,7 @@
 						</div>
 					</section>
 				</div>
-				<div class="section">
+				<div class="section" data-anchor="secret-mixing">
 					<section>
 						<div class="container">
 							<div class="container-inside">
@@ -360,7 +360,7 @@
 						</div>
 					</section>
 				</div>
-				<div class="section">
+				<div class="section" data-anchor="team">
 					<section>
 						<div class="container">
 							<div class="container-inside">
@@ -381,12 +381,14 @@
 					options: {
 						scrollOverflow: true,
 						licenseKey: '98AFD12E-428246E1-B7908FFE-69A37211',
-						sectionsColor: ['transparent']
+						sectionsColor: ['transparent'],
+						touchSensitivity: 10,
+						// menu: '#menu'
 					}
 				}
 			},
 			mounted() {
-				setTimeout(() => { this.drawLogo(); }, 100);
+				setTimeout(() => { this.drawLogo(); }, 500);
 			},
 			methods: {
 				drawLogo() {
@@ -397,7 +399,6 @@
 
 						add = (nx, ny, a) => {
 							if (nx > -15 && ny > -15 && ny < 15 && nx < 15 && !p.find(pe => { return pe[0] == nx && pe[1] == ny; })) {
-								console.log(nx, ny, Math.abs(ny % 3))
 								if (a)
 									l.clone().css({
 										position: "absolute",
@@ -432,6 +433,15 @@
 		const store = {};
 		const router = new VueRouter({
 			mode: 'history',
+			scrollBehavior: function (to, from, savedPosition) {
+				if (to.hash) {
+					console.log('hashmove');
+					fullpage_api.moveTo(to.hash);
+					return { selector: to.hash }
+				} else {
+					return { x: 0, y: 0 }
+				}
+			},
 			routes: [
 				{ path: '/', component: Home }
 			]
