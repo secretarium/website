@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="zxx">
+<html lang="en">
 
 <head>
 	<meta charset="utf-8">
@@ -7,399 +7,444 @@
 	<meta name="robots" content="noindex, nofollow">
 
 	<title>Secretarium - Entrusted with secrets</title>
+	<link rel="icon" type="image/png" href="images/secretarium_128x128.png">
 
-	<!-- Favicons -->
-	<link rel="shortcut icon" type="image/png" href="images/secretarium_128x128.png">
-	<link rel="apple-touch-icon" href="images/secretarium_128x128.png">
+	<link rel="stylesheet" href="styles/reset-2.0.0.css" />
+	<link rel="stylesheet" href="styles/bootstrap-4.3.1.min.css" />
+	<link rel="stylesheet" href="styles/fontawesome-5.7.2.all.min.css" />
+	<link rel="stylesheet" href="styles/fullpage-3.0.4.min.css" />
+	<link rel="stylesheet" href="styles/secretarium-0.0.0.css" />
 
-	<!-- Styles -->
-	<link rel="stylesheet" media="screen" href="styles/style.css">
 
+	<script src="scripts/jquery-3.3.1.min.js"></script>
+	<script src="scripts/popper-1.14.7.min.js"></script>
+	<script src="scripts/bootstrap-4.3.1.min.js"></script>
+	<script src="scripts/vue-2.6.8.min.js"></script>
+	<script src="scripts/vue-router-3.0.2.min.js"></script>
+	<script src="scripts/scrolloverflow-0.1.2.min.js"></script>
+	<script src="scripts/fullpage.vue-0.1.2.min.js"></script>
 </head>
 
 <body>
-
-	<!-- *** Fancy Background *** -->
-	<div id="liquid-scene">
-		<canvas id="liquid"></canvas>
-	</div>
-
-	<div class="veil"></div>
-	<div class="veil-overlay"></div>
-
-	<!-- *** Page Loader *** -->
-	<div id="loading">
-
-		<div class="loader">
-			<p class="loader__label">
-				<img src="images/secretarium_title.png" alt="Secretarium" height="50" />
-				<span data-words="Loading|Chargement|Lädt|Cargando|加载中"></span>
-			</p>
-		</div>
-	</div>
-
-	<!-- *** Menu icon small screen *** -->
-	<button id="small-screen-menu">
-		<span class="custom-menu"></span>
-	</button>
-
-	<!-- *** Logo *** -->
-	<a class="brand-logo" href="#home">
-		<img src="images/secretarium_title.png" alt="Secretarium" class="img-fluid" />
-	</a>
-
-	<!-- *** Navigation menu *** -->
-	<header>
-		<div class="row">
-
-			<div class="col-12 col-md-9 header-nav">
-
-				<ul id="topMenu" class="on-left">
-					<li data-menuanchor="what">
-						<a href="#what">What</a>
-					</li>
-					<li data-menuanchor="why">
-						<a href="#why">Why</a>
-					</li>
-					<li data-menuanchor="whom">
-						<a href="#whom">Whom for</a>
-					</li>
-					<li data-menuanchor="technology">
-						<a href="#technology">Technology</a>
-					</li>
-					<li data-menuanchor="about">
-						<a href="#about">About us</a>
-					</li>
-				</ul>
+	<div id="app" @dragover.prevent @drop.prevent v-cloak>
+		<header>
+			<div class="container">
+				<div class="row">
+					<div class="col-12 col-md-9 header-nav">
+						<ul class="on-left">
+							<li data-menuanchor="home" class="logo">
+								<a href="#home"></a>
+							</li>
+							<li data-menuanchor="what">
+								<a href="#what">What</a>
+							</li>
+							<li data-menuanchor="why">
+								<a href="#why">Why</a>
+							</li>
+							<li data-menuanchor="whom">
+								<a href="#whom">Whom for</a>
+							</li>
+							<li data-menuanchor="technology">
+								<a href="#technology">Technology</a>
+							</li>
+							<li data-menuanchor="about">
+								<a href="#about">About us</a>
+							</li>
+						</ul>
+					</div>
+					<div class="col-12 col-md-3 header-nav">
+						<ul class="on-right">
+							<li>
+								<a href="#" target="_blank"><i class="fab fa-diaspora"></i></a>
+							</li>
+							<li>
+								<a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+							</li>
+							<li>
+								<a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+							</li>
+						</ul>
+					</div>
+				</div>
 			</div>
-
-			<div class="col-12 col-md-3 header-nav">
-				<ul class="on-right">
-					<li>
-						<a href="#" target="_blank"><i class="fab fa-diaspora"></i></a>
-					</li>
-					<li>
-						<a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
-					</li>
-					<li>
-						<a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</header>
-
-	<!-- *** Fullpage sections *** -->
-	<div id="fullpage">
-		<div class="section" id="section0">
-			<section class="content-inside-section">
-				<div class="container">
-					<div class="container-inside">
-						<div class="main-content align-center">
-
-						</div>
-					</div>
-				</div>
-			</section>
-		</div>
-		<div class="section">
-			<section class="content-inside-section">
-				<div class="container">
-					<div class="container-inside">
-						<h2>What is Secretarium ?</h2>
-						<h3>Secretarium is an integrity and confidentiality crypto-platform</h3>
-						<div class="container-fluid">
-							<div class="row">
-								<div class="col-md-6 col-md-push-6 col-left">
-									<div class="sec-img fencedNetwork"></div>
-									<h4>Distributed Confidential computing platform</h4>
-									<br />
-									<p>
-										Relying on trusted execution environments and powered by secure multi-party
-										computing. Secretarium has been designed to
-										run applications on encrypted data in a trustable, distributed, scalable and
-										efficient way, with no possible data
-										leakage or manipulation, and no single point of failure.
-									</p>
-								</div>
-								<div class="col-md-6 col-md-pull-6 col-right">
-									<div class="sec-img dcApp"></div>
-									<h4>Hosting Distributed Confidential Applications </h4>
-									<br />
-									<p>
-										Distributed Confidential Applications (DCApps) are smart contracts systems with
-										cryptographic proof of integrity.
-										End-users can grant access to subsets of their private data to DCApps; and
-										DCApps can request access to user's data for
-										pre-defined specific processing.
-									</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
-		</div>
-		<div class="section">
-			<section class="content-inside-section">
-				<div class="container">
-					<div class="container-inside">
-						<h2>What does Secretarium provide ?</h2>
-						<h3>Total confidentiality: nobody sees the data, including Secretarium</h3>
-						<div class="container-fluid">
-							<div class="row">
-								<div class="col-md-6 col-md-push-6 col-left">
-									<div class="sec-img shield"></div>
-									<h4>Protects intellectual property and commercial rights</h4>
-									<br />
-									<p>
-										Secretarium guarantees privacy by default and by design: users always keep
-										control of their data. Secretarium uses
-										end-to-end encryption: data uploaded to Secretarium remains the property of its
-										originators and no one can access it in
-										clear text. DCApps intellectual property remains the property of the DCApp
-										writer.
-									</p>
-								</div>
-								<div class="col-md-6 col-md-pull-6 col-right">
-									<div class="sec-img puzzle"></div>
-									<h4>Offers easy integration to your processes</h4>
-									<br />
-									<p>
-										Every Secretarium node is coupled with a web server. Secretarium connection
-										protocol integrates easily into recent
-										browser and tablets. Secretarium is real-time and has the capacity of pushing
-										data to end-users. Secretarium is designed
-										for speed: we achieve finality of execution within a split second, simplifying
-										integration in an unparalleled way for a
-										Blockchain.
-									</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
-		</div>
-		<div class="section">
-			<section class="content-inside-section">
-				<div class="container">
-					<div class="container-inside">
-						<h2>How does Secretarium scale ?</h2>
-						<h3>Secretarium commoditises privacy at scale for application editors</h3>
-						<br />
-						<div class="container-fluid">
-							<div class="row">
-								<div class="col-md-8">
-									<h4>Facilitates confidential computing at scale</h4>
-									<br />
-									<p>
-										The throughput and latency of a confidential computing system should be
-										compatible with real life scenarios. We believe
-										in a system that can grow organically in the same way the internet did.
-									</p>
-								</div>
-							</div>
-						</div>
-						<div class="sec-img scale tall recess"></div>
-					</div>
-				</div>
-			</section>
-		</div>
-		<div class="section">
-			<section class="content-inside-section">
-				<div class="container">
-					<div class="container-inside">
-						<h2>Why Secretarium ?</h2>
-						<h3>A platform built for data privacy, ownership and control</h3>
-						<div class="container-fluid">
-							<div class="row">
-								<div class="col-md-6 col-md-push-6 col-left">
-									<div class="sec-img restore"></div>
-									<h4>Restore the right to privacy FOR PEOPLE AND COMPANIES</h4>
-									<br />
-									<p>
-										Consent, privacy by design and by default, are our DNA. We believe people and
-										companies should have the option of using
-										a technology that enforces their privacy.
-									</p>
-								</div>
-								<div class="col-md-6 col-md-pull-6 col-right">
-									<div class="sec-img reaper"></div>
-									<h4>Prevent scavenging and monetization of private data</h4>
-									<br />
-									<p>
-										The internet was intended for driving collaboration, but the balance between
-										data originators and data aggregators has
-										been heavily tilted toward the latter. Our goal is to achieve the same results
-										without visibility of private data.
-									</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
-		</div>
-		<div class="section">
-			<section class="content-inside-section">
-				<div class="container">
-					<div class="container-inside">
-						<h2>Who is Secretarium for ?</h2>
-						<div class="container-fluid">
-							<div class="row">
-								<div class="col-md-12">
-									<br />
-									<h3>Secretarium enables impartial and trustful exchanges between distrusting
-										parties.
-										Shared services are distributed and controlled multilaterally, preventing any
-										single party from pulling the plug.</h3>
-								</div>
-							</div>
-						</div>
-						<div class="sec-img map tall recess"></div>
-					</div>
-				</div>
-			</section>
-		</div>
-		<div class="section">
-			<section class="content-inside-section">
-				<div class="container">
-					<div class="container-inside">
-						<h2>How does Secretarium work ?</h2>
-						<h3>Secretarium leverages cryptography and trusted execution environments</h3>
-						<div class="container-fluid">
-							<div class="row">
-								<div class="col-md-6 col-md-push-6 col-left">
-									<br />
-									<h4>Confidentiality out of the box</h4>
-									<br />
-									<p>
-										We designed a secure connection protocol to guarantee to end-users the integrity
-										of the remote nodes. Our
-										crypto-platform is designed to facilitate the development of the business logic
-										inside distributed confidential
-										applications, so you don’t have to deal with all the complexity.
-									</p>
-									<br />
-									<h4>Peer-to-peer network</h4>
-									<br />
-									<p>
-										We set-up multiple trusted nodes to communicate with one another over an
-										encrypted peer to peer network, without a
-										single point of failure. Using a protocol inspired by the military aviation that
-										we call "identification friend-or-foe",
-										we guarantee the integrity of the network at all times.
-									</p>
-									<br />
-									<h4>Secure hardware</h4>
-									<br />
-									<p>
-										To avoid security vs performance trade-offs, we use trusted execution
-										environments. Encrypted enclaves on secure
-										hardware provide privacy and integrity, even to an attacker with physical access
-										to the machine and operating system.
-									</p>
-								</div>
-								<div class="col-md-6 col-md-pull-6 col-right">
-									<div class="sec-img technology tall"></div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
-		</div>
-		<div class="section">
-			<section class="content-inside-section">
-				<div class="container">
-					<div class="container-inside">
-						<h2>Secret processing</h2>
-						<h3>Provides insight on data without seeing the data</h3>
-						<div class="container-fluid">
-							<div class="row">
-								<div class="col-md-6 col-md-push-6 col-left">
-									<br />
-									<br />
-									<p>
-										Some parties have proprietary algorithms, other parties have confidential
-										data-banks. Secret processing involves
-										combining both, whilst guaranteeing secrecy.
-										Designed for data analytics, it can be used to risk analyse some parties'
-										financial portfolios using other parties'
-										quantitative models and/or market data.
-										Other usages can be genomic diagnostic, for individuals, or of one medical firm
-										over the DNA bank of another firm.
-										When secured with Differential Privacy techniques, it is perfectly adapted for
-										data rental, a new way of monetizing
-										confidential data.
-									</p>
-								</div>
-								<div class="col-md-6 col-md-pull-6 col-right">
-									<div class="sec-img secretProcessing tall"></div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
-		</div>
-		<div class="section">
-			<section class="content-inside-section">
-				<div class="container">
-					<div class="container-inside">
-						<h2>Secret mixing</h2>
-						<h3>Allows a group to pool data together and collectively achieve insight</h3>
-						<div class="container-fluid">
-							<div class="row">
-								<div class="col-md-6 col-md-push-6 col-left">
-									<br />
-									<br />
-									<p>
-										Untrusting parties can use Secretarium to build a consensus using each parties
-										private data, without any other party
-										getting access, including Secretarium itself.
-										Designed for data pooling and data matching, it can be used for example to
-										compute market data benchmarks, detect
-										fraudulent insurance claims, compare reference data.
-										Other usages involve enforcement of statistical secrecy, like the pricing of
-										insurance policies on real data.
-										Finally, it is a solution to the voting problem, Secretarium being able to
-										enforce voting secrecy, voting protocol and a
-										guaranteed honest outcome.
-									</p>
-								</div>
-								<div class="col-md-6 col-md-pull-6 col-right">
-									<div class="sec-img secretMixing tall"></div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
-		</div>
-		<div class="section">
-			<section class="content-inside-section">
-				<div class="container">
-					<div class="container-inside">
-						<h2>About us</h2>
-					</div>
-				</div>
-			</section>
-		</div>
+		</header>
+		<content>
+			<transition name="page" mode="out-in">
+				<router-view></router-view>
+			</transition>
+		</content>
+		<footer></footer>
 	</div>
 
-	<!-- Libraries -->
-	<script src="scripts/jquery-3.3.1.min.js"></script>
-	<script src="scripts/jquery-easings-1.4.1.min.js"></script>
-	<script src="scripts/bootstrap-4.3.1.min.js"></script>
-	<script src="scripts/fullpage-3.0.4.min.js"></script>
-	<script src="scripts/scrolloverflow-0.1.2.min.js"></script>
+	<script type="text/x-template" id="sec-home">
+		<div>
+			<img src="images/secretarium_title.png" class="stage-fulllogo" />
+			<img src="images/secretarium_logo_grey.png" class="stage-logo" />
+			<div id="stage"></div>
+			<full-page ref="fullpage" :options="options" id="fullpage">
+				<div class="section">
+				</div>
+				<div class="section">
+					<section>
+						<div class="container">
+							<div class="container-inside">
+								<h2>What is Secretarium ?</h2>
+								<h3>Secretarium is an integrity and confidentiality crypto-platform</h3>
+								<div class="container-fluid">
+									<div class="row">
+										<div class="col-md-6 col-md-push-6 col-left">
+											<div class="sec-img fencedNetwork"></div>
+											<h4>Distributed Confidential computing platform</h4>
+											<br />
+											<p>
+												Relying on trusted execution environments and powered by secure multi-party
+												computing. Secretarium has been designed to
+												run applications on encrypted data in a trustable, distributed, scalable and
+												efficient way, with no possible data
+												leakage or manipulation, and no single point of failure.
+											</p>
+										</div>
+										<div class="col-md-6 col-md-pull-6 col-right">
+											<div class="sec-img dcApp"></div>
+											<h4>Hosting Distributed Confidential Applications </h4>
+											<br />
+											<p>
+												Distributed Confidential Applications (DCApps) are smart contracts systems with
+												cryptographic proof of integrity.
+												End-users can grant access to subsets of their private data to DCApps; and
+												DCApps can request access to user's data for
+												pre-defined specific processing.
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+				</div>
+				<div class="section">
+					<section>
+						<div class="container">
+							<div class="container-inside">
+								<h2>What does Secretarium provide ?</h2>
+								<h3>Total confidentiality: nobody sees the data, including Secretarium</h3>
+								<div class="container-fluid">
+									<div class="row">
+										<div class="col-md-6 col-md-push-6 col-left">
+											<div class="sec-img shield"></div>
+											<h4>Protects intellectual property and commercial rights</h4>
+											<br />
+											<p>
+												Secretarium guarantees privacy by default and by design: users always keep
+												control of their data. Secretarium uses
+												end-to-end encryption: data uploaded to Secretarium remains the property of its
+												originators and no one can access it in
+												clear text. DCApps intellectual property remains the property of the DCApp
+												writer.
+											</p>
+										</div>
+										<div class="col-md-6 col-md-pull-6 col-right">
+											<div class="sec-img puzzle"></div>
+											<h4>Offers easy integration to your processes</h4>
+											<br />
+											<p>
+												Every Secretarium node is coupled with a web server. Secretarium connection
+												protocol integrates easily into recent
+												browser and tablets. Secretarium is real-time and has the capacity of pushing
+												data to end-users. Secretarium is designed
+												for speed: we achieve finality of execution within a split second, simplifying
+												integration in an unparalleled way for a
+												Blockchain.
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+				</div>
+				<div class="section">
+					<section>
+						<div class="container">
+							<div class="container-inside">
+								<h2>How does Secretarium scale ?</h2>
+								<h3>Secretarium commoditises privacy at scale for application editors</h3>
+								<br />
+								<div class="container-fluid">
+									<div class="row">
+										<div class="col-md-8 col-left">
+											<h4>Facilitates confidential computing at scale</h4>
+											<br />
+											<p>
+												The throughput and latency of a confidential computing system should be
+												compatible with real life scenarios. We believe
+												in a system that can grow organically in the same way the internet did.
+											</p>
+										</div>
+									</div>
+								</div>
+								<div class="sec-img scale tall recess"></div>
+							</div>
+						</div>
+					</section>
+				</div>
+				<div class="section">
+					<section>
+						<div class="container">
+							<div class="container-inside">
+								<h2>Why Secretarium ?</h2>
+								<h3>A platform built for data privacy, ownership and control</h3>
+								<div class="container-fluid">
+									<div class="row">
+										<div class="col-md-6 col-md-push-6 col-left">
+											<div class="sec-img restore"></div>
+											<h4>Restore the right to privacy FOR PEOPLE AND COMPANIES</h4>
+											<br />
+											<p>
+												Consent, privacy by design and by default, are our DNA. We believe people and
+												companies should have the option of using
+												a technology that enforces their privacy.
+											</p>
+										</div>
+										<div class="col-md-6 col-md-pull-6 col-right">
+											<div class="sec-img reaper"></div>
+											<h4>Prevent scavenging and monetization of private data</h4>
+											<br />
+											<p>
+												The internet was intended for driving collaboration, but the balance between
+												data originators and data aggregators has
+												been heavily tilted toward the latter. Our goal is to achieve the same results
+												without visibility of private data.
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+				</div>
+				<div class="section">
+					<section>
+						<div class="container">
+							<div class="container-inside">
+								<h2>Who is Secretarium for ?</h2>
+								<div class="container-fluid">
+									<div class="row">
+										<div class="col-md-12 col-left">
+											<br />
+											<h3>Secretarium enables impartial and trustful exchanges between distrusting
+												parties.
+												Shared services are distributed and controlled multilaterally, preventing any
+												single party from pulling the plug.</h3>
+										</div>
+									</div>
+								</div>
+								<div class="sec-img map tall recess" style="height: calc(60vh - 50px); margin: 0;"></div>
+							</div>
+						</div>
+					</section>
+				</div>
+				<div class="section">
+					<section>
+						<div class="container">
+							<div class="container-inside">
+								<h2>How does Secretarium work ?</h2>
+								<h3>Secretarium leverages cryptography and trusted execution environments</h3>
+								<div class="container-fluid">
+									<div class="row">
+										<div class="col-md-6 col-md-push-6 col-left">
+											<br />
+											<h4>Confidentiality out of the box</h4>
+											<br />
+											<p>
+												We designed a secure connection protocol to guarantee to end-users the integrity
+												of the remote nodes. Our
+												crypto-platform is designed to facilitate the development of the business logic
+												inside distributed confidential
+												applications, so you don’t have to deal with all the complexity.
+											</p>
+											<br />
+											<h4>Peer-to-peer network</h4>
+											<br />
+											<p>
+												We set-up multiple trusted nodes to communicate with one another over an
+												encrypted peer to peer network, without a
+												single point of failure. Using a protocol inspired by the military aviation that
+												we call "identification friend-or-foe",
+												we guarantee the integrity of the network at all times.
+											</p>
+											<br />
+											<h4>Secure hardware</h4>
+											<br />
+											<p>
+												To avoid security vs performance trade-offs, we use trusted execution
+												environments. Encrypted enclaves on secure
+												hardware provide privacy and integrity, even to an attacker with physical access
+												to the machine and operating system.
+											</p>
+										</div>
+										<div class="col-md-6 col-md-pull-6 col-right">
+											<div class="sec-img technology tall" style="height: calc(100% - 3rem);"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+				</div>
+				<div class="section">
+					<section>
+						<div class="container">
+							<div class="container-inside">
+								<h2>Secret processing</h2>
+								<h3>Provides insight on data without seeing the data</h3>
+								<div class="container-fluid">
+									<div class="row">
+										<div class="col-md-6 col-md-push-6 col-left">
+											<br />
+											<br />
+											<p>
+												Some parties have proprietary algorithms, other parties have confidential
+												data-banks. Secret processing involves
+												combining both, whilst guaranteeing secrecy.
+												Designed for data analytics, it can be used to risk analyse some parties'
+												financial portfolios using other parties'
+												quantitative models and/or market data.
+												Other usages can be genomic diagnostic, for individuals, or of one medical firm
+												over the DNA bank of another firm.
+												When secured with Differential Privacy techniques, it is perfectly adapted for
+												data rental, a new way of monetizing
+												confidential data.
+											</p>
+										</div>
+										<div class="col-md-6 col-md-pull-6 col-right">
+											<div class="sec-img secretProcessing tall"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+				</div>
+				<div class="section">
+					<section>
+						<div class="container">
+							<div class="container-inside">
+								<h2>Secret mixing</h2>
+								<h3>Allows a group to pool data together and collectively achieve insight</h3>
+								<div class="container-fluid">
+									<div class="row">
+										<div class="col-md-6 col-md-push-6 col-left">
+											<br />
+											<br />
+											<p>
+												Untrusting parties can use Secretarium to build a consensus using each parties
+												private data, without any other party
+												getting access, including Secretarium itself.
+												Designed for data pooling and data matching, it can be used for example to
+												compute market data benchmarks, detect
+												fraudulent insurance claims, compare reference data.
+												Other usages involve enforcement of statistical secrecy, like the pricing of
+												insurance policies on real data.
+												Finally, it is a solution to the voting problem, Secretarium being able to
+												enforce voting secrecy, voting protocol and a
+												guaranteed honest outcome.
+											</p>
+										</div>
+										<div class="col-md-6 col-md-pull-6 col-right">
+											<div class="sec-img secretMixing tall"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+				</div>
+				<div class="section">
+					<section>
+						<div class="container">
+							<div class="container-inside">
+								<h2>About us</h2>
+							</div>
+						</div>
+					</section>
+				</div>
+			</full-page>
+		</div>
+	</script>
 
-	<!-- Scripts -->
-	<script src="scripts/main.js"></script>
-	<script src="scripts/liquid.js"></script>
+	<script>
+		const Home = Vue.component('sec-home', {
+			template: '#sec-home',
+			data: function () {
+				return {
+					options: {
+						scrollOverflow: true,
+						licenseKey: '98AFD12E-428246E1-B7908FFE-69A37211',
+						sectionsColor: ['transparent']
+					}
+				}
+			},
+			mounted() {
+				setTimeout(() => { this.drawLogo(); }, 100);
+			},
+			methods: {
+				drawLogo() {
+					let t = $(".stage-fulllogo"),
+						l = $(".stage-logo"),
+						w = $("#stage"),
+						p = [],
 
+						add = (nx, ny, a) => {
+							if (nx > -15 && ny > -15 && ny < 15 && nx < 15 && !p.find(pe => { return pe[0] == nx && pe[1] == ny; })) {
+								console.log(nx, ny, Math.abs(ny % 3))
+								if (a)
+									l.clone().css({
+										position: "absolute",
+										left: "50%",
+										top: "50%",
+										transform: "translate(" + (-177.5 + nx * 1.23 * 100 - (ny % 3 * 100 * 0.41)) + "%, " + (-50 + ny * 0.55 * 100) + "%)",
+										height: "8vh",
+									}).appendTo(w).fadeIn(500)
+
+								p.push([nx, ny]);
+								setTimeout(() => {
+									if (Math.random() > .5 && nx < 0) add(nx - 1, ny - 3, 1);
+									if (Math.random() > .3 && ny > 1) add(nx + 1, ny + 1, 1);
+									add(nx - 1, ny, 1);
+									add(nx, ny + 1, 1);
+									add(nx, ny + 2, 1);
+								}, 100 + Math.random() * 80);
+
+							}
+						};
+					t.clone().css({
+						position: "absolute",
+						left: "50%",
+						top: "50%",
+						transform: "translate(-50%, -50%)",
+						height: "8vh",
+					}).appendTo(w).fadeIn(100);
+					setTimeout(() => { add(0, 0, 0) }, 400);
+				},
+			}
+		});
+		const store = {};
+		const router = new VueRouter({
+			mode: 'history',
+			routes: [
+				{ path: '/', component: Home }
+			]
+		});
+		const app = new Vue({
+			router,
+			data: function () {
+				return {
+					store: store
+				}
+			},
+		}).$mount('#app');
+	</script>
 </body>
 
 </html>
