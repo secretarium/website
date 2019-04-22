@@ -450,7 +450,7 @@
 								<div class="row">
 									<div class="col-md-12 col-md-push-12 col-left">
 										<p class="copyright">
-											All rights reserved. Copyright &copy; 2019 Secretarium Inc. - Webdesign by Florian Guitton
+											All rights reserved. Copyright &copy; 2019 Secretarium Inc. - Webdesign by <a href="https://florian.bzh" target="_blank">Florian Guitton</a>
 										</p>
 									</div>
 								</div>
@@ -465,9 +465,10 @@
 	</script>
 
 	<script>
+		let isHomePageActive = ["#home", ""].includes(window.location.hash);
 		const Home = Vue.component('sec-home', {
 			template: '#sec-home',
-			data: function () {
+			data: () => {
 				return {
 					options: {
 						scrollOverflow: true,
@@ -481,37 +482,48 @@
 				}
 			},
 			mounted() {
-				setTimeout(() => { this.drawLogo(); }, 500);
+				setTimeout(() => { this.drawLogo(); }, 600);
 			},
 			methods: {
 				drawLogo() {
 					let t = $(".stage-fulllogo"),
 						l = $(".stage-logo"),
 						w = $("#stage"),
-						p = [],
+						p = null,
+						r = 5000
 
-						add = (nx, ny, a) => {
-							if (nx > -15 && ny > -15 && ny < 15 && nx < 15 && !p.find(pe => { return pe[0] == nx && pe[1] == ny; })) {
-								if (a)
-									l.clone().css({
-										position: "absolute",
-										left: "50%",
-										top: "50%",
-										transform: "translate(" + (-177.5 + nx * 1.23 * 100 - (ny % 3 * 100 * 0.41)) + "%, " + (-50 + ny * 0.55 * 100) + "%)",
-										height: "8vh",
-									}).appendTo(w).fadeIn(500)
+					add = (nx, ny, a) => {
+						if (a == 0)
+							p = []
+						if (nx > -15 && ny > -15 && ny < 15 && nx < 15 && !p.find(pe => { return pe[0] == nx && pe[1] == ny; })) {
+							if (a)
+								l.clone().data({ nx, ny }).css({
+									position: "absolute",
+									left: "50%",
+									top: "50%",
+									transform: "translate(" + (-177.5 + nx * 1.23 * 100 - (ny % 3 * 100 * 0.41)) + "%, " + (-50 + ny * 0.55 * 100) + "%)",
+									height: "8vh",
+								}).appendTo(w).fadeIn(500).delay(r).fadeOut(500, () => {
+									pnx = $(this).data('nx');
+									pny = $(this).data('ny');
+									p.forEach((v, i) => {
+										if (v[0] == pnx && v[1] == pny)
+											p.splice(i, 1);
+									})
+									$(this).remove();
+								})
 
-								p.push([nx, ny]);
-								setTimeout(() => {
-									if (Math.random() > .5 && nx < 0) add(nx - 1, ny - 3, 1);
-									if (Math.random() > .3 && ny > 1) add(nx + 1, ny + 1, 1);
-									add(nx - 1, ny, 1);
-									add(nx, ny + 1, 1);
-									add(nx, ny + 2, 1);
-								}, 100 + Math.random() * 80);
+							p.push([nx, ny]);
+							setTimeout(() => {
+								if (Math.random() > .5 && nx < 0) add(nx - 1, ny - 3, 1);
+								if (Math.random() > .3 && ny > 1) add(nx + 1, ny + 1, 1);
+								add(nx - 1, ny, 1);
+								add(nx, ny + 1, 1);
+								add(nx, ny + 2, 1);
+							}, 100 + Math.random() * 80);
 
-							}
-						};
+						}
+					};
 					t.clone().css({
 						position: "absolute",
 						left: "50%",
@@ -519,16 +531,20 @@
 						transform: "translate(-50%, -50%)",
 						height: "8vh",
 					}).appendTo(w).fadeIn(500);
-					setTimeout(() => { add(0, 0, 0) }, 400);
+					setInterval(() => { if (isHomePageActive) add(0, 0, 0) }, r + 1500);
+					add(0, 0, 0);
 				},
 			}
 		});
 		const store = {};
 		const router = new VueRouter({
 			mode: 'history',
-			scrollBehavior: function (to, from, savedPosition) {
+			scrollBehavior: (to, from, savedPosition) => {
 				if (to.hash) {
-					console.log('hashmove');
+					if (to.hash != "#home")
+						isHomePageActive = false
+					else
+						isHomePageActive = true
 					fullpage_api.moveTo(to.hash);
 					return { selector: to.hash }
 				} else {
@@ -541,7 +557,7 @@
 		});
 		const app = new Vue({
 			router,
-			data: function () {
+			data: () => {
 				return {
 					store: store
 				}
