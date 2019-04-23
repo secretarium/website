@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta name="robots" content="noindex, nofollow">
+	<meta name="description" content="Secretarium is a distributed confidential computing platform guaranteeing privacy by default and by design">
 
 	<title>Secretarium - Entrusted with secrets</title>
 	<link rel="icon" type="image/png" href="images/secretarium_128x128.png">
@@ -487,44 +487,40 @@
 			},
 			methods: {
 				drawLogo() {
-					let t = $(".stage-fulllogo"),
-						l = $(".stage-logo"),
-						w = $("#stage"),
-						p = null,
-						r = 5000
-
-					add = (nx, ny, a) => {
-						if (a == 0)
-							p = []
-						if (nx > -15 && ny > -15 && ny < 15 && nx < 15 && !p.find(pe => { return pe[0] == nx && pe[1] == ny; })) {
-							if (a)
-								l.clone().data({ nx, ny }).css({
-									position: "absolute",
-									left: "50%",
-									top: "50%",
-									transform: "translate(" + (-177.5 + nx * 1.23 * 100 - (ny % 3 * 100 * 0.41)) + "%, " + (-50 + ny * 0.55 * 100) + "%)",
-									height: "8vh",
-								}).appendTo(w).fadeIn(500).delay(r).fadeOut(500, () => {
-									pnx = $(this).data('nx');
-									pny = $(this).data('ny');
-									p.forEach((v, i) => {
-										if (v[0] == pnx && v[1] == pny)
-											p.splice(i, 1);
+					let t = $(".stage-fulllogo"), l = $(".stage-logo"), w = $("#stage"),
+						p = null, r = 5000,
+						add = (nx, ny, a) => {
+							if (a == 0)
+								p = []
+							if (nx > -15 && ny > -15 && ny < 15 && nx < 15 && !p.find(pe => { return pe[0] == nx && pe[1] == ny; })) {
+								if (a)
+									l.clone().data({ nx, ny }).css({
+										position: "absolute",
+										left: "50%",
+										top: "50%",
+										transform: "translate(" + (-177.5 + nx * 1.23 * 100 - (ny % 3 * 100 * 0.41)) + "%, " + (-50 + ny * 0.55 * 100) + "%)",
+										height: "8vh",
+									}).appendTo(w).fadeIn(500).delay(r).fadeOut(500, () => {
+										pnx = $(this).data('nx');
+										pny = $(this).data('ny');
+										p.forEach((v, i) => {
+											if (v[0] == pnx && v[1] == pny)
+												p.splice(i, 1);
+										})
+										$(this).remove();
 									})
-									$(this).remove();
-								})
 
-							p.push([nx, ny]);
-							setTimeout(() => {
-								if (Math.random() > .5 && nx < 0) add(nx - 1, ny - 3, 1);
-								if (Math.random() > .3 && ny > 1) add(nx + 1, ny + 1, 1);
-								add(nx - 1, ny, 1);
-								add(nx, ny + 1, 1);
-								add(nx, ny + 2, 1);
-							}, 100 + Math.random() * 80);
+								p.push([nx, ny]);
+								setTimeout(() => {
+									if (Math.random() > .5 && nx < 0) add(nx - 1, ny - 3, 1);
+									if (Math.random() > .3 && ny > 1) add(nx + 1, ny + 1, 1);
+									add(nx - 1, ny, 1);
+									add(nx, ny + 1, 1);
+									add(nx, ny + 2, 1);
+								}, 100 + Math.random() * 80);
 
-						}
-					};
+							}
+						};
 					t.clone().css({
 						position: "absolute",
 						left: "50%",
