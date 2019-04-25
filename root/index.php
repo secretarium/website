@@ -32,7 +32,7 @@
 		<header>
 			<div class="container">
 				<div class="row">
-					<div class="col-12 col-md-9 header-nav">
+					<div class="col-12 col-md-10 header-nav">
 						<ul id="menu" class="on-left">
 							<li data-menuanchor="home" class="logo">
 								<a href="#home"></a>
@@ -452,7 +452,8 @@
 	</script>
 
 	<script>
-		let isHomePageActive = ["#home", ""].includes(window.location.hash);
+		const store = {}, onDrop = null, onResize = {};
+
 		const Home = Vue.component('sec-home', {
 			template: '#sec-home',
 			data: () => {
@@ -472,12 +473,19 @@
 			},
 			mounted() {
 				Vue.set(this.options, "onLeave", this.onLeave);
-				setTimeout(() => { this.fillCanvas(); this.drawCanvas(); }, 1500);
+				setTimeout(() => { this.fillCanvas(); }, 100);
+				setTimeout(() => { this.drawCanvas(); }, 2500);
+				subscribeOnResize("home-logo", () => {
+					$("#stage").empty();
+					this.canvas.items = [];
+					this.canvas.maxDist = 0;
+					this.fillCanvas();
+				});
 			},
 			methods: {
 				onLeave (origin, destination, direction) {
 					this.canvas.redrawLoop = destination.index == 0;
-					if(this.canvas.redrawLoop) setTimeout(() => { this.drawCanvas(); }, 1500);
+					if(this.canvas.redrawLoop) setTimeout(() => { this.drawCanvas(); }, 10000);
 					return true;
 				},
 				fillCanvas() {
@@ -493,7 +501,7 @@
 							this.canvas.items[dist].push({ e: e, x: i, y: j, v: false });
 							if(dist > this.canvas.maxDist) this.canvas.maxDist = dist;
 						};
-					t.clone().removeAttr("id").css({ position: "absolute", left: x, top: y, height: "8vh" }).appendTo(w).fadeIn(500);
+					t.clone().removeAttr("id").css({ position: "absolute", left: x, top: y, height: "8vh", display: "none" }).appendTo(w).fadeIn(1000);
 					let ix = -wx % 3 != -1 ? -wx + wx % 3 - 1 : -wx;
 					for(var i = ix; i <= wx; i+= 3) { // horizontal
 						for(var j = -13; j <= 12; j+= 3) {
@@ -520,7 +528,6 @@
 				}
 			}
 		});
-		const store = {};
 		const router = new VueRouter({
 			mode: 'history',
 			routes: [
@@ -535,6 +542,40 @@
 				}
 			},
 		}).$mount('#app');
+
+		function setOnDrop(cb) {
+			$('body').toggleClass('active', cb != null);
+			onDrop = cb;
+		}
+		function subscribeOnResize(id, cb) {
+			onResize[id] = cb;
+		}
+		$(function() {
+			$('body').on("dragover dragenter", function(e) {
+				$('body').addClass('dragging');
+			}).on("dragleave", function(e) {
+				if(e.clientX == 0 && e.clientY == 0)
+					$('body').removeClass('dragging');
+			}).on("drop", function(e) {
+				$('body').removeClass('dragging');
+				if(onDrop != null) {
+					if(e.dataTransfer && e.dataTransfer.files) onDrop(e);
+					else if(e.originalEvent.dataTransfer && e.originalEvent.dataTransfer.files) onDrop(e.originalEvent);
+				}
+			});
+			(() => {
+				var resizeTimeout = null;
+				$( window ).resize(function() {
+					if (resizeTimeout !== null) clearTimeout(resizeTimeout);
+					resizeTimeout = setTimeout(() => {
+						resizeTimeout = null;
+						for(let id in onResize) {
+							onResize[id]();
+						}
+					}, 100);
+				});
+			})();
+		});
 	</script>
 </body>
 
