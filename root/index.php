@@ -26,6 +26,8 @@
 </head>
 
 <body>
+	<img src="images/secretarium_title.png" id="stage-fulllogo" />
+	<img src="images/secretarium_logo_grey.png" id="stage-logo" />
 	<div id="app" @dragover.prevent @drop.prevent v-cloak>
 		<header>
 			<div class="container">
@@ -49,19 +51,6 @@
 							</li>
 							<li data-menuanchor="team">
 								<a href="#team">About us</a>
-							</li>
-						</ul>
-					</div>
-					<div class="col-12 col-md-3 header-nav">
-						<ul class="on-right">
-							<li>
-								<a href="#" target="_blank"><i class="fab fa-diaspora"></i></a>
-							</li>
-							<li>
-								<a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
-							</li>
-							<li>
-								<a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a>
 							</li>
 						</ul>
 					</div>
@@ -107,8 +96,6 @@
 
 	<script type="text/x-template" id="sec-home">
 		<div>
-			<img src="images/secretarium_title.png" class="stage-fulllogo" />
-			<img src="images/secretarium_logo_grey.png" class="stage-logo" />
 			<div id="stage"></div>
 			<full-page ref="fullpage" :options="options" id="fullpage">
 				<div class="section" data-anchor="home">
@@ -476,78 +463,66 @@
 						sectionsColor: ['transparent'],
 						touchSensitivity: 30,
 						scrollingSpeed: 1000,
-						menu: '#menu'
+						menu: '#menu',
 						// The scrollBar behaviour is extra-buggy
-						// scrollBar: true
-					}
+						//scrollBar: true
+					},
+					canvas: { redrawLoop: true, items: {}, maxDist: 0 }
 				}
 			},
 			mounted() {
-				setTimeout(() => { this.drawLogo(); }, 600);
+				Vue.set(this.options, "onLeave", this.onLeave);
+				setTimeout(() => { this.fillCanvas(); this.drawCanvas(); }, 1500);
 			},
 			methods: {
-				drawLogo() {
-					let t = $(".stage-fulllogo"), l = $(".stage-logo"), w = $("#stage"),
-						p = null, r = 5000,
-						add = (nx, ny, a) => {
-							if (a == 0)
-								p = []
-							if (nx > -15 && ny > -15 && ny < 15 && nx < 15 && !p.find(pe => { return pe[0] == nx && pe[1] == ny; })) {
-								if (a)
-									l.clone().data({ nx, ny }).css({
-										position: "absolute",
-										left: "50%",
-										top: "50%",
-										transform: "translate(" + (-177.5 + nx * 1.23 * 100 - (ny % 3 * 100 * 0.41)) + "%, " + (-50 + ny * 0.55 * 100) + "%)",
-										height: "8vh",
-									}).appendTo(w).fadeIn(500).delay(r).fadeOut(500, () => {
-										pnx = $(this).data('nx');
-										pny = $(this).data('ny');
-										p.forEach((v, i) => {
-											if (v[0] == pnx && v[1] == pny)
-												p.splice(i, 1);
-										})
-										$(this).remove();
-									})
-
-								p.push([nx, ny]);
-								setTimeout(() => {
-									if (Math.random() > .5 && nx < 0) add(nx - 1, ny - 3, 1);
-									if (Math.random() > .3 && ny > 1) add(nx + 1, ny + 1, 1);
-									add(nx - 1, ny, 1);
-									add(nx, ny + 1, 1);
-									add(nx, ny + 2, 1);
-								}, 100 + Math.random() * 80);
-
-							}
-						};
-					t.clone().css({
-						position: "absolute",
-						left: "50%",
-						top: "50%",
-						transform: "translate(-50%, -50%)",
-						height: "8vh",
-					}).appendTo(w).fadeIn(500);
-					setInterval(() => { if (isHomePageActive) add(0, 0, 0) }, r + 1500);
-					add(0, 0, 0);
+				onLeave (origin, destination, direction) {
+					this.canvas.redrawLoop = destination.index == 0;
+					if(this.canvas.redrawLoop) setTimeout(() => { this.drawCanvas(); }, 1500);
+					return true;
 				},
+				fillCanvas() {
+					let t = $("#stage-fulllogo"), l = $("#stage-logo"), w = $("#stage"),
+						sx = w.width(), sy = w.height(), flx = 5906, fly = 1231, lx = 1665, ly = 1231, lhx = 685, lhy = 680,
+						r = 0.08 * sy / fly, y = sy * 0.46, x = (sx - r * flx) / 2, wx = Math.floor(sx / (r * lhx) / 2),
+						add = (i, j) => {
+							if(i >= 0 && j >= -1 || Math.abs(j) > 12) return;
+							let dist = Math.floor(Math.sqrt(i * i + j * j)), nx = x + i * r * lhx, ny = y - j * r * lhy,
+								e = l.clone().removeAttr("id").addClass("stage-logo")
+									 .css({ position: "absolute", left: nx, top: ny, height: "8vh", display: "none" }).appendTo(w);
+							if(!this.canvas.items[dist]) this.canvas.items[dist] = [];
+							this.canvas.items[dist].push({ e: e, x: i, y: j, v: false });
+							if(dist > this.canvas.maxDist) this.canvas.maxDist = dist;
+						};
+					t.clone().removeAttr("id").css({ position: "absolute", left: x, top: y, height: "8vh" }).appendTo(w).fadeIn(500);
+					let ix = -wx % 3 != -1 ? -wx + wx % 3 - 1 : -wx;
+					for(var i = ix; i <= wx; i+= 3) { // horizontal
+						for(var j = -13; j <= 12; j+= 3) {
+							add(i, j);
+							add(i + 1, j + 1);
+							add(i + 2, j + 2);
+						}
+					}
+				},
+				drawCanvas() {
+					if(!this.canvas.redrawLoop) return;
+					for(var i in this.canvas.items) {
+						this.canvas.items[i].forEach(o => {
+							let r = Math.random(), show = (o.x < 0 && o.y <= 0 && r > .2) || (o.x < 0 && o.y < -o.x && r > .3) ||
+								(o.x < 0 && r > .6) || (o.x >= 0 && -o.y > .5 * o.x && r > .2) || (o.x >= 0 && r > .6);
+							if(o.v != show) {
+								if(show) o.e.fadeIn(2500 + 100 * i);
+								else o.e.fadeOut(500 + 20 * i);
+								o.v = show;
+							}
+						});
+					}
+					setTimeout(() => { this.drawCanvas(); }, 10000);
+				}
 			}
 		});
 		const store = {};
 		const router = new VueRouter({
 			mode: 'history',
-			scrollBehavior: (to, from, savedPosition) => {
-				if (to.hash) {
-					if (to.hash != "#home")
-						isHomePageActive = false
-					else
-						isHomePageActive = true
-					fullpage_api.moveTo(to.hash);
-					return { selector: to.hash }
-				} else {
-					return { x: 0, y: 0 }
-				}
-			},
 			routes: [
 				{ path: '/', component: Home }
 			]
