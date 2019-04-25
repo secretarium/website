@@ -452,7 +452,10 @@
 	</script>
 
 	<script>
-		const store = {}, onDrop = null, onResize = {};
+		const onDrop = null, onResize = {}, store = {
+			isPresentationPages: true,
+			isLogoPage: true
+		};
 
 		const Home = Vue.component('sec-home', {
 			template: '#sec-home',
@@ -484,8 +487,12 @@
 			},
 			methods: {
 				onLeave (origin, destination, direction) {
-					this.canvas.redrawLoop = destination.index == 0;
-					if(this.canvas.redrawLoop) setTimeout(() => { this.drawCanvas(); }, 10000);
+					let x = this.$root.store.isLogoPage = destination.index == 0;
+					if(!x) this.canvas.redrawLoop = false;
+					else if(!this.canvas.redrawLoop) {
+						this.canvas.redrawLoop = true;
+						setTimeout(() => { this.drawCanvas(); }, 1500);
+					}
 					return true;
 				},
 				fillCanvas() {
@@ -512,7 +519,7 @@
 					}
 				},
 				drawCanvas() {
-					if(!this.canvas.redrawLoop) return;
+					if(!this.$root.store.isLogoPage) return;
 					for(var i in this.canvas.items) {
 						this.canvas.items[i].forEach(o => {
 							let r = Math.random(), show = (o.x < 0 && o.y <= 0 && r > .2) || (o.x < 0 && o.y < -o.x && r > .3) ||
@@ -528,12 +535,18 @@
 				}
 			}
 		});
+
 		const router = new VueRouter({
 			mode: 'history',
 			routes: [
 				{ path: '/', component: Home }
 			]
 		});
+		router.beforeEach((to, from, next) => {
+			store.isPresentationPages = (to.path == '/' || to.path.startsWith("/#"));
+			next();
+		});
+
 		const app = new Vue({
 			router,
 			data: () => {
