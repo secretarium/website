@@ -9,11 +9,11 @@
 	<title>Secretarium - Entrusted with secrets</title>
 	<link rel="icon" type="image/png" href="images/secretarium_128x128.png">
 
-	<link rel="stylesheet" href="styles/reset-2.0.0.css" />
+	<!-- <link rel="stylesheet" href="styles/reset-2.0.0.css" /> -->
 	<link rel="stylesheet" href="styles/bootstrap-4.3.1.min.css" />
 	<link rel="stylesheet" href="styles/fontawesome-5.7.2.all.min.css" />
 	<link rel="stylesheet" href="styles/fullpage-3.0.4.min.css" />
-	<link rel="stylesheet" href="styles/secretarium-0.0.0.css" />
+	<link rel="stylesheet" href="styles/secretarium-0.0.1.css" />
 
 
 	<script src="scripts/jquery-3.3.1.min.js"></script>
