@@ -32,24 +32,24 @@
 
 	<div id="app" @dragover.prevent @drop.prevent v-cloak>
 		<header>
-			<nav class="navbar" :class="{'fixed-top':store.isPresentationPages, 'logo-page':store.isLogoPage}">
-				<div :class="{container:!store.isLogoPage}">
+			<nav class="navbar px-0 pb-0" :class="{'fixed-top':store.isPresentationPages, 'logo-page':store.isLogoPage}">
+				<div class="container-fluid" :class="{container:!store.isLogoPage}">
 					<a class="navbar-brand logo" href="/"> </a>
 					<ul id="presentation-menu" class="navbar-nav flex-row d-none d-md-flex">
-						<li class="nav-item py-0 px-2" data-menuanchor="what-it-is">
-							<a class="nav-link" href="#what-it-is">What</a>
+						<li class="nav-item py-0 px-2">
+							<a class="nav-link" data-menuanchor="what-it-is" href="#what-it-is">What</a>
 						</li>
-						<li class="nav-item py-0 px-2" data-menuanchor="why">
-							<a class="nav-link" href="#why">Why</a>
+						<li class="nav-item py-0 px-2">
+							<a class="nav-link" data-menuanchor="why" href="#why">Why</a>
 						</li>
-						<li class="nav-item py-0 px-2" data-menuanchor="whom-for">
-							<a class="nav-link" href="#whom-for">Whom for</a>
+						<li class="nav-item py-0 px-2">
+							<a class="nav-link" data-menuanchor="whom-for" href="#whom-for">Whom for</a>
 						</li>
-						<li class="nav-item py-0 px-2" data-menuanchor="technology">
-							<a class="nav-link" href="#technology">Technology</a>
+						<li class="nav-item py-0 px-2">
+							<a class="nav-link" data-menuanchor="technology" href="#technology">Technology</a>
 						</li>
-						<li class="nav-item py-0 px-2" data-menuanchor="team">
-							<a class="nav-link" href="#team">About us</a>
+						<li class="nav-item py-0 px-2">
+							<a class="nav-link" data-menuanchor="team" href="#team">About us</a>
 						</li>
 					</ul>
 					<ul id="menu" class="navbar-nav flex-row ml-auto">
@@ -130,29 +130,31 @@
 						</li>
 					</ul>
 				</div>
-				<div id="presentation-sub-menu" class="container d-none d-md-flex">
-					<ul id="sub-what" class="navbar-nav flex-row m-0 p-0 mt-3">
-						<li class="nav-item py-0 px-2" data-menuanchor="what-it-is">
-							<a href="#what-it-is">What is Secretarium ?</a>
-						</li>
-						<li class="nav-item py-0 px-2" data-menuanchor="what-it-does">
-							<a href="#what-it-does">What does it provide ?</a>
-						</li>
-						<li class="nav-item py-0 px-2" data-menuanchor="scaling">
-							<a href="#scaling">How does it scale ?</a>
-						</li>
-					</ul>
-					<ul id="sub-how" class="navbar-nav flex-row m-0 p-0 mt-3">
-						<li class="nav-item py-0 px-2" data-menuanchor="technology">
-							<a href="#technology">How does it work ?</a>
-						</li>
-						<li class="nav-item py-0 px-2" data-menuanchor="secret-processing">
-							<a href="#secret-processing">Secret processing</a>
-						</li>
-						<li class="nav-item py-0 px-2" data-menuanchor="secret-mixing">
-							<a href="#secret-mixing">Secret mixing</a>
-						</li>
-					</ul>
+				<div id="presentation-sub-menu" class="mt-2 d-none d-md-flex">
+					<div class="container small">
+						<ul id="sub-what" class="navbar-nav flex-row m-0 p-0 my-2">
+							<li class="nav-item py-0 px-2">
+								<a data-menuanchor="what-it-is" href="#what-it-is">What is Secretarium ?</a>
+							</li>
+							<li class="nav-item py-0 px-2">
+								<a data-menuanchor="what-it-does" href="#what-it-does">What does it provide ?</a>
+							</li>
+							<li class="nav-item py-0 px-2">
+								<a data-menuanchor="scaling" href="#scaling">How does it scale ?</a>
+							</li>
+						</ul>
+						<ul id="sub-how" class="navbar-nav flex-row m-0 p-0 my-2">
+							<li class="nav-item py-0 px-2">
+								<a data-menuanchor="technology" href="#technology">How does it work ?</a>
+							</li>
+							<li class="nav-item py-0 px-2">
+								<a data-menuanchor="secret-processing" href="#secret-processing">Secret processing</a>
+							</li>
+							<li class="nav-item py-0 px-2">
+								<a data-menuanchor="secret-mixing" href="#secret-mixing">Secret mixing</a>
+							</li>
+						</ul>
+					</div>
 				</div>
 			</nav>
 		</header>
