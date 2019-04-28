@@ -79,12 +79,12 @@
 								<button type="button" class="dropdown-item" @click.prevent="disconnect">Disconnect</button>
 							</div>
 						</li>
-						<li v-else class="nav-item ml-auto dropdown" style="margin-right: 2%;">
+						<li v-else class="nav-item ml-auto dropdown" style="margin-right: 2vw;">
 							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
 								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">connect</a>
-							<div class="dropdown-menu dropdown-menu-right p-3" aria-labelledby="navbarDropdown">
+							<div class="dropdown-menu dropdown-menu-right p-3" aria-labelledby="navbarDropdown" style="position: absolute;">
 								<h5 class="dropdown-header pl-0 pt-0">Use saved key</h5>
-								<form v-if="keys.list.length>0" class="form-inline" @submit.prevent>
+								<form v-if="keys.list.length>0" class="form-inline flex-nowrap" @submit.prevent>
 									<div class="form-group">
 										<label for="keysListSelect" class="sr-only">Select a key</label>
 										<select id="keysListSelect" class="form-control form-control-sm" style="width: auto;" @change="onKeyChange">
@@ -115,7 +115,7 @@
 								</form>
 								<div class="dropdown-divider my-3"></div>
 								<h5 class="dropdown-header pl-0 pt-0">Create new key</h5>
-								<form class="form-inline" @submit.prevent>
+								<form class="form-inline flex-nowrap" @submit.prevent>
 									<div class="form-group">
 										<label for="createdKeyName" class="sr-only">Key name</label>
 										<input type="text" class="form-control form-control-sm" id="createdKeyName" placeholder="Key name">
