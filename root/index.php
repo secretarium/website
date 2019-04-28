@@ -32,8 +32,8 @@
 
 	<div id="app" @dragover.prevent @drop.prevent v-cloak>
 		<header>
-			<nav class="navbar px-0 pb-0" :class="{'fixed-top':store.isPresentationPages, 'logo-page':store.isLogoPage}">
-				<div class="container-fluid" :class="{container:!store.isLogoPage}">
+			<nav class="navbar p-0" :class="{'fixed-top':store.isPresentationPages, 'logo-page':store.isLogoPage}">
+				<div class="container-fluid py-2" :class="{container:!store.isLogoPage}">
 					<a class="navbar-brand logo" href="/"> </a>
 					<ul id="presentation-menu" class="navbar-nav flex-row d-none d-md-flex">
 						<li class="nav-item py-0 px-2">
@@ -130,7 +130,7 @@
 						</li>
 					</ul>
 				</div>
-				<div id="presentation-sub-menu" class="mt-2 d-none d-md-flex">
+				<div id="presentation-sub-menu" class="d-none d-md-flex">
 					<div class="container small">
 						<ul id="sub-what" class="navbar-nav flex-row m-0 p-0 my-2">
 							<li class="nav-item py-0 px-2">
