@@ -33,7 +33,7 @@
 	<div id="app" @dragover.prevent @drop.prevent v-cloak>
 		<header>
 			<nav class="navbar p-0" :class="{'fixed-top':store.isPresentationPages, 'logo-page':store.isLogoPage}">
-				<div class="container-fluid py-2" :class="{container:!store.isLogoPage}">
+				<div id="#menu" class="container-fluid py-2" :class="{container:!store.isLogoPage}">
 					<a class="navbar-brand logo" href="/"> </a>
 					<ul id="presentation-menu" class="navbar-nav flex-row d-none d-md-flex">
 						<li class="nav-item py-0 px-2">
@@ -52,7 +52,7 @@
 							<a class="nav-link" data-menuanchor="team" href="#team">About us</a>
 						</li>
 					</ul>
-					<ul id="menu" class="navbar-nav flex-row ml-auto">
+					<ul id="sec-menu" class="navbar-nav flex-row ml-auto">
 						<li v-if="connection.retrying" class="nav-item ml-auto">
 							<div class="alert alert-warning py-1 px-2 m-0 mr-3 d-inline-block btn-sm" role="alert" v-if="connection.retryingMsg.length>0">
 								{{connection.retryingMsg}}
@@ -549,6 +549,7 @@
 					}
 					else if(this.canvas.redrawLoop == null)
 						this.canvas.redrawLoop = setTimeout(() => { this.drawCanvas(); }, 1500);
+					//$(".fp-tableCell").css("padding-top", $("#menu").height() + "px");
 					return true;
 				},
 				fillCanvas(onResize = false) {
