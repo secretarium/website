@@ -35,14 +35,14 @@
 			<nav class="navbar p-0" :class="{'fixed-top':store.isPresentationPages, 'logo-page':store.isLogoPage}">
 				<div id="#menu" class="container-fluid py-2" :class="{container:!store.isLogoPage}">
 					<a class="navbar-brand logo" href="/"> </a>
-					<ul id="presentation-menu" class="navbar-nav flex-row d-none d-md-flex">
+					<ul id="presentation-menu" class="navbar-nav flex-row d-none d-flex">
 						<li class="nav-item py-0 px-2">
 							<a class="nav-link" data-menuanchor="what-it-is" href="#what-it-is">What</a>
 						</li>
-						<li class="nav-item py-0 px-2">
+						<li class="nav-item py-0 px-2 d-none d-sm-flex">
 							<a class="nav-link" data-menuanchor="why" href="#why">Why</a>
 						</li>
-						<li class="nav-item py-0 px-2">
+						<li class="nav-item py-0 px-2 d-none d-md-flex">
 							<a class="nav-link" data-menuanchor="whom-for" href="#whom-for">Whom for</a>
 						</li>
 						<li class="nav-item py-0 px-2">
@@ -133,7 +133,7 @@
 						</li>
 					</ul>
 				</div>
-				<div id="presentation-sub-menu" class="d-none d-md-flex">
+				<div id="presentation-sub-menu" class="d-none d-sm-flex">
 					<div class="container small">
 						<ul id="sub-what" class="navbar-nav flex-row m-0 p-0 my-2">
 							<li class="nav-item py-0 px-2">
@@ -523,6 +523,7 @@
 						scrollOverflow: true,
 						licenseKey: '98AFD12E-428246E1-B7908FFE-69A37211',
 						sectionsColor: ['transparent'],
+						responsiveWidth: 768,
 						//touchSensitivity: 30,
 						lockAnchors: true,
 						menu: 'nav',
