@@ -542,7 +542,7 @@
 				Vue.set(this.options, "onLeave", this.onLeave);
 				this.fillCanvas();
 				setTimeout(() => { $("#stage .full-logo").addClass("active") }, 100);
-				this.canvas.redrawLoop = setTimeout(() => { this.drawCanvas(); }, 2500);
+				this.canvas.redrawLoop = setTimeout(() => { this.drawCanvas(); }, 1500);
 				subscribeOnResize("presentation-logo", () => {
 					$("#stage").empty();
 					this.canvas.items = [];
