@@ -279,7 +279,7 @@
 							</div>
 						</div>
 						<div class="sec-img scale">
-							<img src="images/figure_scale.svg" alt="scale image"/>
+							<img src="images/figure_scale.png" alt="scale image"/>
 						</div>
 					</div>
 				</section>
@@ -326,7 +326,7 @@
 							Shared services are distributed and controlled multilaterally, preventing any
 							single party from pulling the plug.</h3>
 						<div class="sec-img map">
-							<img src="images/figure_map.svg" alt="map image"/>
+							<img src="images/figure_map.png" alt="map image"/>
 						</div>
 					</div>
 				</section>
