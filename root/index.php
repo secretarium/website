@@ -475,8 +475,8 @@
 							<div class="col-md-3">
 								<h5 class="footer-category">Community</h5>
 								<ul>
-									<li><a href="#">Discourse</a></li>
-									<li><a href="#">Twitter</a></li>
+									<li><a href="https://twitter.com/secretarium1" target="_blank">Twitter</a></li>
+									<li><a href="https://www.linkedin.com/company/secretarium" target="_blank">LinkedIn</a></li>
 								<ul>
 							</div>
 							<div class="col-md-3">
@@ -484,6 +484,7 @@
 								<ul>
 									<li><a href="#">Blog</a></li>
 									<li><a href="#">Privacy Notice</a></li>
+									<li><a href="#">About</a></li>
 								<ul>
 							</div>
 						</div>
@@ -491,7 +492,7 @@
 							<div class="col-md-12">
 								<p class="copyright">
 									All rights reserved. Copyright &copy; 2019 Secretarium Ltd. - Webdesign by
-									<a href="https://florian.bzh" target="_blank" style="color:#fff">Florian Guitton</a>
+									<a href="https://florian.bzh" target="_blank" style="color:#eee">Florian Guitton</a>
 								</p>
 							</div>
 						</div>
