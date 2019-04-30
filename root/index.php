@@ -523,7 +523,7 @@
 						scrollOverflow: true,
 						licenseKey: '98AFD12E-428246E1-B7908FFE-69A37211',
 						sectionsColor: ['transparent'],
-						touchSensitivity: 30,
+						//touchSensitivity: 30,
 						lockAnchors: true,
 						menu: 'nav',
 						// The scrollBar behaviour is extra-buggy
@@ -553,7 +553,6 @@
 					}
 					else if(this.canvas.redrawLoop == null)
 						this.canvas.redrawLoop = setTimeout(() => { this.drawCanvas(); }, 1500);
-					//$(".fp-tableCell").css("padding-top", $("#menu").height() + "px");
 					return true;
 				},
 				fillCanvas(onResize = false) {
