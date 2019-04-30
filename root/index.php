@@ -53,7 +53,10 @@
 						</li>
 					</ul>
 					<ul id="sec-menu" class="navbar-nav flex-row ml-auto">
-						<li v-if="connection.retrying" class="nav-item ml-auto">
+						<li class="nav-item mr-3" v-if="!store.isPresentationPages||store.isLogoPage">
+							<a class="nav-link" data-menuanchor="what-it-is" href="#what-it-is">presentation</a>
+						</li>
+						<li v-if="connection.retrying" class="nav-item">
 							<div class="alert alert-warning py-1 px-2 m-0 mr-3 d-inline-block btn-sm" role="alert" v-if="connection.retryingMsg.length>0">
 								{{connection.retryingMsg}}
 							</div>
@@ -69,7 +72,7 @@
 								</div>
 							</div>
 						</li>
-						<li v-if="isLoggedIn" class="nav-item ml-auto dropdown" style="margin-right: 2%;">
+						<li v-if="isLoggedIn" class="nav-item dropdown" style="margin-right: 2%;">
 							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
 								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">me</a>
 							<div class="dropdown-menu dropdown-menu-right p-3" aria-labelledby="navbarDropdown">
@@ -79,7 +82,7 @@
 								<button type="button" class="dropdown-item" @click.prevent="disconnect">Disconnect</button>
 							</div>
 						</li>
-						<li v-else class="nav-item ml-auto dropdown" style="margin-right: 2vw;">
+						<li v-else class="nav-item dropdown" style="margin-right: 2vw;">
 							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
 								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">connect</a>
 							<div class="dropdown-menu dropdown-menu-right p-3" aria-labelledby="navbarDropdown" style="position: absolute;">
