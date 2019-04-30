@@ -37,13 +37,10 @@
 					<a class="navbar-brand logo" href="/"> </a>
 					<ul id="presentation-menu" class="navbar-nav flex-row d-none d-flex">
 						<li class="nav-item py-0 px-2">
-							<a class="nav-link" data-menuanchor="what-it-is" href="#what-it-is">What</a>
+							<a class="nav-link" data-menuanchor="what-it-is" href="#what-it-is">Concept</a>
 						</li>
 						<li class="nav-item py-0 px-2 d-none d-sm-flex">
-							<a class="nav-link" data-menuanchor="why" href="#why">Why</a>
-						</li>
-						<li class="nav-item py-0 px-2 d-none d-md-flex">
-							<a class="nav-link" data-menuanchor="whom-for" href="#whom-for">Whom for</a>
+							<a class="nav-link" data-menuanchor="why" href="#why">Rationale</a>
 						</li>
 						<li class="nav-item py-0 px-2">
 							<a class="nav-link" data-menuanchor="technology" href="#technology">Technology</a>
@@ -135,7 +132,7 @@
 				</div>
 				<div id="presentation-sub-menu" class="d-none d-sm-flex">
 					<div class="container small">
-						<ul id="sub-what" class="navbar-nav flex-row m-0 p-0 my-2">
+						<ul id="sub-concept" class="navbar-nav flex-row m-0 p-0 my-2">
 							<li class="nav-item py-0 px-2">
 								<a data-menuanchor="what-it-is" href="#what-it-is">What is Secretarium ?</a>
 							</li>
@@ -146,7 +143,15 @@
 								<a data-menuanchor="scaling" href="#scaling">How does it scale ?</a>
 							</li>
 						</ul>
-						<ul id="sub-how" class="navbar-nav flex-row m-0 p-0 my-2">
+						<ul id="sub-rationale" class="navbar-nav flex-row m-0 p-0 my-2">
+							<li class="nav-item py-0 px-2">
+								<a data-menuanchor="why" href="#why">Why Secretarium ?</a>
+							</li>
+							<li class="nav-item py-0 px-2">
+								<a data-menuanchor="whom-for" href="#whom-for">Who is it for ?</a>
+							</li>
+						</ul>
+						<ul id="sub-techno" class="navbar-nav flex-row m-0 p-0 my-2">
 							<li class="nav-item py-0 px-2">
 								<a data-menuanchor="technology" href="#technology">How does it work ?</a>
 							</li>
