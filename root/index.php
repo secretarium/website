@@ -33,7 +33,7 @@
 	<div id="app" @dragover.prevent @drop.prevent v-cloak>
 		<header>
 			<nav class="navbar p-0" :class="{'fixed-top':store.isPresentationPages, 'logo-page':store.isLogoPage}">
-				<div id="#menu" class="container-fluid py-2" :class="{container:!store.isLogoPage}">
+				<div id="menu" class="container-fluid py-2" :class="{container:!store.isLogoPage}">
 					<a class="navbar-brand logo" href="/"> </a>
 					<ul id="presentation-menu" class="navbar-nav flex-row d-none d-flex">
 						<li class="nav-item py-0 px-2">
@@ -529,11 +529,8 @@
 						licenseKey: '98AFD12E-428246E1-B7908FFE-69A37211',
 						sectionsColor: ['transparent'],
 						responsiveWidth: 768,
-						//touchSensitivity: 30,
 						lockAnchors: true,
-						menu: 'nav',
-						// The scrollBar behaviour is extra-buggy
-						//scrollBar: true
+						menu: 'nav'
 					},
 					canvas: { redrawLoop: null, items: {}, maxDist: 0 }
 				}
