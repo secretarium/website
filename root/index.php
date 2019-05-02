@@ -508,17 +508,19 @@
 	</script>
 
 	<script>
-		const onDrop = null, onResize = {}, store = {
-			isPresentationPages: window.location.pathname == "/",
-			isLogoPage: true,
-			gateways: [
-				{ endpoint: "wss://ovh2.node.secretarium.org:443/", name: "PROD (OVH #2)" },
-				{ endpoint: "wss://ovh3.node.secretarium.org:443/", name: "PROD (OVH #3)" },
-				{ endpoint: "wss://ovh5.node.secretarium.org:443/", name: "PROD (OVH #5)" },
-				{ endpoint: "wss://ovh6.node.secretarium.org:443/", name: "PROD (OVH #6)" },
-				{ endpoint: "wss://ovh7.node.secretarium.org:443/", name: "PROD (OVH #7)" }
-			]
-		}
+		const onDrop = null, onResize = {},
+			store = {
+				isPresentationPages: window.location.pathname == "/",
+				isLogoPage: true,
+				gateways: [
+					{ endpoint: "wss://ovh2.node.secretarium.org:443/", name: "PROD (OVH #2)" },
+					{ endpoint: "wss://ovh3.node.secretarium.org:443/", name: "PROD (OVH #3)" },
+					{ endpoint: "wss://ovh5.node.secretarium.org:443/", name: "PROD (OVH #5)" },
+					{ endpoint: "wss://ovh6.node.secretarium.org:443/", name: "PROD (OVH #6)" },
+					{ endpoint: "wss://ovh7.node.secretarium.org:443/", name: "PROD (OVH #7)" }
+				],
+				dcapps: {}
+			};
 
 		const Presentation = Vue.component('sec-presentation', {
 			template: '#sec-presentation',
@@ -636,6 +638,13 @@
 			methods: {
 				async connect(endpoint = "") {
 				},
+				getDCApps() {
+					return $.getJSON("https://secretarium.org/dcapps/")
+						.done(async x => {
+							for (var name in x) { x[name].id = await sec.utils.hashBase64(name); }
+							Vue.set(store, "dcapps", x);
+						});
+				}
 			}
 		}).$mount('#app');
 
