@@ -15,6 +15,7 @@
 	<link rel="stylesheet" href="styles/secretarium-0.0.1.css" />
 	<link rel="stylesheet" href="styles/secretarium.navbar.css" />
 	<link rel="stylesheet" href="styles/secretarium.presentation.css" />
+	<link rel="stylesheet" href="styles/secretarium.alerts.css" />
 
 	<script src="scripts/jquery-3.3.1.min.js"></script>
 	<script src="scripts/popper-1.14.7.min.js"></script>
@@ -187,6 +188,8 @@
 				</div>
 			</div>
 		</footer>
+
+		<sec-alerts></sec-alerts>
 	</div>
 
 	<script type="text/x-template" id="sec-presentation">
@@ -507,6 +510,17 @@
 		</full-page>
 	</script>
 
+	<script type="text/x-template" id="sec-alerts">
+		<div v-if="alerts.length>0" id="sec-alert-wrap">
+			<div v-for="a in alerts" :key="a.key" class="sec-alert alert alert-warning alert-dismissible fade show" role="alert">
+				<div v-html="a.html"></div>
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+		</div>
+	</script>
+
 	<script>
 		const onDrop = null, onResize = {},
 			store = {
@@ -519,7 +533,8 @@
 					{ endpoint: "wss://ovh6.node.secretarium.org:443/", name: "PROD (OVH #6)" },
 					{ endpoint: "wss://ovh7.node.secretarium.org:443/", name: "PROD (OVH #7)" }
 				],
-				dcapps: {}
+				dcapps: {},
+				alerts: []
 			};
 
 		const Presentation = Vue.component('sec-presentation', {
@@ -599,6 +614,15 @@
 					}
 					if(this.$root.store.isLogoPage)
 						this.canvas.redrawLoop = setTimeout(() => { this.drawCanvas(); }, 10000);
+				}
+			}
+		});
+
+		const Alerts = Vue.component('sec-alerts', {
+			template: '#sec-alerts',
+			data: () => {
+				return {
+					alerts: store.alerts
 				}
 			}
 		});
