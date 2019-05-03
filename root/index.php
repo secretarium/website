@@ -512,9 +512,10 @@
 
 	<script type="text/x-template" id="sec-alerts">
 		<div v-if="alerts.length>0" id="sec-alert-wrap">
-			<div v-for="a in alerts" :key="a.key" class="sec-alert alert alert-warning alert-dismissible fade show" role="alert">
+			<div v-for="(a, i) in alerts" class="sec-alert alert alert-warning fade show" role="alert"
+				:class="{'alert-dismissible':a.dismissible}" :key="a.key" >
 				<div v-html="a.html"></div>
-				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<button v-if="a.dismissible" type="button" class="close" data-dismiss="alert" aria-label="Close" @click="close(i)">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
@@ -623,6 +624,11 @@
 			data: () => {
 				return {
 					alerts: store.alerts
+				}
+			},
+			methods: {
+				close(i) {
+					store.alerts.splice(i, 1);
 				}
 			}
 		});
