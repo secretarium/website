@@ -499,7 +499,7 @@
 						<div class="row mt-4">
 							<div class="col-md-12">
 								<p class="copyright">
-									All rights reserved. Copyright &copy; 2019 Secretarium Ltd. - Webdesign by
+									All rights reserved. Copyright &copy; <?=date("Y")?> Secretarium Ltd. - Webdesign by
 									<a href="https://florian.bzh" target="_blank" style="color:#eee">Florian Guitton</a>
 								</p>
 							</div>
