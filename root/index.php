@@ -33,7 +33,7 @@
 
 	<div id="app" @dragover.prevent @drop.prevent v-cloak>
 		<header>
-			<nav class="navbar p-0" :class="{'fixed-top':store.isPresentationPages, 'logo-page':store.isLogoPage}">
+			<nav class="navbar sticky-top p-0" :class="{'logo-page':store.isLogoPage}">
 				<div id="menu" class="container-fluid py-2" :class="{container:!store.isLogoPage}">
 					<a class="navbar-brand logo" href="/"> </a>
 					<ul id="presentation-menu" class="navbar-nav flex-row d-none d-flex">
@@ -51,8 +51,8 @@
 						</li>
 					</ul>
 					<ul id="sec-menu" class="navbar-nav flex-row ml-auto">
-						<li class="nav-item mr-3" v-if="!store.isPresentationPages||store.isLogoPage">
-							<a class="nav-link" data-menuanchor="what-it-is" href="#what-it-is">presentation</a>
+						<li v-if="!store.isPresentationPages||store.isLogoPage" class="nav-item mr-3" >
+							<a class="nav-link shift-left" data-menuanchor="what-it-is" href="#what-it-is">Presentation</a>
 						</li>
 						<li v-if="connection.retrying" class="nav-item">
 							<div class="alert alert-warning py-1 px-2 m-0 mr-3 d-inline-block btn-sm" role="alert" v-if="connection.retryingMsg.length>0">
@@ -70,7 +70,7 @@
 								</div>
 							</div>
 						</li>
-						<li v-if="isLoggedIn" class="nav-item dropdown" style="margin-right: 2%;">
+						<li v-if="isLoggedIn" class="nav-item dropdown" style="margin-right: 2vw;">
 							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
 								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">me</a>
 							<div class="dropdown-menu dropdown-menu-right p-3" aria-labelledby="navbarDropdown">
@@ -80,54 +80,8 @@
 								<button type="button" class="dropdown-item" @click.prevent="disconnect">Disconnect</button>
 							</div>
 						</li>
-						<li v-else class="nav-item dropdown" style="margin-right: 2vw;">
-							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">connect</a>
-							<div class="dropdown-menu dropdown-menu-right p-3" aria-labelledby="navbarDropdown" style="position: absolute;">
-								<h5 class="dropdown-header pl-0 pt-0">Use saved key</h5>
-								<form v-if="keys.list.length>0" class="form-inline flex-nowrap" @submit.prevent>
-									<div class="form-group">
-										<label for="keysListSelect" class="sr-only">Select a key</label>
-										<select id="keysListSelect" class="form-control form-control-sm" style="width: auto;" @change="onKeyChange">
-											<option v-for="(key, i) in keys.list" :value="i">{{key.name}}</option>
-										</select>
-									</div>
-									<div class="form-group mx-3">
-										<label for="keyPwd" class="sr-only">Password</label>
-										<input type="password" class="form-control form-control-sm" id="keyPwd" placeholder="Password">
-									</div>
-									<div class="btn-group ml-auto">
-										<button type="button" class="btn btn-success btn-sm" @click.prevent="connect('')">Connect</button>
-										<button type="button" class="btn btn-success btn-sm dropdown-toggle dropdown-toggle-split"
-												data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" @click.stop="onToggleGateways">
-										</button>
-										<div class="dropdown-menu dropdown-menu-right">
-											<h5 class="dropdown-header">Choose a gateway</h5>
-											<button type="button" class="dropdown-item btn-sm"
-													v-for="gw in store.gateways" :key="gw.endpoint" @click.prevent="connect(gw.endpoint)">
-													<i class="fas fa-fw fa-server pr-3"></i> {{gw.name}}
-											</button>
-											<div role="separator" class="dropdown-divider"></div>
-											<h5 class="dropdown-header">Manage key</h5>
-											<button type="button" class="dropdown-item  btn-sm" @click.prevent="removeKey"><i class="fas fa-fw fa-trash-alt pr-3"></i> Delete key</button>
-											<a class="dropdown-item" :href="keyExportUrl" :download="keyExportName"><i class="fas fa-fw fa-download pr-3"></i> Export</a>
-										</div>
-									</div>
-								</form>
-								<div class="dropdown-divider my-3"></div>
-								<h5 class="dropdown-header pl-0 pt-0">Create new key</h5>
-								<form class="form-inline flex-nowrap" @submit.prevent>
-									<div class="form-group">
-										<label for="createdKeyName" class="sr-only">Key name</label>
-										<input type="text" class="form-control form-control-sm" id="createdKeyName" placeholder="Key name">
-									</div>
-									<div class="form-group ml-3">
-										<label for="createdKeyPassword" class="sr-only">Password</label>
-										<input type="password" class="form-control form-control-sm" id="createdKeyPassword" placeholder="Password">
-									</div>
-									<button type="submit" class="btn btn-primary btn-sm ml-3" @click.prevent="createNewKeys">Generate</button>
-								</form>
-							</div>
+						<li v-else class="nav-item" style="margin-right: 2vw;">
+							<router-link to="/connect" class="nav-link">Connect</router-link>
 						</li>
 					</ul>
 				</div>
@@ -522,6 +476,103 @@
 		</div>
 	</script>
 
+	<script type="text/x-template" id="sec-connect">
+		<div class="container">
+			<ul>
+				<li v-if="$root.connection.retrying" class="">
+					<div class="alert alert-warning py-1 px-2 m-0 mr-3 d-inline-block btn-sm" role="alert" v-if="$root.connection.retryingMsg.length>0">
+						{{$root.connection.retryingMsg}}
+					</div>
+					<div class="btn-group">
+						<button type="button" class="btn btn-outline-primary btn-sm" @click.prevent="$root.connect('')">Retry now</button>
+						<button type="button" class="btn btn-outline-primary btn-sm dropdown-toggle dropdown-toggle-split"
+								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<span class="sr-only">Toggle Dropdown</span>
+						</button>
+						<div class="dropdown-menu dropdown-menu-right">
+							<button type="button" class="dropdown-item btn-sm"
+									v-for="gw in $root.store.gateways" :key="gw.endpoint" @click.prevent="$root.connect(gw.endpoint)">{{gw.name}}</button>
+						</div>
+					</div>
+				</li>
+				<li v-if="$root.isLoggedIn" class=" dropdown" style="margin-right: 2%;">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">me</a>
+					<div class="dropdown-menu dropdown-menu-right p-3" aria-labelledby="navbarDropdown">
+						<router-link to="/apps" class="dropdown-item">DCApp store</router-link>
+						<div class="dropdown-divider"></div>
+						<router-link to="/app/identity" class="dropdown-item">Personal settings</router-link>
+						<button type="button" class="dropdown-item" @click.prevent="$root.disconnect">Disconnect</button>
+					</div>
+				</li>
+				<li v-else class=" dropdown" style="margin-right: 2%;">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">connect</a>
+					<div class="dropdown-menu dropdown-menu-right p-3" aria-labelledby="navbarDropdown">
+						<h5 class="dropdown-header pl-0 pt-0">Use saved key</h5>
+						<form v-if="$root.keys.list.length>0" class="form-inline" @submit.prevent>
+							<div class="form-group">
+								<label for="keysListSelect" class="sr-only">Select a key</label>
+								<select id="keysListSelect" class="form-control form-control-sm" style="width: auto;" @change="$root.onKeyChange">
+									<option v-for="(key, i) in $root.keys.list" :value="i">{{key.name}}</option>
+								</select>
+							</div>
+							<div class="form-group mx-3">
+								<label for="keyPwd" class="sr-only">Password</label>
+								<input type="password" class="form-control form-control-sm" id="keyPwd" placeholder="Password">
+							</div>
+							<div class="btn-group ml-auto">
+								<button type="button" class="btn btn-success btn-sm" @click.prevent="$root.connect('')">Connect</button>
+								<button type="button" class="btn btn-success btn-sm dropdown-toggle dropdown-toggle-split"
+										data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" @click.stop="$root.onToggleGateways">
+								</button>
+								<div class="dropdown-menu dropdown-menu-right">
+									<h5 class="dropdown-header">Choose a gateway</h5>
+									<button type="button" class="dropdown-item btn-sm"
+											v-for="gw in $root.store.gateways" :key="gw.endpoint" @click.prevent="$root.connect(gw.endpoint)"><i class="fas fa-fw fa-server pr-3"> {{gw.name}}</button>
+									<div role="separator" class="dropdown-divider"></div>
+									<h5 class="dropdown-header">Manage key</h5>
+									<button type="button" class="dropdown-item  btn-sm" @click.prevent="$root.removeKey"><i class="fas fa-fw fa-trash-alt pr-3"></i> Delete key</button>
+									<a class="dropdown-item" :href="$root.keyExportUrl" :download="$root.keyExportName"><i class="fas fa-fw fa-download pr-3"></i> Export</a>
+								</div>
+							</div>
+							<sec-notif-state :state="$root.connection.ns.data" class="ml-2"></sec-notif-state>
+						</form>
+						<div class="dropdown-divider my-3"></div>
+						<h5 class="dropdown-header pl-0 pt-0">Create new key</h5>
+						<form class="form-inline" @submit.prevent>
+							<div class="form-group">
+								<label for="createdKeyName" class="sr-only">Key name</label>
+								<input type="text" class="form-control form-control-sm" id="createdKeyName" placeholder="Key name">
+							</div>
+							<div class="form-group ml-3">
+								<label for="createdKeyPassword" class="sr-only">Password</label>
+								<input type="password" class="form-control form-control-sm" id="createdKeyPassword" placeholder="Password">
+							</div>
+							<button type="submit" class="btn btn-primary btn-sm ml-3" @click.prevent="$root.createNewKeys">Generate</button>
+							<sec-notif-state :state="$root.keys.generation.ns.data"></sec-notif-state>
+						</form>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</script>
+
+	<script type="text/x-template" id="sec-app-access-denied">
+		<div class="container mt-4 mb-4">
+			<div class="card mb-4">
+				<h5 class="card-header">
+					<i class="fas fa-fw mr-2 text-primary" :class="$root.store.dcapps[$route.params.id].icon"></i>
+					{{ $root.store.dcapps[$route.params.id].display }}
+				</h5>
+				<div class="card-body">
+					<h5 class="card-title">Restricted access</h5>
+					<p class="card-text">You do not have access to this application.</p>
+				</div>
+			</div>
+		</div>
+	</script>
+
 	<script>
 		const onDrop = null, onResize = {},
 			store = {
@@ -633,14 +684,42 @@
 			}
 		});
 
+		const Connect = Vue.component('sec-connect', {
+			template: '#sec-connect',
+			data: () => {
+				return {
+				}
+			},
+			methods: {
+			}
+		});
+
+		const AppStore = Vue.component('sec-app-store', {
+			template: '#sec-appstore',
+			data: () => {
+				return {
+				}
+			},
+			methods: {
+			}
+		});
+
+		const AppAccessDenied = Vue.component('sec-app-access-denied', {
+			template: '#sec-app-access-denied'
+		});
+
 		const router = new VueRouter({
 			mode: 'history',
 			routes: [
-				{ path: '/', component: Presentation }
+				{ path: '/', component: Presentation },
+				{ path: '/connect', component: Connect },
+				{ path: '/app-store', component: AppStore },
+				{ path: '/app/:id', component: AppAccessDenied },
 			]
 		});
 		router.beforeEach((to, from, next) => {
 			store.isPresentationPages = to.path == '/';
+			$("body").toggleClass("page-presentation", store.isPresentationPages);
 			next();
 		});
 
@@ -662,6 +741,7 @@
 			},
 			computed: {
 				state() { return { text: "not connected", color: "text-danger", icon: "fa-exclamation-circle" } },
+				connectedAs() { return ""; },
 				isConnected() { return false; },
 				isLoggedIn() { return false; }
 			},
