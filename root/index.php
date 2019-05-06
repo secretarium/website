@@ -28,8 +28,8 @@
 </head>
 
 <body>
-	<img src="images/secretarium_title.png" id="stage-full-logo" />
-	<img src="images/secretarium_logo_grey.png" id="stage-logo" />
+	<img src="images/secretarium_title.svg" id="stage-full-logo" />
+	<img src="images/secretarium_logo_grey.svg" id="stage-logo" />
 	<div id="stage"></div>
 
 	<div id="app" @dragover.prevent @drop.prevent v-cloak>
@@ -396,43 +396,75 @@
 			<div class="section" data-anchor="team">
 				<section>
 					<div class="container">
-						<h2>The Secretarium team</h2>
+						<h2>About us</h2>
 						<h3>A team of engineers, with deep investment banking and crypto background</h3>
 						<div class="row mx-0 mt-5">
-							<div class="col-md-4 px-0 py-2 pr-md-2">
-								<img class="team-member" />
-								<h4 class="team-member-name">NAME SURNAME</h4>
-								<span class="team-member-position">Founder, Chief Technology Officer</span>
+							<div class="col-md-8 pl-0">
+								<h4>The secretarium team</h4>
+								<br/>
+								<div class="about-item">
+									<img class="team-member" />
+									<h5 class="team-member-name">Bertrand Foing</h5>
+									<span class="team-member-position">laoreet non curabitur gravida arcu ac tortor dignissim convallis aenean et tortor at risus viverra adipiscing at in tellus integer</span>
+								</div>
+								<div class="about-item">
+									<img class="team-member" />
+									<h5 class="team-member-name">Cédric Wahl</h5>
+									<span class="team-member-position">aliquam etiam erat velit scelerisque in dictum non consectetur a erat nam at lectus urna duis convallis convallis tellus id</span>
+								</div>
+								<div class="about-item">
+									<img class="team-member" />
+									<h5 class="team-member-name">Axel Oehmichen</h5>
+									<span class="team-member-position">sed enim ut sem viverra aliquet eget sit amet tellus cras adipiscing enim eu turpis egestas pretium aenean pharetra magna</span>
+								</div>
 							</div>
-							<div class="col-md-4 px-0 py-2 px-md-2">
-								<img class="team-member" />
-								<h4 class="team-member-name">NAME SURNAME</h4>
-								<span class="team-member-position">Founder, Chief Science Officer</span>
-							</div>
-							<div class="col-md-4 px-0 py-2 pl-md-2">
-								<img class="team-member" />
-								<h4 class="team-member-name">NAME SURNAME</h4>
-								<span class="team-member-position">Founder, Chief Event Officer</span>
+							<div class="col-md-4 pr-0">
+								<h4>Our sponsor</h4>
+								<br/>
+								<div class="about-item">
+									<img src="/images/logo_intel.svg" class="comp-logo"/>
+								</div>
+								<br/>
+								<br/>
+								<h4>Our partner</h4>
+								<br/>
+								<div class="about-item">
+									<img src="/images/logo_swisscom.svg" class="comp-logo"/>
+								</div>
 							</div>
 						</div>
+						<br/>
+						<br/>
+						<h4>Our clients</h4>
 						<div class="row mx-0">
-							<div class="col-md-4 px-0 py-2 pr-md-2">
-								<img class="team-member" />
-								<h4 class="team-member-name">NAME SURNAME</h4>
-								<span class="team-member-position">Founder, Chief Unicorn Officer</span>
+							<div class="col-md-6 pl-0">
+								<br/>
+								<div class="about-item">
+									<img src="/images/logo_soge.svg" class="comp-logo"/>
+								</div>
+								<div class="about-item">
+									<img src="/images/logo_ubs.svg" class="comp-logo"/>
+								</div>
 							</div>
-							<div class="col-md-4 px-0 py-2 pl-md-2">
-								<img class="team-member" />
-								<h4 class="team-member-name">NAME SURNAME</h4>
-								<span class="team-member-position">Founder, Chief Party Officer</span>
+							<div class="col-md-6 pr-0">
+								<div class="about-item">
+									<img src="/images/logo_creds.svg" class="comp-logo"/>
+								</div>
+								<div class="about-item">
+									<img src="/images/logo_kbc.svg" class="comp-logo"/>
+								</div>
 							</div>
 						</div>
+						<br/>
+						<br/>
+						<br/>
+						<br/>
 					</div>
 				</section>
 			</div>
 			<div class="section fp-auto-height" data-anchor="links">
 				<footer>
-					<div class="container py-4">
+					<div class="container py-5">
 						<div class="row">
 							<div class="col-md-3">
 								<h5 class="footer-category">Community</h5>
@@ -650,9 +682,10 @@
 				return {
 					options: {
 						scrollOverflow: true,
+						anchors: ['home', 'what-it-is', 'what-it-does', 'scaling', 'why', 'whom-for', 'technology', 'secret-processing', 'secret-mixing', 'team', 'links'],
 						licenseKey: '98AFD12E-428246E1-B7908FFE-69A37211',
 						sectionsColor: ['transparent'],
-						responsiveWidth: 768,
+						// responsiveWidth: 768,
 						lockAnchors: true,
 						menu: 'nav'
 					},
@@ -673,6 +706,7 @@
 			},
 			methods: {
 				onLeave (origin, destination, direction) {
+					console.log('fullpage >', destination.anchor)
 					let x = destination.index == 0;
 					this.$root.store.isLogoPage = x;
 					if(!x) {
@@ -686,8 +720,8 @@
 				},
 				fillCanvas(onResize = false) {
 					let t = $("#stage-full-logo"), l = $("#stage-logo"), w = $("#stage"),
-						sx = w.width(), sy = w.height(), flx = 5906, fly = 1231, lx = 1665, ly = 1231, lhx = 685, lhy = 680,
-						r = 0.08 * sy / fly, y = sy * 0.46, x = (sx - r * flx) / 2, wx = Math.floor(sx / (r * lhx) / 2),
+						sx = w.width(), sy = w.height(), flx = 5906, fly = 1231, lx = 1665, ly = 1231, lhx = 650, lhy = 650,
+						r = 0.1 * sy / fly, y = sy * 0.42, x = (sx - r * flx) / 2, wx = Math.floor(sx / (r * lhx) / 2),
 						add = (i, j) => {
 							if(i >= 0 && j >= -1 || Math.abs(j) > 12) return;
 							let dist = Math.floor(Math.sqrt(i * i + j * j)), nx = x + i * r * lhx, ny = y - j * r * lhy,
@@ -820,6 +854,7 @@
 			]
 		});
 		router.beforeEach((to, from, next) => {
+			console.log('router >', to.hash);
 			store.isPresentationPages = to.path == '/';
 			store.isLogoPage = to.path == '/' && (['', '#', '#home'].includes(to.hash));
 			$("body").toggleClass("page-presentation", store.isPresentationPages);
