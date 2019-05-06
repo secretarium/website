@@ -7,23 +7,24 @@
 	<meta name="description" content="Secretarium is a distributed confidential computing platform guaranteeing privacy by default and by design">
 
 	<title>Secretarium - Entrusted with secrets</title>
-	<link rel="icon" type="image/png" href="images/secretarium_128x128.png">
+	<link rel="icon" type="image/png" href="/images/secretarium_128x128.png">
 
-	<link rel="stylesheet" href="styles/bootstrap-4.3.1.min.css" />
-	<link rel="stylesheet" href="styles/fontawesome-5.7.2.all.min.css" />
-	<link rel="stylesheet" href="styles/fullpage-3.0.4.min.css" />
-	<link rel="stylesheet" href="styles/secretarium-0.0.1.css" />
-	<link rel="stylesheet" href="styles/secretarium.navbar.css" />
-	<link rel="stylesheet" href="styles/secretarium.presentation.css" />
-	<link rel="stylesheet" href="styles/secretarium.alerts.css" />
+	<link rel="stylesheet" href="/styles/bootstrap-4.3.1.min.css" />
+	<link rel="stylesheet" href="/styles/fontawesome-5.7.2.all.min.css" />
+	<link rel="stylesheet" href="/styles/fullpage-3.0.4.min.css" />
+	<link rel="stylesheet" href="/styles/secretarium-0.0.1.css" />
+	<link rel="stylesheet" href="/styles/secretarium.navbar.css" />
+	<link rel="stylesheet" href="/styles/secretarium.presentation.css" />
+	<link rel="stylesheet" href="/styles/secretarium.forms.css" />
+	<link rel="stylesheet" href="/styles/secretarium.alerts.css" />
 
-	<script src="scripts/jquery-3.3.1.min.js"></script>
-	<script src="scripts/popper-1.14.7.min.js"></script>
-	<script src="scripts/bootstrap-4.3.1.min.js"></script>
-	<script src="scripts/vue-2.6.8.min.js"></script>
-	<script src="scripts/vue-router-3.0.2.min.js"></script>
-	<script src="scripts/scrolloverflow-0.1.2.min.js"></script>
-	<script src="scripts/fullpage.vue-0.1.2.min.js"></script>
+	<script src="/scripts/jquery-3.3.1.min.js"></script>
+	<script src="/scripts/popper-1.14.7.min.js"></script>
+	<script src="/scripts/bootstrap-4.3.1.min.js"></script>
+	<script src="/scripts/vue-2.6.8.min.js"></script>
+	<script src="/scripts/vue-router-3.0.2.min.js"></script>
+	<script src="/scripts/scrolloverflow-0.1.2.min.js"></script>
+	<script src="/scripts/fullpage.vue-0.1.2.min.js"></script>
 </head>
 
 <body>
@@ -33,27 +34,30 @@
 
 	<div id="app" @dragover.prevent @drop.prevent v-cloak>
 		<header>
-			<nav class="navbar sticky-top p-0" :class="{'logo-page':store.isLogoPage}">
-				<div id="menu" class="container-fluid py-2" :class="{container:!store.isLogoPage}">
-					<a class="navbar-brand logo" href="/"> </a>
+			<nav class="navbar sticky-top p-0">
+				<div id="menu" class="container container-fluid py-2">
+					<router-link class="navbar-brand logo" data-menuanchor="home" to="/#home" :class="{'hide':store.isLogoPage}"> </router-link>
 					<ul id="presentation-menu" class="navbar-nav flex-row d-none d-flex">
-						<li class="nav-item py-0 px-2">
-							<a class="nav-link" data-menuanchor="what-it-is" href="#what-it-is">Concept</a>
+						<li v-if="store.isPresentationPages&&!store.isLogoPage" class="nav-item py-0 px-2">
+							<router-link class="nav-link" data-menuanchor="what-it-is" to="/#what-it-is">Concept</router-link>
 						</li>
-						<li class="nav-item py-0 px-2 d-none d-sm-flex">
-							<a class="nav-link" data-menuanchor="why" href="#why">Rationale</a>
+						<li v-if="store.isPresentationPages&&!store.isLogoPage" class="nav-item py-0 px-2 d-none d-sm-flex">
+							<router-link class="nav-link" data-menuanchor="why" to="/#why">Rationale</router-link>
 						</li>
-						<li class="nav-item py-0 px-2">
-							<a class="nav-link" data-menuanchor="technology" href="#technology">Technology</a>
+						<li v-if="store.isPresentationPages&&!store.isLogoPage" class="nav-item py-0 px-2">
+							<router-link class="nav-link" data-menuanchor="technology" to="/#technology">Technology</router-link>
 						</li>
-						<li class="nav-item py-0 px-2">
-							<a class="nav-link" data-menuanchor="team" href="#team">About us</a>
+						<li v-if="store.isPresentationPages&&!store.isLogoPage" class="nav-item py-0 px-2">
+							<router-link class="nav-link" data-menuanchor="team" to="/#team">About us</router-link>
+						</li>
+						<li v-if="!store.isPresentationPages" class="nav-item py-0 px-2" >
+							<router-link class="nav-link" data-menuanchor="what-it-is" :to="{ path: '/', hash: 'what-it-is' }">home</router-link>
+						</li>
+						<li v-else-if="store.isLogoPage" class="nav-item py-0 px-2" >
+							<router-link class="nav-link" data-menuanchor="what-it-is" to="/#what-it-is">learn more</router-link>
 						</li>
 					</ul>
 					<ul id="sec-menu" class="navbar-nav flex-row ml-auto">
-						<li v-if="!store.isPresentationPages||store.isLogoPage" class="nav-item mr-3" >
-							<a class="nav-link shift-left" data-menuanchor="what-it-is" href="#what-it-is">Presentation</a>
-						</li>
 						<li v-if="connection.retrying" class="nav-item">
 							<div class="alert alert-warning py-1 px-2 m-0 mr-3 d-inline-block btn-sm" role="alert" v-if="connection.retryingMsg.length>0">
 								{{connection.retryingMsg}}
@@ -89,32 +93,32 @@
 					<div class="container small">
 						<ul id="sub-concept" class="navbar-nav flex-row m-0 p-0 my-2">
 							<li class="nav-item py-0 px-2">
-								<a data-menuanchor="what-it-is" href="#what-it-is">What is Secretarium ?</a>
+								<router-link data-menuanchor="what-it-is" to="/#what-it-is">What is Secretarium ?</router-link>
 							</li>
 							<li class="nav-item py-0 px-2">
-								<a data-menuanchor="what-it-does" href="#what-it-does">What does it provide ?</a>
+								<router-link data-menuanchor="what-it-does" to="/#what-it-does">What does it provide ?</router-link>
 							</li>
 							<li class="nav-item py-0 px-2">
-								<a data-menuanchor="scaling" href="#scaling">How does it scale ?</a>
+								<router-link data-menuanchor="scaling" to="/#scaling">How does it scale ?</router-link>
 							</li>
 						</ul>
 						<ul id="sub-rationale" class="navbar-nav flex-row m-0 p-0 my-2">
 							<li class="nav-item py-0 px-2">
-								<a data-menuanchor="why" href="#why">Why Secretarium ?</a>
+								<router-link data-menuanchor="why" to="/#why">Why Secretarium ?</router-link>
 							</li>
 							<li class="nav-item py-0 px-2">
-								<a data-menuanchor="whom-for" href="#whom-for">Who is it for ?</a>
+								<router-link data-menuanchor="whom-for" to="/#whom-for">Who is it for ?</router-link>
 							</li>
 						</ul>
 						<ul id="sub-techno" class="navbar-nav flex-row m-0 p-0 my-2">
 							<li class="nav-item py-0 px-2">
-								<a data-menuanchor="technology" href="#technology">How does it work ?</a>
+								<router-link data-menuanchor="technology" to="/#technology">How does it work ?</router-link>
 							</li>
 							<li class="nav-item py-0 px-2">
-								<a data-menuanchor="secret-processing" href="#secret-processing">Secret processing</a>
+								<router-link data-menuanchor="secret-processing" to="/#secret-processing">Secret processing</router-link>
 							</li>
 							<li class="nav-item py-0 px-2">
-								<a data-menuanchor="secret-mixing" href="#secret-mixing">Secret mixing</a>
+								<router-link data-menuanchor="secret-mixing" to="/#secret-mixing">Secret mixing</router-link>
 							</li>
 						</ul>
 					</div>
@@ -123,22 +127,18 @@
 		</header>
 
 		<content>
-			<transition name="page" mode="out-in">
-				<router-view></router-view>
-			</transition>
+			<router-view></router-view>
 		</content>
 
-		<footer v-if="!store.isPresentationPages" class="bg-light">
+		<footer v-if="!store.isPresentationPages" class="app-footer">
 			<div class="container">
 				<div class="row no-gutters">
 					<div class="col text-muted">
-						<small>
 							<i class="fas fa-circle" :class="[state.color]" style="font-size: 60%; vertical-align: 20%;"></i>
 							<span>{{state.text}}</span>
-						</small>
 					</div>
 					<div class="col-4 text-muted text-center">© <?=date("Y")?> - Secretarium</div>
-					<div class="col-4 text-muted text-right"><small>{{connectedAs}}</small></div>
+					<div class="col-4 text-muted text-right">{{connectedAs}}</div>
 				</div>
 			</div>
 		</footer>
@@ -148,7 +148,7 @@
 
 	<script type="text/x-template" id="sec-presentation">
 		<full-page id="presentation" ref="presentation" :options="options">
-			<div class="section" data-anchor="">
+			<div class="section" data-anchor="home">
 			</div>
 			<div class="section" data-anchor="what-it-is">
 				<section>
@@ -476,85 +476,140 @@
 		</div>
 	</script>
 
+	<script type="text/x-template" id="sec-connect-header">
+		<div class="text-center">
+			<h4>Entrust your secrets with Secretarium.</h4>
+			<p>Access to the most confidential apps in the industry.</p>
+		</div>
+	</script>
+
 	<script type="text/x-template" id="sec-connect">
 		<div class="container">
-			<ul>
-				<li v-if="$root.connection.retrying" class="">
-					<div class="alert alert-warning py-1 px-2 m-0 mr-3 d-inline-block btn-sm" role="alert" v-if="$root.connection.retryingMsg.length>0">
-						{{$root.connection.retryingMsg}}
-					</div>
-					<div class="btn-group">
-						<button type="button" class="btn btn-outline-primary btn-sm" @click.prevent="$root.connect('')">Retry now</button>
-						<button type="button" class="btn btn-outline-primary btn-sm dropdown-toggle dropdown-toggle-split"
-								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<span class="sr-only">Toggle Dropdown</span>
-						</button>
-						<div class="dropdown-menu dropdown-menu-right">
-							<button type="button" class="dropdown-item btn-sm"
-									v-for="gw in $root.store.gateways" :key="gw.endpoint" @click.prevent="$root.connect(gw.endpoint)">{{gw.name}}</button>
-						</div>
-					</div>
-				</li>
-				<li v-if="$root.isLoggedIn" class=" dropdown" style="margin-right: 2%;">
-					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">me</a>
-					<div class="dropdown-menu dropdown-menu-right p-3" aria-labelledby="navbarDropdown">
-						<router-link to="/apps" class="dropdown-item">DCApp store</router-link>
-						<div class="dropdown-divider"></div>
-						<router-link to="/app/identity" class="dropdown-item">Personal settings</router-link>
-						<button type="button" class="dropdown-item" @click.prevent="$root.disconnect">Disconnect</button>
-					</div>
-				</li>
-				<li v-else class=" dropdown" style="margin-right: 2%;">
-					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">connect</a>
-					<div class="dropdown-menu dropdown-menu-right p-3" aria-labelledby="navbarDropdown">
-						<h5 class="dropdown-header pl-0 pt-0">Use saved key</h5>
-						<form v-if="$root.keys.list.length>0" class="form-inline" @submit.prevent>
-							<div class="form-group">
-								<label for="keysListSelect" class="sr-only">Select a key</label>
-								<select id="keysListSelect" class="form-control form-control-sm" style="width: auto;" @change="$root.onKeyChange">
-									<option v-for="(key, i) in $root.keys.list" :value="i">{{key.name}}</option>
-								</select>
-							</div>
-							<div class="form-group mx-3">
-								<label for="keyPwd" class="sr-only">Password</label>
-								<input type="password" class="form-control form-control-sm" id="keyPwd" placeholder="Password">
-							</div>
-							<div class="btn-group ml-auto">
-								<button type="button" class="btn btn-success btn-sm" @click.prevent="$root.connect('')">Connect</button>
-								<button type="button" class="btn btn-success btn-sm dropdown-toggle dropdown-toggle-split"
-										data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" @click.stop="$root.onToggleGateways">
-								</button>
-								<div class="dropdown-menu dropdown-menu-right">
-									<h5 class="dropdown-header">Choose a gateway</h5>
-									<button type="button" class="dropdown-item btn-sm"
-											v-for="gw in $root.store.gateways" :key="gw.endpoint" @click.prevent="$root.connect(gw.endpoint)"><i class="fas fa-fw fa-server pr-3"> {{gw.name}}</button>
-									<div role="separator" class="dropdown-divider"></div>
-									<h5 class="dropdown-header">Manage key</h5>
-									<button type="button" class="dropdown-item  btn-sm" @click.prevent="$root.removeKey"><i class="fas fa-fw fa-trash-alt pr-3"></i> Delete key</button>
-									<a class="dropdown-item" :href="$root.keyExportUrl" :download="$root.keyExportName"><i class="fas fa-fw fa-download pr-3"></i> Export</a>
+			<div class="form-body">
+				<div class="row">
+					<div class="form-holder">
+						<div class="form-content">
+							<div class="form-items">
+								<sec-connect-header></sec-connect-header>
+								<div class="card">
+  									<div class="card-body">
+										<form @submit.prevent>
+											<div v-if="$root.keys.list.length>0">
+												<h5 class="pl-0 pt-0">The following keys are present on your device</h5>
+												<div class="form-group">
+													<div v-for="(key, i) in $root.keys.list" :value="i" class="key-item">
+														<router-link :to="`/connect/${i}/validate`" class="btn btn-info btn-sm"><i class="fas fa-key"></i><span>{{key.name}}</span></router-link>
+													</div>
+												</div>
+												<h5 class="pl-0 pt-0">Additionnally you can also create a new key</h5>
+												<router-link to="/connect/new-key" tag="button" class="btn btn-secondary btn-sm">Generate a new key</router-link>
+											</div>
+											<div v-else>
+												<h5 class="pl-0 pt-0">No key present on your device</h5>
+												<router-link to="/connect/new-key" tag="button" class="btn btn-primary btn-sm">Generate a new key</router-link>
+											</div>
+											<div>
+										</form>
+									</div>
 								</div>
 							</div>
-							<sec-notif-state :state="$root.connection.ns.data" class="ml-2"></sec-notif-state>
-						</form>
-						<div class="dropdown-divider my-3"></div>
-						<h5 class="dropdown-header pl-0 pt-0">Create new key</h5>
-						<form class="form-inline" @submit.prevent>
-							<div class="form-group">
-								<label for="createdKeyName" class="sr-only">Key name</label>
-								<input type="text" class="form-control form-control-sm" id="createdKeyName" placeholder="Key name">
-							</div>
-							<div class="form-group ml-3">
-								<label for="createdKeyPassword" class="sr-only">Password</label>
-								<input type="password" class="form-control form-control-sm" id="createdKeyPassword" placeholder="Password">
-							</div>
-							<button type="submit" class="btn btn-primary btn-sm ml-3" @click.prevent="$root.createNewKeys">Generate</button>
-							<sec-notif-state :state="$root.keys.generation.ns.data"></sec-notif-state>
-						</form>
+						</div>
 					</div>
-				</li>
-			</ul>
+				</div>
+			</div>
+		</div>
+	</script>
+
+	<script type="text/x-template" id="sec-new-key">
+		<div class="container">
+			<div class="form-body">
+				<div class="row">
+					<div class="form-holder">
+						<div class="form-content">
+							<div class="form-items">	
+								<sec-connect-header></sec-connect-header>							
+								<div class="card">
+  									<div class="card-body">
+										<form @submit.prevent>
+											<h5 class="pl-0 pt-0">Please enter the following information so we can generate your key</h5>
+											<div class="form-group">
+												<label for="createdKeyName" class="sr-only">Key name</label>
+												<input type="text" class="form-control form-control-sm" id="createdKeyName" placeholder="Key name">
+											</div>
+											<div class="form-group">
+												<label for="createdKeyPassword" class="sr-only">Password</label>
+												<input type="password" class="form-control form-control-sm" id="createdKeyPassword" placeholder="Password">
+											</div>
+											<button type="submit" class="btn btn-primary btn-sm" @click.prevent="$root.createNewKeys">Generate</button>
+											<router-link to="/connect" tag="button" class="btn btn-secondary btn-sm">Back</router-link>
+											<sec-notif-state :state="$root.keys.generation.ns.data"></sec-notif-state>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</script>
+	
+	<script type="text/x-template" id="sec-validate-key">
+		<div class="container">
+			<div class="form-body">
+				<div class="row">
+					<div class="form-holder">
+						<div class="form-content">
+							<div class="form-items">
+								<sec-connect-header></sec-connect-header>
+								<div class="card">
+  									<div class="card-body">
+										<form @submit.prevent>
+											<h5 class="pl-0 pt-0">Please enter the password used for securing the key {{ kid }}</h5>
+											<div class="form-group">
+												<label for="keyPwd" class="sr-only">Password</label>
+												<input type="password" class="form-control form-control-sm" id="keyPwd" placeholder="Password">
+											</div>
+											<router-link to="/connect/endpoints" tag="button" class="btn btn-primary btn-sm">Validate</router-link>
+											<router-link to="/connect" tag="button" class="btn btn-secondary btn-sm">Back</router-link>
+											<sec-notif-state :state="$root.keys.generation.ns.data"></sec-notif-state>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</script>
+
+	<script type="text/x-template" id="sec-endpoints">
+		<div class="container">
+			<div class="form-body">
+				<div class="row">
+					<div class="form-holder">
+						<div class="form-content">
+							<div class="form-items">
+								<sec-connect-header></sec-connect-header>
+								<div class="card">
+  									<div class="card-body">
+										<form @submit.prevent>
+											<h5 class="pl-0 pt-0">To finalise the connect please select which endpoint you wish to connect to</h5>
+											<div class="form-group">
+												<div v-for="gw in $root.store.gateways" :key="gw.endpoint" class="endpoint-item">
+													<button type="button" @click.prevent="$root.connect(gw.endpoint)" class="btn btn-info btn-sm"><i class="fas fa-network-wired"></i></i><span>{{gw.name}}</span></router-link>
+												</div>
+											</div>
+											<router-link to="/connect" tag="button" class="btn btn-secondary btn-sm">Back</router-link>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</script>
 
@@ -618,13 +673,15 @@
 			},
 			methods: {
 				onLeave (origin, destination, direction) {
-					let x = this.$root.store.isLogoPage = destination.index == 0;
+					let x = destination.index == 0;
+					this.$root.store.isLogoPage = x;
 					if(!x) {
 						clearTimeout(this.canvas.redrawLoop);
 						this.canvas.redrawLoop = null;
 					}
 					else if(this.canvas.redrawLoop == null)
 						this.canvas.redrawLoop = setTimeout(() => { this.drawCanvas(); }, 1500);
+					router.push({hash: destination.anchor})
 					return true;
 				},
 				fillCanvas(onResize = false) {
@@ -684,10 +741,52 @@
 			}
 		});
 
+		const ConnectHeader = Vue.component('sec-connect-header', {
+			template: '#sec-connect-header',
+			data: () => {
+				return {
+				}
+			},
+			methods: {
+			}
+		});
+
 		const Connect = Vue.component('sec-connect', {
 			template: '#sec-connect',
 			data: () => {
 				return {
+				}
+			},
+			methods: {
+			}
+		});
+
+		const NewKey = Vue.component('sec-new-key', {
+			template: '#sec-new-key',
+			data: () => {
+				return {
+				}
+			},
+			methods: {
+			}
+		});
+
+		const ValidateKey = Vue.component('sec-validate-key', {
+			template: '#sec-validate-key',
+			data: () => {
+				return {
+					kid: null
+				}
+			},
+			methods: {
+			}
+		});
+
+		const EndpointSelection = Vue.component('sec-endpoints', {
+			template: '#sec-endpoints',
+			data: () => {
+				return {
+					kid: null
 				}
 			},
 			methods: {
@@ -713,12 +812,16 @@
 			routes: [
 				{ path: '/', component: Presentation },
 				{ path: '/connect', component: Connect },
+				{ path: '/connect/:kid/validate', component: ValidateKey },
+				{ path: '/connect/new-key', component: NewKey },
+				{ path: '/connect/endpoints', component: EndpointSelection },
 				{ path: '/app-store', component: AppStore },
 				{ path: '/app/:id', component: AppAccessDenied },
 			]
 		});
 		router.beforeEach((to, from, next) => {
 			store.isPresentationPages = to.path == '/';
+			store.isLogoPage = to.path == '/' && (['', '#', '#home'].includes(to.hash));
 			$("body").toggleClass("page-presentation", store.isPresentationPages);
 			next();
 		});
@@ -734,13 +837,13 @@
 						ns: {data: {}}
 					},
 					keys: {
-						list: [], cryptoKeys: {}, exportUrl: "",
+						list: [{name: 'LK_Test_002'}, {name: 'LX_Test_052'}], cryptoKeys: {}, exportUrl: "",
 						generation: { key: null, ns: {data: {}} }
 					},
 				}
 			},
 			computed: {
-				state() { return { text: "not connected", color: "text-danger", icon: "fa-exclamation-circle" } },
+				state() { return { text: "Not connected", color: "text-danger", icon: "fa-exclamation-circle" } },
 				connectedAs() { return ""; },
 				isConnected() { return false; },
 				isLoggedIn() { return false; }
