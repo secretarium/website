@@ -426,6 +426,8 @@
 								</div>
 								<br/>
 								<br/>
+								<br/>
+								<br/>
 								<h4>Our partner</h4>
 								<br/>
 								<div class="about-item">
