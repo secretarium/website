@@ -888,6 +888,10 @@
 						this.subMenu[1].includes(id) ? 2 :
 						this.subMenu[2].includes(id) ? 3 : 0;
 
+					// Toggle link
+					$("header a[href].active").removeClass("active");
+					$("header a[href='#" + id + "']").addClass("active");
+
 					// Sub menu display
 					$("#presentation-sub-menu").toggleClass("active", x > 0);
 					$("#presentation-sub-menu #sub-concept").toggle(x === 1);
