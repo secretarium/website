@@ -442,67 +442,46 @@
 					<h3>A team of engineers, with deep investment banking and crypto background</h3>
 					<div class="row mx-0 mt-5">
 						<div class="col-md-4 px-0 py-2 pr-md-2">
-								<h4>The secretarium team</h4>
-								<br/>
-								<div class="about-item">
-									<img class="team-member" />
-									<h5 class="team-member-name">Bertrand Foing</h5>
-									<span class="team-member-position">laoreet non curabitur gravida arcu ac tortor dignissim convallis aenean et tortor at risus viverra adipiscing at in tellus integer</span>
-								</div>
-								<div class="about-item">
-									<img class="team-member" />
-									<h5 class="team-member-name">Cédric Wahl</h5>
-									<span class="team-member-position">aliquam etiam erat velit scelerisque in dictum non consectetur a erat nam at lectus urna duis convallis convallis tellus id</span>
-								</div>
-								<div class="about-item">
-									<img class="team-member" />
-									<h5 class="team-member-name">Axel Oehmichen</h5>
-									<span class="team-member-position">sed enim ut sem viverra aliquet eget sit amet tellus cras adipiscing enim eu turpis egestas pretium aenean pharetra magna</span>
-								</div>
+							<h4 class="mb-4">The secretarium team</h4>
+							<div class="about-item">
+								<img class="team-member" />
+								<h5 class="team-member-name">Bertrand Foing</h5>
+								<span class="team-member-position">laoreet non curabitur gravida arcu ac tortor dignissim convallis aenean et tortor at risus viverra adipiscing at in tellus integer</span>
 							</div>
-							<div class="col-md-4 pr-0">
-								<h4>Our sponsor</h4>
-								<br/>
-								<div class="about-item">
-									<img src="/images/logo_intel.svg" class="comp-logo"/>
-								</div>
-								<br/>
-								<br/>
-								<br/>
-								<br/>
-								<h4>Our partner</h4>
-								<br/>
-								<div class="about-item">
-									<img src="/images/logo_swisscom.svg" class="comp-logo"/>
-								</div>
+							<div class="about-item">
+								<img class="team-member" />
+								<h5 class="team-member-name">Cédric Wahl</h5>
+								<span class="team-member-position">aliquam etiam erat velit scelerisque in dictum non consectetur a erat nam at lectus urna duis convallis convallis tellus id</span>
+							</div>
+							<div class="about-item">
+								<img class="team-member" />
+								<h5 class="team-member-name">Axel Oehmichen</h5>
+								<span class="team-member-position">sed enim ut sem viverra aliquet eget sit amet tellus cras adipiscing enim eu turpis egestas pretium aenean pharetra magna</span>
 							</div>
 						</div>
-						<br/>
-						<br/>
-						<h4>Our clients</h4>
-						<div class="row mx-0">
-							<div class="col-md-6 pl-0">
-								<br/>
-								<div class="about-item">
-									<img src="/images/logo_soge.svg" class="comp-logo"/>
-								</div>
-								<div class="about-item">
-									<img src="/images/logo_ubs.svg" class="comp-logo"/>
-								</div>
+						<div class="col-md-4 px-0 py-2 pr-md-2">
+							<h4 class="mb-4">Our sponsors</h4>
+							<div class="about-item">
+								<img src="/images/logo_intel.svg" class="comp-logo"/>
 							</div>
-							<div class="col-md-6 pr-0">
-								<div class="about-item">
-									<img src="/images/logo_creds.svg" class="comp-logo"/>
-								</div>
-								<div class="about-item">
-									<img src="/images/logo_kbc.svg" class="comp-logo"/>
-								</div>
+							<h4 class="my-4">Our partners</h4>
+							<div class="about-item">
+								<img src="/images/logo_swisscom.svg" class="comp-logo"/>
 							</div>
 						</div>
-						<br/>
-						<br/>
-						<br/>
-						<br/>
+						<div class="col-md-4 px-0 py-2 pr-md-2">
+							<h4 class="mb-4">Our clients</h4>
+							<div class="about-item">
+								<img src="/images/logo_soge.svg" class="comp-logo"/>
+							</div>
+							<div class="about-item">
+								<img src="/images/logo_ubs.svg" class="comp-logo"/>
+							</div>
+							<div class="about-item">
+								<img src="/images/logo_creds.svg" class="comp-logo"/>
+							</div>
+						</div>
+					</div>
 				</div>
 			</section>
 			<a class="go-to-next" href="#next" @click.prevent="goToNext"><i class="fas fa-arrow-down"></i></a>
