@@ -575,7 +575,7 @@
 		<div>
 			<div class="py-2">
 				<p class="card-text border rounded bg-light p-2">
-					<strong>Key Name</strong>: "{{key.name}}"<br />
+					<strong>Key Name</strong>: "{{name}}"<br />
 					<strong>Public Key</strong>: {{publicKeyHex}}
 				</p>
 			</div>
@@ -613,7 +613,7 @@
 						<label class="form-check-label" for="ckExportEncrypted">Export encrypted</label>
 					</div>
 					<a class="btn btn-sec" :href="exportUrl"
-						:download="key.name+'.secretarium'">
+						:download="name+'.secretarium'">
 						<i class="fas fa-fw fa-download pr-3"></i> Export
 					</a>
 				</form>
@@ -625,10 +625,11 @@
 					<p class="card-text">If you trust this machine, save your key in this browser to ease future connections.</p>
 					<form class="form-inline" @submit.prevent>
 						<div class="form-check lg mr-3">
-							<input type="checkbox" class="form-check-input" id="ckSaveEncrypted" :disabled="!encryption.success">
+							<input type="checkbox" class="form-check-input" id="ckSaveEncrypted"
+								:disabled="!encryption.success" :checked="encryption.success">
 							<label class="form-check-label" for="ckSaveEncrypted">Save encrypted</label>
 						</div>
-						<button type="button" class="btn btn-sec" :disabled="key.name.length==0" @click.prevent="saveKey">
+						<button type="button" class="btn btn-sec" :disabled="name.length==0" @click.prevent="saveKey">
 							<i class="fas fa-fw fa-save pr-3"></i> Save
 						</button>
 						<sec-notif-state :state="save.ns.data"></sec-notif-state>

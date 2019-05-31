@@ -328,7 +328,7 @@ var sec, secretarium = sec = {
         }
 
         _toExportable(key) {
-            let exp = { name: key.name };
+            let exp = { };
             if(key.encrypted) {
                 exp.encrypted = true;
                 exp.iv = key.iv;
@@ -367,17 +367,17 @@ var sec, secretarium = sec = {
                 if(!e || !e.files) reject("Unsupported, missing key file");
                 if(e.files.length != 1) reject("Unsupported, expecting a single key file");
 
-                let reader = new FileReader();
+                let reader = new FileReader(), file = e.files[0], name = file.name;
                 reader.onloadend = x => {
                     try {
                         let key = JSON.parse(reader.result);
-                        this.addKey(key.name, key, save);
+                        this.addKey(name, key, save);
                         resolve(name);
                     }
                     catch (e) { reject(e.message); }
                 };
                 reader.onerror = e => { reject(e.message); };
-                reader.readAsText(e.files[0]);
+                reader.readAsText(file);
             });
         }
 
@@ -388,7 +388,7 @@ var sec, secretarium = sec = {
 
             let salt = sec.utils.getRandomUint8Array(32),
                 iv = sec.utils.getRandomUint8Array(12),
-                weakPwd = sec.utils.encode(pwd);
+                weakPwd = sec.utils.encode(pwd),
                 strongPwd = await sec.utils.hash(sec.utils.concatUint8Array(salt, weakPwd)),
                 aesgcmKey = await sec.utils.aesgcm.import(strongPwd),
                 keys = Uint8Array.secFromBase64(key.keys),
@@ -397,7 +397,7 @@ var sec, secretarium = sec = {
             key.iv = iv.secToBase64();
             key.keys = new Uint8Array(encryptedKeys).secToBase64();
             key.encrypted = true;
-            this.addKey(key.name, key, save);
+            this.addKey(name, key, save);
             return key;
         }
 
@@ -440,7 +440,6 @@ var sec, secretarium = sec = {
             if(this.exports[name]) {
                 URL.revokeObjectURL(this.exports[name]);
             }
-            key.name = name;
             this.keys[name] = this._toExportable(key);
             this.exports[name] = this._createObjectURL(key);
             if(!save) this.keys[name].save = false;
