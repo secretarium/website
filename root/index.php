@@ -7,28 +7,28 @@
 	<meta name="description" content="Secretarium is a distributed confidential computing platform guaranteeing privacy by default and by design">
 
 	<title>Secretarium - Entrusted with secrets</title>
-	<link rel="icon" type="image/png" href="images/secretarium_128x128.png">
+	<link rel="icon" type="image/png" href="/images/secretarium_128x128.png">
 
-	<link rel="stylesheet" href="styles/bootstrap-4.3.1.min.css" />
-	<link rel="stylesheet" href="styles/fontawesome-5.7.2.all.min.css" />
-	<link rel="stylesheet" href="styles/secretarium-0.0.1.css" />
-	<link rel="stylesheet" href="styles/secretarium.navbar.css" />
-	<link rel="stylesheet" href="styles/secretarium.presentation.css" />
-	<link rel="stylesheet" href="styles/secretarium.connect.css" />
-	<link rel="stylesheet" href="styles/secretarium.alerts.css" />
+	<link rel="stylesheet" href="/styles/bootstrap-4.3.1.min.css" />
+	<link rel="stylesheet" href="/styles/fontawesome-5.7.2.all.min.css" />
+	<link rel="stylesheet" href="/styles/secretarium-0.0.1.css" />
+	<link rel="stylesheet" href="/styles/secretarium.navbar.css" />
+	<link rel="stylesheet" href="/styles/secretarium.presentation.css" />
+	<link rel="stylesheet" href="/styles/secretarium.connect.css" />
+	<link rel="stylesheet" href="/styles/secretarium.alerts.css" />
 
-	<script src="scripts/jquery-3.3.1.min.js"></script>
-	<script src="scripts/popper-1.14.7.min.js"></script>
-	<script src="scripts/bootstrap-4.3.1.min.js"></script>
-	<script src="scripts/vue-2.6.10.js"></script>
-	<script src="scripts/vue-router-3.0.2.min.js"></script>
-	<script src="scripts/nng-0.1.0.js"></script>
-	<script src="scripts/secretarium-0.1.5.js"></script>
+	<script src="/scripts/jquery-3.3.1.min.js"></script>
+	<script src="/scripts/popper-1.14.7.min.js"></script>
+	<script src="/scripts/bootstrap-4.3.1.min.js"></script>
+	<script src="/scripts/vue-2.6.10.js"></script>
+	<script src="/scripts/vue-router-3.0.2.min.js"></script>
+	<script src="/scripts/nng-0.1.0.js"></script>
+	<script src="/scripts/secretarium-0.1.5.js"></script>
 </head>
 
 <body>
-	<img src="images/secretarium_title.svg" id="stage-full-logo" />
-	<img src="images/secretarium_logo_grey.svg" id="stage-logo" />
+	<img src="/images/secretarium_title.svg" id="stage-full-logo" />
+	<img src="/images/secretarium_logo_grey.svg" id="stage-logo" />
 	<div id="stage"></div>
 	<div id="drop-area"></div>
 
@@ -129,7 +129,9 @@
 
 		<content>
 			<transition name="page" mode="out-in">
-				<router-view></router-view>
+				<keep-alive include="['sec-presentation']">
+					<router-view></router-view>
+				</keep-alive>
 			</transition>
 		</content>
 
@@ -461,27 +463,27 @@
 						</div>
 						<div class="col-md-4 px-0 py-2 pr-md-2">
 							<h4 class="mb-4">Our sponsors</h4>
-							<div class="about-item">
-								<img src="/images/logo_intel.svg" class="comp-logo"/>
+							<div class="about-item comp-logo">
+								<img src="/images/logo_intel.svg"/>
 							</div>
 							<h4 class="my-4">Our partners</h4>
-							<div class="about-item">
-								<img src="/images/logo_swisscom.svg" class="comp-logo"/>
+							<div class="about-item comp-logo">
+								<img src="/images/logo_swisscom_blockchain.jpg"/>
 							</div>
 						</div>
 						<div class="col-md-4 px-0 py-2 pr-md-2 d-none">
 							<h4 class="mb-4">Our clients</h4>
-							<div class="about-item">
-								<img src="/images/logo_soge.svg" class="comp-logo"/>
+							<div class="about-item comp-logo">
+								<img src="/images/logo_soge.svg"/>
 							</div>
-							<div class="about-item">
-								<img src="/images/logo_ubs.svg" class="comp-logo"/>
+							<div class="about-item comp-logo">
+								<img src="/images/logo_ubs.svg"/>
 							</div>
-							<div class="about-item">
-								<img src="/images/logo_creds.svg" class="comp-logo"/>
+							<div class="about-item comp-logo">
+								<img src="/images/logo_creds.svg"/>
 							</div>
-							<div class="about-item">
-								<img src="/images/logo_kbc.svg" class="comp-logo"/>
+							<div class="about-item comp-logo">
+								<img src="/images/logo_kbc.svg"/>
 							</div>
 						</div>
 					</div>
@@ -556,10 +558,10 @@
 					</div>
 					<div class="col-sm-auto mt-3 mt-sm-0">
 						<button type="submit" class="btn btn-sec" @click.prevent="createKey">Generate a new key</button>
-						<sec-notif-state :state="generation.ns.data" class="d-sm-none"></sec-notif-state>
+						<sec-notif-state :state="generation.ns.data" class="pl-3 d-sm-none"></sec-notif-state>
 					</div>
 				</div>
-				<sec-notif-state :state="generation.ns.data" class="mt-2 d-sm-block"></sec-notif-state>
+				<sec-notif-state :state="generation.ns.data" class="mt-2 d-none d-sm-block"></sec-notif-state>
 			</form>
 		</div>
 	</script>
@@ -577,31 +579,38 @@
 	<script type="text/x-template" id="sec-export-key">
 		<div>
 			<div class="py-2">
-				<p class="card-text border rounded bg-light p-2">
+				<p class="card-text border rounded-sm bg-light p-2 fs-85">
 					<strong>Key Name</strong>: "{{name}}"<br />
-					<strong>Public Key ({{key.encrypted?'clear-text':'encrypted'}})</strong>: {{publicKeyHex}}
+					<strong>Public Key</strong>: {{publicKeyStr}}
 				</p>
 			</div>
 			<hr class="my-3 sec" />
 			<div class="py-2">
-				<h6 class="card-title mb-3">Encrypt your key</h6>
-				<p class="card-text">
-					To safely store your key, please choose a strong password.
-				</p>
-				<form @submit.prevent>
-					<div class="form-row">
-						<div class="col-sm">
-							<input id="ckPwd" type="password" class="form-control" placeholder="Password" autocomplete="current-password">
+				<h6 class="card-title mb-3"
+					data-toggle="collapse" data-target="#sec-export-key-encrypt-collapse"
+					:aria-expanded="!encryption.success" aria-controls="sec-export-key-encrypt-collapse">
+					Encrypt your key
+					<i class="fas fa-chevron-down float-right" v-if="encryption.success"></i>
+				</h6>
+				<div class="collapse" id="sec-export-key-encrypt-collapse" :class="{'show':!encryption.success}">
+					<p class="card-text">
+						To safely store your key, please choose a strong password.
+					</p>
+					<form @submit.prevent>
+						<div class="form-row">
+							<div class="col-sm">
+								<input id="ckPwd" type="password" class="form-control" placeholder="Password" autocomplete="current-password">
+							</div>
+							<div class="col-sm-auto mt-3 mt-sm-0">
+								<button type="submit" class="btn btn-sec" @click.prevent="encryptKey">
+									<i class="fas fa-fw fa-lock pr-3"></i> Encrypt
+								</button>
+								<sec-notif-state :state="encryption.ns.data" class="pl-3 d-sm-none"></sec-notif-state>
+							</div>
 						</div>
-						<div class="col-sm-auto mt-3 mt-sm-0">
-							<button type="submit" class="btn btn-sec" @click.prevent="encryptKey">
-								<i class="fas fa-fw fa-lock pr-3"></i> Encrypt
-							</button>
-							<sec-notif-state :state="encryption.ns.data" class="d-sm-none"></sec-notif-state>
-						</div>
-					</div>
-					<sec-notif-state :state="encryption.ns.data" class="mt-2 d-sm-block"></sec-notif-state>
-				</form>
+						<sec-notif-state :state="encryption.ns.data" class="mt-2 d-none d-sm-block"></sec-notif-state>
+					</form>
+				</div>
 			</div>
 			<hr class="my-3 sec" />
 			<div class="py-2">
@@ -610,7 +619,7 @@
 					Export your key to back it up locally, or on a secure hardware.
 				</p>
 				<form class="form-inline" @submit.prevent>
-					<div class="form-check lg mr-3">
+					<div class="form-check lg mr-3 mb-3 mb-sm-0">
 						<input type="checkbox" class="form-check-input" id="ckExportEncrypted"
 							:disabled="!encryption.success" :checked="encryption.success">
 						<label class="form-check-label" for="ckExportEncrypted">Export encrypted</label>
@@ -627,7 +636,7 @@
 					<h6 class="card-title mb-3">Save in this browser</h6>
 					<p class="card-text">If you trust this machine, save your key in this browser to ease future connections.</p>
 					<form class="form-inline" @submit.prevent>
-						<div class="form-check lg mr-3">
+						<div class="form-check lg mr-3 mb-3 mb-sm-0">
 							<input type="checkbox" class="form-check-input" id="ckSaveEncrypted"
 								:disabled="!encryption.success" :checked="encryption.success">
 							<label class="form-check-label" for="ckSaveEncrypted">Save encrypted</label>
@@ -871,6 +880,7 @@
 				document.querySelectorAll('#presentation>section').forEach(target => {
 					scrollObserver.observe(target);
 				});
+				$("a.go-to-next").css("opacity", 1);
 			},
 			beforeDestroy() {
 				unsubscribeOnScroll("presentation");
@@ -946,7 +956,7 @@
 					}
 					try {
 						await this.$root.keysManager.createKey(name, false);
-						this.generation.ns.executed("Success", true).hide();
+						this.generation.ns.executed("Success", true).hide(1500);
 						setTimeout(() => { router.push({ name: 'key-export', params : { name: name }}); }, 500);
 					}
 					catch(e) {
@@ -983,20 +993,20 @@
 			computed: {
 				key() { return this.$root.keysManager.keys[this.name]; },
 				exportUrl() { return this.$root.keysManager.exports[this.name]; },
-				publicKeyHex() {
-					let z = this.$root.keysManager.getPublicKeyHex(this.name, " ");
-					return z.toUpperCase();
+				publicKeyStr() {
+					if(this.key.encrypted) return "(encrypted)";
+					return this.$root.keysManager.getPublicKeyHex(this.name, " ").toUpperCase();
 				}
 			},
 			methods: {
 				async encryptKey() {
 					this.encryption.success = false;
-					this.encryption.ns.processing();
+					this.encryption.ns.processing("Encrypting key", true);
 					let pwd = $('#ckPwd').val();
 					if(pwd.length < 1) { this.encryption.ns.failed("invalid password", true); return; }
 					try {
 						this.$root.keysManager.encryptKey(this.name, pwd, false);
-						this.encryption.ns.executed().hide();
+						this.encryption.ns.executed("Success", true).hide(1500);
 					} catch (err) {
 						this.encryption.ns.failed(err, true);
 					}
@@ -1134,7 +1144,6 @@
 
 			$("#stage").css("z-index", -1);
 			$("#app").css("opacity", 1);
-			$("a.go-to-next").css("opacity", 1);
 		});
 	</script>
 </body>

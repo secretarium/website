@@ -333,19 +333,11 @@ var sec, secretarium = sec = {
                 exp.encrypted = true;
                 exp.iv = key.iv;
                 exp.salt = key.salt;
-                exp.keys = key.keys;
+                exp.encryptedKeys = key.encryptedKeys;
             } else {
                 exp.keys = key.keys;
             }
             return exp;
-        }
-
-        async _toCryptoKey(keys) {
-            let publicKey = await sec.utils.ecdsa.importPub(keys.subarray(0, 65), "raw"),
-                privateKey = await sec.utils.ecdsa.importPri(keys.subarray(65), "pkcs8"),
-                cryptoKey = { publicKey: publicKey, privateKey: privateKey };
-            this.cryptoKeys[name] = cryptoKey;
-            return cryptoKey;
         }
 
         async createKey(name, save = true) {
@@ -384,7 +376,7 @@ var sec, secretarium = sec = {
         async encryptKey(name, pwd, save = true) {
             let key = this.keys[name];
             if(name.length == 0 || !key) throw "Invalid key name";
-            if(key.encrypted) return key;
+            if(!key.keys) throw "Key is encrypted";
 
             let salt = sec.utils.getRandomUint8Array(32),
                 iv = sec.utils.getRandomUint8Array(12),
@@ -395,7 +387,7 @@ var sec, secretarium = sec = {
                 encryptedKeys = await sec.utils.aesgcm.encrypt(aesgcmKey, iv, keys);
             key.salt = salt.secToBase64();
             key.iv = iv.secToBase64();
-            key.keys = new Uint8Array(encryptedKeys).secToBase64();
+            key.encryptedKeys = new Uint8Array(encryptedKeys).secToBase64();
             key.encrypted = true;
             this.addKey(name, key, save);
             return key;
@@ -408,26 +400,31 @@ var sec, secretarium = sec = {
 
             let iv = Uint8Array.secFromBase64(key.iv),
                 salt = Uint8Array.secFromBase64(key.salt),
-                encryptedKeys = Uint8Array.secFromBase64(key.keys),
+                encryptedKeys = Uint8Array.secFromBase64(key.encryptedKeys),
                 weakpwd = sec.utils.encode(pwd),
                 strongPwd = await sec.utils.hash(sec.utils.concatUint8Array(salt, weakpwd)),
-                aesgcmKey = await sec.utils.aesgcm.import(strongPwd), keys;
+                aesgcmKey = await sec.utils.aesgcm.import(strongPwd);
             try {
-                keys = new Uint8Array(await sec.utils.aesgcm.decrypt(aesgcmKey, iv, encryptedKeys));
-            } catch (e) { throw "can't decrypt"; }
-            try {
-                return await this._toCryptoKey(keys);
-            } catch (e) { throw "corrupted key/invalid password"; }
+                let keys = new Uint8Array(await sec.utils.aesgcm.decrypt(aesgcmKey, iv, encryptedKeys));
+                key.keys = keys.secToBase64();
+                return this.cryptoKeys[name] = {
+                    publicKey: await sec.utils.ecdsa.importPub(keys.subarray(0, 65), "raw"),
+                    privateKey: await sec.utils.ecdsa.importPri(keys.subarray(65), "pkcs8")
+                };
+            } catch (e) { throw "can't decrypt/invalid password"; }
         }
 
         async getCryptoKey(name) {
             let key = this.keys[name];
             if(name.length == 0 || !key) throw "Invalid key name";
-            if(key.encrypted) throw "The key is encrypted";
+            if(!key.keys) throw "The key is encrypted";
             if(this.cryptoKeys[name]) return this.cryptoKeys[name];
 
             let keys = Uint8Array.secFromBase64(key.keys);
-            return await this._toCryptoKey(keys);
+            return this.cryptoKeys[name] = {
+                publicKey: await sec.utils.ecdsa.importPub(keys.subarray(0, 65), "raw"),
+                privateKey: await sec.utils.ecdsa.importPri(keys.subarray(65), "pkcs8")
+            };
         }
 
         getPublicKeyHex(name, delimiter = '') {
