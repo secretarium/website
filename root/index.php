@@ -23,7 +23,7 @@
 	<script src="scripts/vue-2.6.10.js"></script>
 	<script src="scripts/vue-router-3.0.2.min.js"></script>
 	<script src="scripts/nng-0.1.0.js"></script>
-	<script src="scripts/secretarium-0.1.4.js"></script>
+	<script src="scripts/secretarium-0.1.5.js"></script>
 </head>
 
 <body>
@@ -86,7 +86,7 @@
 							</div>
 						</li>
 						<li v-else class="nav-item" style="margin-right: 2vw;">
-							<router-link to="/connect" class="nav-link">Connect</router-link>
+							<router-link to="/key" class="nav-link">Connect</router-link>
 						</li>
 					</ul>
 				</div>
@@ -484,130 +484,155 @@
 					</div>
 				</div>
 			</section>
-			<a class="go-to-next" href="#next" @click.prevent="goToNext"><i class="fas fa-arrow-down"></i></a>
+			<a class="go-to-next d-none d-sm-inline" href="#next" @click.prevent="goToNext"><i class="fas fa-arrow-down"></i></a>
 		</div>
 	</script>
 
 	<script type="text/x-template" id="sec-connect">
 		<div id="connect" class="container center">
-			<div class="card sec-card border-0">
-				<h1 class="card-header text-center"><i class="sec-logo mr-1"></i>Connect</h1>
-				<div class="card-body lato">
-					<div v-if="$root.keys.list.length>0" class="py-3">
-						<h5 class="card-title">Choose a key</h5>
-						<ul>
-							<li v-for="(key, i) in $root.keys.list" :key="i">
-								<p>{{key.name}}</p>
-								<button type="button" class="btn-sm" @click.prevent="$root.removeKey(i)" title="Delete key">
-									<i class="fas fa-fw fa-trash-alt pr-3"></i>
-								</button>
-								<a class="dropdown-item" :href="$root.keys.exports[i].url" :download="$root.keys.exports[i].name" title="Export">
-									<i class="fas fa-fw fa-download"></i>
-								</a>
-							</li>
-						</ul>
-					</div>
-					<hr v-if="$root.keys.list.length>0" class="my-4 sec" />
-					<div class="py-3">
-						<h6 class="card-title mb-3">Load a key</h6>
-						<p class="card-text">
-							Please drag and drop a key here, or load from disk.
-						</p>
-						<div class="custom-file">
-							<input type="file" id="sec-loadkey-file" accept=".secretarium" class="custom-file-input" @change="keyFileChange">
-							<label for="sec-loadkey-file sec" class="custom-file-label">Browse</label>
-						</div>
-						<p v-if="importedKeyMsg.length>0" class="small text-alert">
-							{{importedKeyMsg}}
-						</p>
-					</div>
-					<hr class="my-4 sec" />
-					<div class="py-3">
-						<h6 class="card-title mb-3">Create a new key</h6>
-						<sec-create-key></sec-create-key>
-					</div>
+			<div class="card sec-card mw-md border-0">
+				<div class="card-header">
+					<h4>Entrust your secrets with Secretarium</h4>
+					<p class="mb-0">Access to the most privacy respecting apps in the industry.</p>
+				</div>
+				<div class="card-body">
+					<transition name="no-transition">
+						<router-view></router-view>
+					</transition>
 				</div>
 			</div>
 		</div>
 	</script>
 
+	<script type="text/x-template" id="sec-load-key">
+		<div id="load-key">
+			<div v-if="$root.keysManager.keys.length>0">
+				<div class="py-3">
+					<h6 class="card-title mb-3">Choose a key</h6>
+					<p class="mb-0">The following keys are present on your device</p>
+					<ul class="sec-key-list">
+						<li v-for="(key, name) in $root.keysManager.keys" :key="name">
+							<p>{{name}}</p>
+							<button type="button" class="btn-sm" @click.prevent="$root.keysManager.removeKey(name)" title="Delete key">
+								<i class="fas fa-fw fa-trash-alt pr-3"></i>
+							</button>
+							<a class="dropdown-item" :href="$root.keysManager.exports[name]" :download="name" title="Export">
+								<i class="fas fa-fw fa-download"></i>
+							</a>
+						</li>
+					</ul>
+				</div>
+				<hr class="my-4 sec" />
+				<div class="py-3">
+					<p class="card-text">
+						Additionnally, you can also
+						<router-link to="/key/create" class="btn btn-link p-0 sec-color">create a new key</router-link>
+					</p>
+					<sec-browse-key></sec-browse-key>
+				</div>
+			</div>
+			<div v-else>
+				<sec-create-key></sec-create-key>
+				<hr class="mt-4 mb-3 sec" />
+				<sec-browse-key></sec-browse-key>
+			</div>
+		</div>
+	</script>
+
 	<script type="text/x-template" id="sec-create-key">
-		<div id="create-key">
+		<div class="py-3">
+			<h6 class="card-title mb-3">Create a new key</h6>
 			<p class="card-text">
 				A new key will be generated, locally in your browser.<br />
 				It will allow authentication when interacting with the Secretarium platform.
 			</p>
 			<form @submit.prevent>
-				<button type="submit" class="btn btn-sec mr-3" @click.prevent="createKey">Generate</button>
-				<sec-notif-state :state="generation.ns.data"></sec-notif-state>
+				<div class="form-row">
+					<div class="col-sm">
+						<input id="ckName" type="text" class="form-control" placeholder="Key name">
+					</div>
+					<div class="col-sm-auto mt-3 mt-sm-0">
+						<button type="submit" class="btn btn-sec" @click.prevent="createKey">Generate a new key</button>
+						<sec-notif-state :state="generation.ns.data" class="d-sm-none"></sec-notif-state>
+					</div>
+				</div>
+				<sec-notif-state :state="generation.ns.data" class="mt-2 d-sm-block"></sec-notif-state>
 			</form>
 		</div>
 	</script>
 
+	<script type="text/x-template" id="sec-browse-key">
+		<div>
+			<p class="card-text">
+				Alternatively drag and drop a key or
+				<label for="sec-loadkey-file" class="btn btn-link p-0 sec-color">browse from disk</label>
+				<input type="file" id="sec-loadkey-file" accept=".secretarium" class="d-none" @change="onKeyFile" />
+			</p>
+		</div>
+	</script>
+
 	<script type="text/x-template" id="sec-export-key">
-		<div id="export-key" class="container center">
-			<div class="card sec-card border-0 mw-md">
-				<h3 class="card-header text-center"><i class="sec-logo mr-1"></i>Export your new key</h3>
-				<div class="card-body lato">
-
-					<h6 class="card-title mb-3">Name your key</h6>
-					<form @submit.prevent>
-						<div class="form-group mb-1">
-							<label for="ckName" class="sr-only">Key name</label>
-							<input id="ckName" type="text" class="form-control" placeholder="Key name" :value="key.name||''">
-						</div>
-					</form>
-
-					<hr class="mt-4 sec" />
-
-					<h6 class="card-title my-3">Encrypt your key for storage</h6>
-					<p class="card-text">
-						To safely store your key, please choose a strong password.
-					</p>
-					<form @submit.prevent>
-						<div class="form-group mt-3">
-							<label for="ckPwd" class="sr-only">Password</label>
+		<div>
+			<div class="py-2">
+				<p class="card-text border rounded bg-light p-2">
+					<strong>Key Name</strong>: "{{key.name}}"<br />
+					<strong>Public Key</strong>: {{publicKeyHex}}
+				</p>
+			</div>
+			<hr class="my-3 sec" />
+			<div class="py-2">
+				<h6 class="card-title mb-3">Encrypt your key</h6>
+				<p class="card-text">
+					To safely store your key, please choose a strong password.
+				</p>
+				<form @submit.prevent>
+					<div class="form-row">
+						<div class="col-sm">
 							<input id="ckPwd" type="password" class="form-control" placeholder="Password" autocomplete="current-password">
 						</div>
-						<button type="submit" class="btn btn-sec mr-3" @click.prevent="encryptKey">
-							<i class="fas fa-fw fa-lock pr-3"></i> Encrypt
-						</button>
-						<sec-notif-state :state="encryption.ns.data"></sec-notif-state>
-					</form>
-
-					<hr class="mt-4 sec" />
-
-					<h6 class="card-title my-3">Export your key</h6>
-					<p class="card-text">
-						Export your key to back it up locally, or on a secure hardware.
-					</p>
-					<form class="form-inline" @submit.prevent>
-						<a class="btn btn-sec mr-3" :href="exportUrl"
-							:disabled="key.name.length==0" :download="(key.name||'new-key')+'.secretarium'">
-							<i class="fas fa-fw fa-download pr-3"></i> Export
-						</a>
-						<div class="form-check lg">
-							<input type="checkbox" class="form-check-input" id="ckExportEncrypted"
-								:disabled="!encryption.success" :checked="encryption.success">
-							<label class="form-check-label" for="ckExportEncrypted">Export encrypted</label>
-						</div>
-					</form>
-
-					<div v-if="$root.canStore">
-						<hr class="mt-4 sec" />
-						<h6 class="card-title my-3">Save in this browser</h6>
-						<p class="card-text">If you trust this machine, save your key in this browser to ease future connections.</p>
-						<form class="form-inline" @submit.prevent>
-							<button type="button" class="btn btn-sec mr-3" :disabled="key.name.length==0" @click.prevent="saveKey">
-								<i class="fas fa-fw fa-save pr-3"></i> Save
+						<div class="col-sm-auto mt-3 mt-sm-0">
+							<button type="submit" class="btn btn-sec" @click.prevent="encryptKey">
+								<i class="fas fa-fw fa-lock pr-3"></i> Encrypt
 							</button>
-							<sec-notif-state :state="save.ns.data"></sec-notif-state>
-							<div class="form-check lg">
-								<input type="checkbox" class="form-check-input" id="ckSaveEncrypted" :disabled="!encryption.success">
-								<label class="form-check-label" for="ckSaveEncrypted">Save encrypted</label>
-							</div>
-						</form>
+							<sec-notif-state :state="encryption.ns.data" class="d-sm-none"></sec-notif-state>
+						</div>
 					</div>
+					<sec-notif-state :state="encryption.ns.data" class="mt-2 d-sm-block"></sec-notif-state>
+				</form>
+			</div>
+			<hr class="my-3 sec" />
+			<div class="py-2">
+				<h6 class="card-title mb-3">Export your key</h6>
+				<p class="card-text">
+					Export your key to back it up locally, or on a secure hardware.
+				</p>
+				<form class="form-inline" @submit.prevent>
+					<div class="form-check lg mr-3">
+						<input type="checkbox" class="form-check-input" id="ckExportEncrypted"
+							:disabled="!encryption.success" :checked="encryption.success">
+						<label class="form-check-label" for="ckExportEncrypted">Export encrypted</label>
+					</div>
+					<a class="btn btn-sec" :href="exportUrl"
+						:download="key.name+'.secretarium'">
+						<i class="fas fa-fw fa-download pr-3"></i> Export
+					</a>
+				</form>
+			</div>
+			<div v-if="$root.canStore">
+				<hr class="my-3 sec" />
+				<div class="py-2">
+					<h6 class="card-title mb-3">Save in this browser</h6>
+					<p class="card-text">If you trust this machine, save your key in this browser to ease future connections.</p>
+					<form class="form-inline" @submit.prevent>
+						<div class="form-check lg mr-3">
+							<input type="checkbox" class="form-check-input" id="ckSaveEncrypted" :disabled="!encryption.success">
+							<label class="form-check-label" for="ckSaveEncrypted">Save encrypted</label>
+						</div>
+						<button type="button" class="btn btn-sec" :disabled="key.name.length==0" @click.prevent="saveKey">
+							<i class="fas fa-fw fa-save pr-3"></i> Save
+						</button>
+						<sec-notif-state :state="save.ns.data"></sec-notif-state>
+					</form>
 				</div>
 			</div>
 		</div>
@@ -636,21 +661,13 @@
 				}
 			}, { threshold: 0.5 });
 		const onResize = {},
-			canStore = (function() {
-				try {
-					localStorage.setItem("a", "a");
-					localStorage.removeItem("a");
-					return true;
-				} catch (e) {
-					return false;
-				}
-			})(),
 			store = {
 				user: {
 					ECDSA: undefined,
 					ECDSAPubBase64: undefined,
 					dcapps: {}
 				},
+				transition: "page",
 				isPresentationPages: window.location.pathname == "/",
 				isLogoPage: window.location.pathname == "/" && (window.location.hash.length == 0 || window.location.hash == "#welcome"),
 				gateways: [
@@ -775,7 +792,7 @@
 			}
 			_setState(state, msg = "", showMsg = false) {
 				clearTimeout(this.timeout);
-				this.data.msg = showMsg ? (msg != "" ? msg : this.title) : "";
+				this.data.msg = showMsg ? (msg != "" ? msg : state) : "";
 				if(this.state == "failed" && state != "sent" && state != "processing") return this;
 				this.state = state;
 				let target = this._current();
@@ -841,7 +858,7 @@
 			mounted() {
 				subscribeOnScroll("presentation", (entries, observer) => {
 					entries.forEach(entry => {
-						if(entry.isIntersecting && entry.target.id)
+						if(entry.isIntersecting && entry.intersectionRatio>=.5 && entry.target.id)
 							this.onScroll(entry.target.id);
 					});
 				});
@@ -896,150 +913,94 @@
 		});
 
 		const Connect = Vue.component('sec-connect', {
-			template: '#sec-connect',
+			template: '#sec-connect'
+		});
+		const LoadKey = Vue.component('sec-load-key', {
+			template: '#sec-load-key',
 			data: () => {
 				return {
-					importedKeyMsg: ""
+					key: {}
 				}
-			},
-			mounted() {
-				setOnDrop(this.importDroppedKeyFile);
-			},
-			beforeDestroy() {
-				setOnDrop(null);
-			},
-			methods: {
-				keyFileChange(e) {
-					if(e.target && e.target.files && e.target.files.length == 1)
-						this.importKeyFile(e.target.files[0]);
-					else
-						this.importedKeyMsg = "Invalid choice, expecting one file";
-				},
-				importDroppedKeyFile(e) {
-					if(e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length == 1)
-						this.importKeyFile(e.dataTransfer.files[0]);
-					else
-						alerts.push({ key: "invalid-key-file", isError: true, html: "Invalid drop, expecting one file" });
-				},
-				importKeyFile(file) {
-					let reader = new FileReader();
-					reader.onloadend = x => {
-						try {
-							let key = JSON.parse(reader.result), replaced = false;
-							for(let i = 0; i < this.keys.list.length; i++) {
-								if(this.keys.list[i].name == key.name) {
-									this.keys.list[i] = key;
-									replaced = true;
-									//$("#keysListSelect").val(i);
-									break;
-								}
-							}
-							if(!replaced) {
-								this.keys.list.push(key);
-							}
-						}
-						catch (e) {
-							alerts.push({ key: "invalid-key-file", isError: true, html: "Invalid key file" });
-						}
-					};
-					reader.onerror = e => {
-						alerts.push({ key: "invalid-key-file", isError: true, html: "Error when reading file: " + e });
-					};
-					reader.readAsText(file);
-				},
 			}
 		});
-		const createdKey = { name: ""};
 		const CreateKey = Vue.component('sec-create-key', {
 			template: '#sec-create-key',
 			data: () => {
 				return {
-					key: createdKey,
 					generation: { ns: new notifState() }
 				}
 			},
 			methods: {
 				async createKey() {
-					this.generation.success = false;
-					this.generation.ns.processing();
+					this.generation.ns.processing("Creating key", true);
+					let name = $('#ckName').val();
+					if(name.length < 1) {
+						this.generation.ns.failed("invalid key name", true);
+						return;
+					}
 					try {
-						this.key.cryptoKey = await sec.utils.ecdsa.generateKeyPair(true);
-						this.key.publicKey = new Uint8Array(await sec.utils.ecdsa.exportPub(this.key.cryptoKey, "raw")),
-						this.key.privateKey = new Uint8Array(await sec.utils.ecdsa.exportPri(this.key.cryptoKey, "pkcs8"));
-						this.generation.ns.executed().hide();
-						setTimeout(() => { router.push('export-key'); }, 600);
+						await this.$root.keysManager.createKey(name, false);
+						this.generation.ns.executed("Success", true).hide();
+						setTimeout(() => { router.push({ name: 'key-export', params : { name: name }}); }, 500);
 					}
 					catch(e) {
-						this.generation.ns.failed(e.message);
+						this.generation.ns.failed(e, true);
 					}
+				}
+			}
+		});
+		const BrowseKey = Vue.component('sec-browse-key', {
+			template: '#sec-browse-key',
+			mounted() {
+				setOnDrop(this.onKeyFile);
+			},
+			beforeDestroy() {
+				setOnDrop(null);
+			},
+			methods: {
+				onKeyFile(evt) {
+					this.$root.keysManager.importKeyFile(evt, false).catch(err => {
+						alerts.push({ key: "invalid-key-file", isError: true, html: err });
+					})
 				}
 			}
 		});
 		const ExportKey = Vue.component('sec-export-key', {
 			template: '#sec-export-key',
+			props: ['name'],
 			data: () => {
 				return {
-					key: createdKey,
-					exportUrl: null,
 					encryption: { ns: new notifState(), success: false },
 					save: { ns: new notifState() }
 				}
 			},
-			created() {
-				this.exportUrl = this.getExportUrl();
-			},
-			destroyed() {
-				URL.revokeObjectURL(this.exportUrl);
+			computed: {
+				key() { return this.$root.keysManager.keys[this.name]; },
+				exportUrl() { return this.$root.keysManager.exports[this.name]; },
+				publicKeyHex() {
+					let z = this.$root.keysManager.getPublicKeyHex(this.name, " ");
+					return z.toUpperCase();
+				}
 			},
 			methods: {
-				getExportUrl() {
-					let j = JSON.stringify(this.getExportableKey()),
-					    b = new Blob([j], { type: 'application/json;charset=utf-8;' });
-					return URL.createObjectURL(b);
-				},
-				getExportableKey() {
-					let key = { name: this.key.name };
-					if(this.encryption.success) {
-						key.encrypted = true;
-						key.iv = this.key.iv.secToBase64();
-						key.salt = this.key.salt.secToBase64();
-						key.keys = this.key.encryptedKeys;
-					} else {
-						key.keys = sec.utils.concatUint8Array(this.key.publicKey, this.key.privateKey).secToBase64();
-					}
-					return key;
-				},
 				async encryptKey() {
 					this.encryption.success = false;
+					this.encryption.ns.processing();
+					let pwd = $('#ckPwd').val();
+					if(pwd.length < 1) { this.encryption.ns.failed("invalid password", true); return; }
 					try {
-						this.encryption.ns.processing();
-						let name = $('#ckName').val();
-						if(name.length < 1) { this.encryption.ns.failed("invalid key name", true); return; }
-						this.key.name = name;
-						this.key.salt = sec.utils.getRandomUint8Array(32);
-						this.key.iv = sec.utils.getRandomUint8Array(12);
-						let weakpwd = sec.utils.encode($('#ckPwd').val()),
-							strongPwd = await sec.utils.hash(sec.utils.concatUint8Array(this.key.salt, weakpwd)),
-							aesgcmKey = await sec.utils.aesgcm.import(strongPwd),
-							keys = sec.utils.concatUint8Array(this.key.publicKey, this.key.privateKey);
-							encryptedKeys = await sec.utils.aesgcm.encrypt(aesgcmKey, this.key.iv, keys);
-						this.key.encryptedKeys = new Uint8Array(encryptedKeys).secToBase64();
-						this.encryption.ns.executed();
-						this.encryption.success = true;
-						URL.revokeObjectURL(this.exportUrl);
-						this.exportUrl = this.getExportUrl();
+						this.$root.keysManager.encryptKey(this.name, pwd, false);
+						this.encryption.ns.executed().hide();
+					} catch (err) {
+						this.encryption.ns.failed(err, true);
 					}
-					catch(e) {
-						this.encryption.ns.failed(e.message);
-					}
+					this.encryption.success = true;
 				},
 				saveKey() {
 					this.save.ns.processing();
-					let name = $('#ckName').val();
-					if(name.length < 1) { this.save.ns.failed("invalid key name", true); return; }
-					this.key.name = name;
-					this.$root.addKey(this.getExportableKey(), this.key.cryptoKey, true);
-					this.save.ns.executed();
+					this.key.save = true;
+					this.$root.keysManager.save();
+					this.save.ns.executed().hide();
 				}
 			}
 		});
@@ -1062,7 +1023,14 @@
 			mode: 'history',
 			routes: [
 				{ path: '/', component: Presentation },
-				{ path: '/connect', component: Connect },
+				{ path: '/key', component: Connect,
+					children: [
+						{ path: '', redirect: 'load' },
+						{ path: 'load', component: LoadKey },
+						{ path: 'create', component: CreateKey },
+						{ path: 'export/:name', component: ExportKey, name: 'key-export', props: true }
+					]
+				},
 				{ path: '/create-key', component: CreateKey },
 				{ path: '/export-key', component: ExportKey },
 				{ path: '/app-store', component: AppStore },
@@ -1072,6 +1040,7 @@
 		router.beforeEach((to, from, next) => {
 			store.isPresentationPages = to.path == '/';
 			store.isLogoPage = store.isPresentationPages && (to.hash.length == 0 || to.hash == "#welcome");
+			store.transition = ["/create-key", "/load-key", "/export-key"].includes(to.path) ? "none" : "page";
 			$("body").toggleClass("page-presentation", store.isPresentationPages);
 			next();
 		});
@@ -1080,7 +1049,8 @@
 			router,
 			data: () => {
 				return {
-					canStore: canStore,
+					transition: "page",
+					canStore: sec.utils.localStorage.canUse,
 					store: store,
 					connection: {
 						endpoint: "",
@@ -1090,20 +1060,8 @@
 					keys: {
 						list: [], exports: [], cryptoKeys: {}
 					},
-				}
-			},
-			beforeMount() {
-				if (canStore) {
-					let v = localStorage.getItem('secretarium-keys');
-					if(v != null) {
-						try {
-							this.keys.list = JSON.parse(v);
-							for(let i = 0; i < this.keys.list.length; i++) {
-								this.keys.exports.push(this.getExport(this.keys.list[i]));
-							}
-						}
-						catch (e) { }
-					}
+					scp: new secretarium.scp(),
+					keysManager: new secretarium.keysManager()
 				}
 			},
 			computed: {
@@ -1113,25 +1071,6 @@
 				isLoggedIn() { return false; },
 			},
 			methods: {
-				getExport(key) {
-					let b = new Blob([JSON.stringify(key)], { type: 'application/json;charset=utf-8;' });
-					return { name: key.name + ".secretarium", url: URL.createObjectURL(b) };
-				},
-				storeKeys() {
-					if (canStore)
-						localStorage.setItem('secretarium-keys', JSON.stringify(this.keys.list));
-				},
-				addKey(key, cryptoKey, store) {
-					this.keys.list.push(key);
-					this.keys.exports.push(this.getExport(key));
-					this.keys.cryptoKeys[key.name] = cryptoKey;
-					if(store) this.storeKeys();
-				},
-				removeKey(i) {
-					delete this.keys.cryptoKeys[this.keys.list[i].name];
-					this.keys.list.splice(i, 1);
-					this.storeKeys();
-				},
 				async connect(endpoint = "") {
 				},
 				getDCApps() {

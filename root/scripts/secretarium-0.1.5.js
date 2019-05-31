@@ -300,6 +300,174 @@ var sec, secretarium = sec = {
         }
     },
 
+    keysManager: class {
+
+        constructor() {
+            this.keys = {};
+            this.exports = {};
+            this.cryptoKeys = {};
+
+            if (sec.utils.localStorage.canUse) {
+                let v = localStorage.getItem('secretarium-keys');
+                if(v != null) {
+                    try {
+                        let keys = JSON.parse(v);
+                        for(var name in keys) {
+                            this.keys[name] = keys[name];
+                            this.exports[name] = this._createObjectURL(keys[name]);
+                        }
+                    } catch (e) { }
+                }
+            }
+        }
+
+        _createObjectURL(key) {
+            let j = JSON.stringify(this._toExportable(key)),
+                b = new Blob([j], { type: 'application/json;charset=utf-8;' });
+            return URL.createObjectURL(b);
+        }
+
+        _toExportable(key) {
+            let exp = { name: key.name };
+            if(key.encrypted) {
+                exp.encrypted = true;
+                exp.iv = key.iv;
+                exp.salt = key.salt;
+                exp.keys = key.keys;
+            } else {
+                exp.keys = key.keys;
+            }
+            return exp;
+        }
+
+        async _toCryptoKey(keys) {
+            let publicKey = await sec.utils.ecdsa.importPub(keys.subarray(0, 65), "raw"),
+                privateKey = await sec.utils.ecdsa.importPri(keys.subarray(65), "pkcs8"),
+                cryptoKey = { publicKey: publicKey, privateKey: privateKey };
+            this.cryptoKeys[name] = cryptoKey;
+            return cryptoKey;
+        }
+
+        async createKey(name, save = true) {
+            if(name.length == 0) throw "Invalid key name";
+
+            let cryptoKey = await sec.utils.ecdsa.generateKeyPair(true),
+                publicKey = new Uint8Array(await sec.utils.ecdsa.exportPub(cryptoKey, "raw")),
+                privateKey = new Uint8Array(await sec.utils.ecdsa.exportPri(cryptoKey, "pkcs8")),
+                keys = sec.utils.concatUint8Array(publicKey, privateKey).secToBase64();
+
+            this.cryptoKeys[name] = cryptoKey;
+            this.addKey(name, { keys: keys }, save);
+            return cryptoKey;
+        }
+
+        importKeyFile(evt, save = true) {
+            return new Promise((resolve, reject) => {
+                let e = evt.dataTransfer || evt.target; // dragged or browsed
+                if(!e || !e.files) reject("Unsupported, missing key file");
+                if(e.files.length != 1) reject("Unsupported, expecting a single key file");
+
+                let reader = new FileReader();
+                reader.onloadend = x => {
+                    try {
+                        let key = JSON.parse(reader.result);
+                        this.addKey(key.name, key, save);
+                        resolve(name);
+                    }
+                    catch (e) { reject(e.message); }
+                };
+                reader.onerror = e => { reject(e.message); };
+                reader.readAsText(e.files[0]);
+            });
+        }
+
+        async encryptKey(name, pwd, save = true) {
+            let key = this.keys[name];
+            if(name.length == 0 || !key) throw "Invalid key name";
+            if(key.encrypted) return key;
+
+            let salt = sec.utils.getRandomUint8Array(32),
+                iv = sec.utils.getRandomUint8Array(12),
+                weakPwd = sec.utils.encode(pwd);
+                strongPwd = await sec.utils.hash(sec.utils.concatUint8Array(salt, weakPwd)),
+                aesgcmKey = await sec.utils.aesgcm.import(strongPwd),
+                keys = Uint8Array.secFromBase64(key.keys),
+                encryptedKeys = await sec.utils.aesgcm.encrypt(aesgcmKey, iv, keys);
+            key.salt = salt.secToBase64();
+            key.iv = iv.secToBase64();
+            key.keys = new Uint8Array(encryptedKeys).secToBase64();
+            key.encrypted = true;
+            this.addKey(key.name, key, save);
+            return key;
+        }
+
+        async decryptKey(name, pwd) {
+            let key = this.keys[name];
+            if(name.length == 0 || !key) throw "Invalid key name";
+            if(!key.encrypted) return await this.getCryptoKey(name);
+
+            let iv = Uint8Array.secFromBase64(key.iv),
+                salt = Uint8Array.secFromBase64(key.salt),
+                encryptedKeys = Uint8Array.secFromBase64(key.keys),
+                weakpwd = sec.utils.encode(pwd),
+                strongPwd = await sec.utils.hash(sec.utils.concatUint8Array(salt, weakpwd)),
+                aesgcmKey = await sec.utils.aesgcm.import(strongPwd), keys;
+            try {
+                keys = new Uint8Array(await sec.utils.aesgcm.decrypt(aesgcmKey, iv, encryptedKeys));
+            } catch (e) { throw "can't decrypt"; }
+            try {
+                return await this._toCryptoKey(keys);
+            } catch (e) { throw "corrupted key/invalid password"; }
+        }
+
+        async getCryptoKey(name) {
+            let key = this.keys[name];
+            if(name.length == 0 || !key) throw "Invalid key name";
+            if(key.encrypted) throw "The key is encrypted";
+            if(this.cryptoKeys[name]) return this.cryptoKeys[name];
+
+            let keys = Uint8Array.secFromBase64(key.keys);
+            return await this._toCryptoKey(keys);
+        }
+
+        getPublicKeyHex(name, delimiter = '') {
+            let key = this.keys[name];
+            if(name.length == 0 || !key) throw "Invalid key name";
+            return Uint8Array.secFromBase64(key.keys).subarray(0, 65).secToHex(delimiter);
+        }
+
+        addKey(name, key, save = true) {
+            if(this.exports[name]) {
+                URL.revokeObjectURL(this.exports[name]);
+            }
+            key.name = name;
+            this.keys[name] = this._toExportable(key);
+            this.exports[name] = this._createObjectURL(key);
+            if(!save) this.keys[name].save = false;
+            else this.save();
+        }
+
+        removeKey(name) {
+            if(this.exports[name]) {
+                URL.revokeObjectURL(this.exports[name]);
+            }
+            delete this.keys[name];
+            delete this.exports[name];
+            delete this.cryptoKeys[name];
+            this.save();
+        }
+
+        save() {
+            let toSave = {};
+            for(var name in this.keys) {
+                if(this.keys[name].save !== false)
+                    toSave[name] = this._toExportable(this.keys[name]);
+            }
+            if (sec.utils.localStorage.canUse)
+                localStorage.setItem('secretarium-keys', JSON.stringify(toSave));
+        }
+    },
+
     utils: (function(){
         var decoder = new TextDecoder("utf-8"),
             encoder = new TextEncoder("utf-8");
@@ -349,6 +517,10 @@ var sec, secretarium = sec = {
             return btoa(this.secToString());
         }
 
+        Uint8Array.prototype.secToHex = function(delimiter = '') {
+            return Array.prototype.map.call(this, x => ('00' + x.toString(16)).slice(-2)).join(delimiter);
+        }
+
         Uint8Array.secFromString = function(str) {
             var buf = new Uint8Array(str.length);
             for (var i = 0, strLen = str.length; i < strLen; i++) {
@@ -366,6 +538,16 @@ var sec, secretarium = sec = {
             window.crypto.getRandomValues(a);
             return a;
         }
+
+        var canUseLocalStorage = (function() {
+            try {
+                localStorage.setItem("a", "a");
+                localStorage.removeItem("a");
+                return true;
+            } catch (e) {
+                return false;
+            }
+        })();
 
         return {
             getRandomUint8Array: getRandomUint8Array,
@@ -452,6 +634,9 @@ var sec, secretarium = sec = {
                 decrypt: async function(key, iv, data) {
                     return window.crypto.subtle.decrypt({ name: "AES-GCM", iv: iv, tagLength: 128 }, key, data);
                 }
+            },
+            localStorage: {
+                canUse: canUseLocalStorage
             }
         }
     })()
