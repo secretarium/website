@@ -411,10 +411,10 @@
 			<section id="secret-mixing">
 				<div class="container">
 					<h2>Secret mixing</h2>
-					<h3>Allows a group to pool data together and collectively achieve insight</h3>
-					<div class="row mx-0 mt-5">
+					<div class="row mx-0">
 						<div class="col-md-6 px-0">
-							<p>
+							<h3>Allows a group to pool data together and collectively achieve insight</h3>
+							<p class="mt-5">
 								Untrusting parties can use Secretarium to build a consensus using each parties
 								private data, without any other party
 								getting access, including Secretarium itself.
@@ -445,18 +445,18 @@
 							<h4 class="mb-4">The secretarium team</h4>
 							<div class="about-item">
 								<img class="team-member" />
-								<h5 class="team-member-name">Bertrand Foing</h5>
-								<span class="team-member-position">laoreet non curabitur gravida arcu ac tortor dignissim convallis aenean et tortor at risus viverra adipiscing at in tellus integer</span>
+								<h5 class="team-member-name mb-0">Bertrand Foing</h5>
+								<p class="team-member-position">Founder - Head of strategy</p>
 							</div>
 							<div class="about-item">
 								<img class="team-member" />
-								<h5 class="team-member-name">Cédric Wahl</h5>
-								<span class="team-member-position">aliquam etiam erat velit scelerisque in dictum non consectetur a erat nam at lectus urna duis convallis convallis tellus id</span>
+								<h5 class="team-member-name mb-0">Cédric Wahl</h5>
+								<p class="team-member-position">Founder - Head of technology</p>
 							</div>
 							<div class="about-item">
 								<img class="team-member" />
-								<h5 class="team-member-name">Axel Oehmichen</h5>
-								<span class="team-member-position">sed enim ut sem viverra aliquet eget sit amet tellus cras adipiscing enim eu turpis egestas pretium aenean pharetra magna</span>
+								<h5 class="team-member-name mb-0">Axel Oehmichen, PhD</h5>
+								<p class="team-member-position">Co-founder - Data scientist</p>
 							</div>
 						</div>
 						<div class="col-md-4 px-0 py-2 pr-md-2">
@@ -469,7 +469,7 @@
 								<img src="/images/logo_swisscom.svg" class="comp-logo"/>
 							</div>
 						</div>
-						<div class="col-md-4 px-0 py-2 pr-md-2">
+						<div class="col-md-4 px-0 py-2 pr-md-2 d-none">
 							<h4 class="mb-4">Our clients</h4>
 							<div class="about-item">
 								<img src="/images/logo_soge.svg" class="comp-logo"/>
@@ -480,6 +480,9 @@
 							<div class="about-item">
 								<img src="/images/logo_creds.svg" class="comp-logo"/>
 							</div>
+							<div class="about-item">
+								<img src="/images/logo_kbc.svg" class="comp-logo"/>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -489,7 +492,7 @@
 	</script>
 
 	<script type="text/x-template" id="sec-connect">
-		<div id="connect" class="container center">
+		<div id="connect" class="container fixed-center">
 			<div class="card sec-card mw-md border-0">
 				<div class="card-header">
 					<h4>Entrust your secrets with Secretarium</h4>
@@ -576,7 +579,7 @@
 			<div class="py-2">
 				<p class="card-text border rounded bg-light p-2">
 					<strong>Key Name</strong>: "{{name}}"<br />
-					<strong>Public Key</strong>: {{publicKeyHex}}
+					<strong>Public Key ({{key.encrypted?'clear-text':'encrypted'}})</strong>: {{publicKeyHex}}
 				</p>
 			</div>
 			<hr class="my-3 sec" />
@@ -735,10 +738,12 @@
 					redrawLoop = null;
 				};
 				function onResize() {
+					stop();
 					stage.empty();
 					items = {};
 					maxDist = 0;
 					fill(true);
+					start(100);
 				};
 				return {
 					fill: fill, draw: draw, start: start, stop: stop
