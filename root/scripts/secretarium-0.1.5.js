@@ -363,6 +363,11 @@ var sec, secretarium = sec = {
                 reader.onloadend = x => {
                     try {
                         let key = JSON.parse(reader.result);
+                        if(key.iv && !key.encrypted) { // retro comp
+                            key.encrypted = true;
+                            key.encryptedKeys = key.keys;
+                            delete key.keys;
+                        }
                         this.addKey(name, key, save);
                         resolve(name);
                     }

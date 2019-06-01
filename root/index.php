@@ -12,8 +12,8 @@
 	<link rel="stylesheet" href="/styles/bootstrap-4.3.1.min.css" />
 	<link rel="stylesheet" href="/styles/fontawesome-5.7.2.all.min.css" />
 	<link rel="stylesheet" href="/styles/secretarium-0.0.1.css" />
-	<link rel="stylesheet" href="/styles/secretarium.navbar.css" />
-	<link rel="stylesheet" href="/styles/secretarium.presentation.css" />
+	<!-- <link rel="stylesheet" href="/styles/secretarium.navbar.css" />
+	<link rel="stylesheet" href="/styles/secretarium.presentation.css" /> -->
 	<link rel="stylesheet" href="/styles/secretarium.connect.css" />
 	<link rel="stylesheet" href="/styles/secretarium.alerts.css" />
 
@@ -30,9 +30,9 @@
 	<img src="/images/secretarium_title.svg" id="stage-full-logo" />
 	<img src="/images/secretarium_logo_grey.svg" id="stage-logo" />
 	<div id="stage"></div>
-	<div id="drop-area"></div>
 
 	<div id="app" @dragover.prevent @drop.prevent v-cloak>
+		<div id="drop-area"></div>
 		<header>
 			<nav class="navbar p-0" :class="{'logo-page':store.isLogoPage, 'fixed-top':store.isPresentationPages}">
 				<div id="menu" class="container-fluid py-2" :class="{container:!store.isLogoPage}">
@@ -445,46 +445,86 @@
 					<div class="row mx-0 mt-5">
 						<div class="col-md-4 px-0 py-2 pr-md-2">
 							<h4 class="mb-4">The secretarium team</h4>
-							<div class="about-item">
-								<img class="team-member" />
-								<h5 class="team-member-name mb-0">Bertrand Foing</h5>
-								<p class="team-member-position">Founder - Head of strategy</p>
-							</div>
-							<div class="about-item">
-								<img class="team-member" />
-								<h5 class="team-member-name mb-0">Cédric Wahl</h5>
-								<p class="team-member-position">Founder - Head of technology</p>
-							</div>
-							<div class="about-item">
-								<img class="team-member" />
-								<h5 class="team-member-name mb-0">Axel Oehmichen, PhD</h5>
-								<p class="team-member-position">Co-founder - Data scientist</p>
+							<div class="row m-0">
+								<div class="col-xs-4 pr-3 pb-3 team-member">
+									<img src="/images/bertrand.jpg" />
+									<h5>Bertrand Foing</h5>
+									<p>Founder - Strategy & Technology</p>
+								</div>
+								<div class="col-xs-4 pr-3 pb-3 team-member">
+									<img src="/images/cedric.jpg" />
+									<h5>Cédric Wahl</h5>
+									<p>Founder - Strategy & Technology</p>
+								</div>
+								<div class="col-xs-4 pr-3 pb-3 team-member">
+									<img src="/images/axel.png" />
+									<h5>Axel Oehmichen, PhD</h5>
+									<p>Co-founder - Data scientist</p>
+								</div>
 							</div>
 						</div>
 						<div class="col-md-4 px-0 py-2 pr-md-2">
 							<h4 class="mb-4">Our sponsors</h4>
-							<div class="about-item comp-logo">
-								<img src="/images/logo_intel.svg"/>
-							</div>
-							<h4 class="my-4">Our partners</h4>
-							<div class="about-item comp-logo">
-								<img src="/images/logo_swisscom_blockchain.jpg"/>
+							<div class="row m-0">
+								<div class="col-xs-4 pr-3 pb-3 comp-logo">
+									<img src="/images/logo_intel.svg"/>
+								</div>
 							</div>
 						</div>
-						<div class="col-md-4 px-0 py-2 pr-md-2 d-none">
-							<h4 class="mb-4">Our clients</h4>
-							<div class="about-item comp-logo">
-								<img src="/images/logo_soge.svg"/>
+						<div class="col-md-4 px-0 py-2 pr-md-2">
+							<h4 class="mb-4">Our partners</h4>
+							<div class="row m-0">
+								<div class="col-xs-4 pr-3 pb-3 comp-logo">
+									<img src="/images/logo_soge.svg"/>
+								</div>
+								<div class="col-xs-4 pr-3 pb-3 comp-logo">
+									<img src="/images/logo_swisscom_blockchain.jpg"/>
+								</div>
 							</div>
-							<div class="about-item comp-logo">
-								<img src="/images/logo_ubs.svg"/>
-							</div>
-							<div class="about-item comp-logo">
-								<img src="/images/logo_creds.svg"/>
-							</div>
-							<div class="about-item comp-logo">
-								<img src="/images/logo_kbc.svg"/>
-							</div>
+						</div>
+					</div>
+					<h4 class="my-4 d-none">Our clients</h4>
+					<div class="row d-none">
+						<div class="col-xs-4 pr-3 pb-3 comp-logo">
+							<img src="/images/logo_soge.svg"/>
+						</div>
+						<div class="col-xs-4 pr-3 pb-3 comp-logo">
+							<img src="/images/logo_ubs.svg"/>
+						</div>
+						<div class="col-xs-4 pr-3 pb-3 comp-logo">
+							<img src="/images/logo_creds.svg"/>
+						</div>
+						<div class="col-xs-4 pr-3 pb-3 comp-logo">
+							<img src="/images/logo_kbc.svg"/>
+						</div>
+					</div>
+					<h4 class="my-4">get in touch</h4>
+					<div class="row mx-0 contact">
+						<div class="col-md-4 px-0 pr-md-2 pb-3">
+							<h5>Contact us</h5>
+							<p class="pl-3 pl-md-0">
+								<a href="https://secretarium.slack.com" target="_blank">
+									<img src="/images/Slack_Mark-120x120-3b17743.png">
+									<span>on Slack</span>
+								</a>
+								<a href="https://github.com/Secretarium" target="_blank">
+									<img src="/images/GitHub-Mark-64px.png">
+									<span>on GitHub</span>
+								</a>
+								<a href="mailto:contact@secretarium.org" target="_blank">
+									<i class="fas fa-envelope"></i>
+									<span>by email</span>
+								</a>
+							</p>
+						</div>
+						<div class="col-md px-0 pr-md-2 pb-3">
+							<h5>Visit us</h5>
+							<p class="pl-3 pl-md-0">
+								Société Générale Incubator<br/>
+								The Greenhouse, 6th floor<br/>
+								41 Tower Hill,<br/>
+								EC3N 4SG, London, UK
+							</p>
 						</div>
 					</div>
 				</div>
@@ -498,7 +538,7 @@
 			<div class="card sec-card mw-md border-0">
 				<div class="card-header">
 					<h4>Entrust your secrets with Secretarium</h4>
-					<p class="mb-0">Access to the most privacy respecting apps in the industry.</p>
+					<p class="mb-0">Access to the most privacy respecting apps in the industry</p>
 				</div>
 				<div class="card-body">
 					<transition name="no-transition">
@@ -512,9 +552,9 @@
 	<script type="text/x-template" id="sec-load-key">
 		<div id="load-key">
 			<div v-if="$root.keysManager.keys.length>0">
-				<div class="py-3">
-					<h6 class="card-title mb-3">Choose a key</h6>
-					<p class="mb-0">The following keys are present on your device</p>
+				<div class="py-2">
+					<h6 class="card-title">Choose a key</h6>
+					<p class="mt-3 mb-0">The following keys are present on your device</p>
 					<ul class="sec-key-list">
 						<li v-for="(key, name) in $root.keysManager.keys" :key="name">
 							<p>{{name}}</p>
@@ -528,7 +568,7 @@
 					</ul>
 				</div>
 				<hr class="my-4 sec" />
-				<div class="py-3">
+				<div class="py-2">
 					<p class="card-text">
 						Additionnally, you can also
 						<router-link to="/key/create" class="btn btn-link p-0 sec-color">create a new key</router-link>
@@ -545,9 +585,9 @@
 	</script>
 
 	<script type="text/x-template" id="sec-create-key">
-		<div class="py-3">
-			<h6 class="card-title mb-3">Create a new key</h6>
-			<p class="card-text">
+		<div class="py-2">
+			<h6 class="card-title">Create a new key</h6>
+			<p class="card-text mt-3">
 				A new key will be generated, locally in your browser.<br />
 				It will allow authentication when interacting with the Secretarium platform.
 			</p>
@@ -586,13 +626,13 @@
 			</div>
 			<hr class="my-3 sec" />
 			<div class="py-2">
-				<h6 class="card-title mb-3"
+				<h6 class="card-title"
 					data-toggle="collapse" data-target="#sec-export-key-encrypt-collapse"
 					:aria-expanded="!encryption.success" aria-controls="sec-export-key-encrypt-collapse">
 					Encrypt your key
 					<i class="fas fa-chevron-down float-right" v-if="encryption.success"></i>
 				</h6>
-				<div class="collapse" id="sec-export-key-encrypt-collapse" :class="{'show':!encryption.success}">
+				<div class="mt-3 collapse" id="sec-export-key-encrypt-collapse" :class="{'show':!encryption.success}">
 					<p class="card-text">
 						To safely store your key, please choose a strong password.
 					</p>
@@ -614,8 +654,8 @@
 			</div>
 			<hr class="my-3 sec" />
 			<div class="py-2">
-				<h6 class="card-title mb-3">Export your key</h6>
-				<p class="card-text">
+				<h6 class="card-title">Export your key</h6>
+				<p class="card-text mt-3">
 					Export your key to back it up locally, or on a secure hardware.
 				</p>
 				<form class="form-inline" @submit.prevent>
@@ -633,8 +673,8 @@
 			<div v-if="$root.canStore">
 				<hr class="my-3 sec" />
 				<div class="py-2">
-					<h6 class="card-title mb-3">Save in this browser</h6>
-					<p class="card-text">If you trust this machine, save your key in this browser to ease future connections.</p>
+					<h6 class="card-title">Save in this browser</h6>
+					<p class="card-text mt-3">If you trust this machine, save your key in this browser to ease future connections.</p>
 					<form class="form-inline" @submit.prevent>
 						<div class="form-check lg mr-3 mb-3 mb-sm-0">
 							<input type="checkbox" class="form-check-input" id="ckSaveEncrypted"
@@ -880,7 +920,8 @@
 				document.querySelectorAll('#presentation>section').forEach(target => {
 					scrollObserver.observe(target);
 				});
-				$("a.go-to-next").css("opacity", 1);
+				setTimeout(() => { $("a.go-to-next").css("opacity", 1); }, 3000);
+
 			},
 			beforeDestroy() {
 				unsubscribeOnScroll("presentation");
@@ -916,7 +957,7 @@
 					$("#presentation-menu a[href='#technology']").toggleClass("active", x === 3);
 
 					// Go to next visibility
-					$("#presentation>a").toggle(id != "team");
+					$("#presentation>a.go-to-next").toggleClass("d-sm-inline", id != "team");
 				},
 				goToNext(e) {
 					var s = window.scrollY, r = $("#presentation")[0].scrollHeight,
@@ -1005,7 +1046,7 @@
 					let pwd = $('#ckPwd').val();
 					if(pwd.length < 1) { this.encryption.ns.failed("invalid password", true); return; }
 					try {
-						this.$root.keysManager.encryptKey(this.name, pwd, false);
+						await this.$root.keysManager.encryptKey(this.name, pwd, false);
 						this.encryption.ns.executed("Success", true).hide(1500);
 					} catch (err) {
 						this.encryption.ns.failed(err, true);
@@ -1073,9 +1114,6 @@
 						retrying: false, retryingMsg: "", retryFailures: 0, retrier: null, lastState: 0, timeoutSec: 30,
 						ns: {data: {}}
 					},
-					keys: {
-						list: [], exports: [], cryptoKeys: {}
-					},
 					scp: new secretarium.scp(),
 					keysManager: new secretarium.keysManager()
 				}
@@ -1124,14 +1162,16 @@
 			}).on("drop", function(e) {
 				$('body').removeClass('dragging');
 				if(onDrop != null) {
-					if(e.dataTransfer && e.dataTransfer.files) onDrop(e);
-					else if(e.originalEvent.dataTransfer && e.originalEvent.dataTransfer.files) onDrop(e.originalEvent);
+					if(e.dataTransfer && e.dataTransfer.files)
+						onDrop(e);
+					else if(e.originalEvent.dataTransfer && e.originalEvent.dataTransfer.files)
+						onDrop(e.originalEvent);
 				}
 			});
 
 			(() => {
 				var resizeTimeout = null;
-				$( window ).resize(function() {
+				$(window).resize(function() {
 					if (resizeTimeout !== null) clearTimeout(resizeTimeout);
 					resizeTimeout = setTimeout(() => {
 						resizeTimeout = null;
