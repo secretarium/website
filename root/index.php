@@ -635,8 +635,7 @@
 					<h6 class="card-title">Choose a key</h6>
 					<p class="mt-3">The following keys are present on your device</p>
 					<div class="form-row sec-key"
-						v-for="(key, i) in $root.keysManager.keys" :key="key.name"
-						v-if="key.save!==false||key.imported||key.saved">
+						v-for="(key, i) in $root.keysManager.keys" :key="key.name">
 						<div class="col">
 							<router-link :to="'/key/decrypt/'+i" class="btn btn-sec text-left">
 								{{key.name}}
@@ -1137,7 +1136,7 @@
 						await this.$root.keysManager.createKey(name, false);
 						this.generationNs.executed("Success", true).hide(1500);
 						let id = this.$root.keysManager.find(name);
-						setTimeout(() => { router.push({ name: 'key-manage', params : { id: id }}); }, 500);
+						router.push({ name: 'key-manage', params : { id: id }});
 					}
 					catch(e) {
 						this.generationNs.failed(e, true);
