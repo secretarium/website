@@ -12,10 +12,6 @@
 	<link rel="stylesheet" href="/styles/bootstrap-4.3.1.min.css" />
 	<link rel="stylesheet" href="/styles/fontawesome-5.7.2.all.min.css" />
 	<link rel="stylesheet" href="/styles/secretarium-0.0.1.css" />
-	<!-- <link rel="stylesheet" href="/styles/secretarium.navbar.css" />
-	<link rel="stylesheet" href="/styles/secretarium.presentation.css" /> -->
-	<link rel="stylesheet" href="/styles/secretarium.connect.css" />
-	<link rel="stylesheet" href="/styles/secretarium.alerts.css" />
 
 	<script src="/scripts/jquery-3.3.1.min.js"></script>
 	<script src="/scripts/popper-1.14.7.min.js"></script>
