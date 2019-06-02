@@ -11,12 +11,12 @@
 
 	<link rel="stylesheet" href="/styles/bootstrap-4.3.1.min.css" />
 	<link rel="stylesheet" href="/styles/fontawesome-5.7.2.all.min.css" />
-	<link rel="stylesheet" href="/styles/secretarium-0.0.1.css" />
+	<link rel="stylesheet" href="/styles/secretarium-0.0.2.min.css" />
 
 	<script src="/scripts/jquery-3.3.1.min.js"></script>
 	<script src="/scripts/popper-1.14.7.min.js"></script>
 	<script src="/scripts/bootstrap-4.3.1.min.js"></script>
-	<script src="/scripts/vue-2.6.10.js"></script>
+	<script src="/scripts/vue-2.6.10.min.js"></script>
 	<script src="/scripts/vue-router-3.0.2.min.js"></script>
 	<script src="/scripts/nng-0.1.0.js"></script>
 	<script src="/scripts/secretarium-0.1.5.js"></script>
@@ -167,7 +167,7 @@
 						<ul>
 							<li><a href="https://twitter.com/secretarium1" target="_blank">Twitter</a></li>
 							<li><a href="https://www.linkedin.com/company/secretarium" target="_blank">LinkedIn</a></li>
-						<ul>
+						</ul>
 					</div>
 					<div class="col-md-3">
 						<h5 class="footer-category">Secretarium</h5>
@@ -175,7 +175,7 @@
 							<li><a href="#">Blog</a></li>
 							<li><a href="#">Privacy Notice</a></li>
 							<li><a href="#">About</a></li>
-						<ul>
+						</ul>
 					</div>
 				</div>
 				<div class="row mt-4">
@@ -233,7 +233,7 @@
 							<h4 class="mb-2">Distributed Confidential computing platform</h4>
 							<p>
 								Relying on trusted execution environments and powered by secure multi-party
-								computing. Secretarium has been designed to
+								computing, Secretarium has been designed to
 								run applications on encrypted data in a trustable, distributed, scalable and
 								efficient way, with no possible data
 								leakage or manipulation, and no single point of failure.
@@ -334,9 +334,9 @@
 							<h4 class="mb-2">Prevent scavenging and monetization of private data</h4>
 							<p>
 								The internet was intended for driving collaboration, but the balance between
-								data originators and data aggregators has
-								been heavily tilted toward the latter. Our goal is to achieve the same results
-								without visibility of private data.
+								data originators and data aggregators has been heavily tilted toward the latter.
+								Our goal is to achieve the same level of service automation without visibility
+								of private data.
 							</p>
 						</div>
 					</div>
@@ -456,30 +456,29 @@
 						<div class="col-md-6 px-0 pr-md-5">
 							<h4 class="mb-2">Our story</h4>
 							<p>
-								Secretarium founders are two engineers who have worked for many years in various
+								Secretarium founders are engineers who have worked for many years in various
 								challenging environments.<br />
-								In 2014, they were asked to study and test various blockchain protocoles for a
-								tier-one European bank. They created a blockchain lab, prototyped many banking
-								applications and participated to the design of some protocoles. None of the tested
-								blockchain protocoles could face all aspects of the requirements, especially
-								regarding confidentiality, performance and user experience.<br />
-								In early 2016, they moved to confidential computing and started experienting with trusted
-								execution environement. At the end of 2016, Bertrand left the bank to create Secretarium.
-								He was joined a year later by Cedric.
+								In 2014, they volunteered to create a blockchain lab for a tier-one European bank.
+								The numerous prototypes and studies resulting from this experience evidenced the
+								unsuitability of blockchains and DLTs when faced with confidentiality, performance
+								and user experience constraints.<br />
+								Early 2016, they started experiments in trusted execution evironments and pivoted
+								into confidential computing.<br />
+								At the end of 2016, recognizing the much wider applicability of confidential
+								computing, Bertrand left the bank to create Secretarium, to be joined a year later
+								by Cedric.
 							</p>
 						</div>
 						<div class="col-md-6 px-0 pl-md-5 mt-4 mt-md-0">
 							<h4 class="mb-2">Our vision and philosophy</h4>
 							<p>
-								Secretarium goal is to restore the right to privacy for people and companies.<br />
-								The short term plan is to achieve in the Pharmatech, RegTech and InsurTech what
-								DLTs promise to achieve in the banking post-trade space.<br />
-								We provide the infrastructure rails for secrets intermediation. We do not seek to
-								monetize for ourselves the value of applications that can built with our technology.<br />
-								We have issued a legally enforceable charter where we take a commitment to keep
-								away and prevent any usage of our technology facilitating illegal practices.
-								This charter on this matter is very strict and aligned to legal
-								enforcement needs of democratic states.
+								Secretarium seeks to restore the right to privacy for people and companies.<br/>
+								Our short term markets are located in the Pharmatech, RegTech and InsurTech
+								sectors, where we provide the infrastructure rails for secrets intermediation.<br/>
+								We do not seek to monetize for ourselves the value of applications that can built
+								with our technology - but support third parties in building these applications.<br/>
+								We have issued a legally enforceable charter where we take a commitment to prevent
+								any usage of our technology facilitating illegal practices.
 							</p>
 						</div>
 					</div>
