@@ -49,7 +49,7 @@
 							<a class="nav-link" href="#technology">Technology</a>
 						</li>
 						<li class="nav-item py-0 px-2">
-							<a class="nav-link" href="#team">About us</a>
+							<a class="nav-link" href="#startup">About us</a>
 						</li>
 					</ul>
 					<ul id="sec-menu" class="navbar-nav flex-row ml-auto">
@@ -120,6 +120,20 @@
 							</li>
 							<li class="nav-item py-0 px-2">
 								<a href="#secret-mixing" class="nav-link">Secret mixing</a>
+							</li>
+						</ul>
+						<ul id="sub-about" class="navbar-nav flex-row m-0 p-0 my-2">
+							<li class="nav-item py-0 px-2">
+								<a href="#startup" class="nav-link">Our story and vision</a>
+							</li>
+							<li class="nav-item py-0 px-2">
+								<a href="#team" class="nav-link">The team</a>
+							</li>
+							<li class="nav-item py-0 px-2">
+								<a href="#sponsors" class="nav-link">Sponsors & partners</a>
+							</li>
+							<li class="nav-item py-0 px-2 d-none"><!--d-md-flex-->
+								<a href="#clients" class="nav-link">Cients and success stories</a>
 							</li>
 						</ul>
 					</div>
@@ -229,7 +243,7 @@
 								leakage or manipulation, and no single point of failure.
 							</p>
 						</div>
-						<div class="col-md-6 px-0 pl-md-5">
+						<div class="col-md-6 px-0 pl-md-5 mt-4 mt-md-0">
 							<div class="sec-img dcApp">
 								<img src="images/figure_dcApp.svg" alt="DCApp image"/>
 							</div>
@@ -264,7 +278,7 @@
 								writer.
 							</p>
 						</div>
-						<div class="col-md-6 px-0 pl-md-5">
+						<div class="col-md-6 px-0 pl-md-5 mt-4 mt-md-0">
 							<div class="sec-img puzzle">
 								<img src="images/figure_puzzle.svg" alt="easy integration image"/>
 							</div>
@@ -317,7 +331,7 @@
 								a technology that enforces their privacy.
 							</p>
 						</div>
-						<div class="col-md-6 px-0 pl-md-5">
+						<div class="col-md-6 px-0 pl-md-5 mt-4 mt-md-0">
 							<div class="sec-img reaper">
 								<img src="images/figure_reaper.svg" alt="prevent scavenging image"/>
 							</div>
@@ -438,53 +452,154 @@
 					</div>
 				</div>
 			</section>
+			<section id="startup">
+				<div class="container">
+					<h2>Secretarium startup</h2>
+					<h3>Pationate people at the intersetion of technology, pharma, banking and cryptograhpy</h3>
+					<div class="row mx-0 mt-5">
+						<div class="col-md-6 px-0 pr-md-5">
+							<h4 class="mb-2">Our story</h4>
+							<p>
+								Secretarium founders are two engineers who have worked for many years in various
+								challenging environments.<br />
+								In 2014, they were asked to study and test various blockchain protocoles for a
+								tier-one European bank. They created a blockchain lab, prototyped many banking
+								applications and participated to the design of some protocoles. None of the tested
+								blockchain protocoles could face all aspects of the requirements, especially
+								regarding confidentiality, performance and user experience.<br />
+								In early 2016, they moved to confidential computing and started experienting with trusted
+								execution environement. At the end of 2016, Bertrand left the bank to create Secretarium.
+								He was joined a year later by Cedric.
+							</p>
+						</div>
+						<div class="col-md-6 px-0 pl-md-5 mt-4 mt-md-0">
+							<h4 class="mb-2">Our vision and philosophy</h4>
+							<p>
+								Secretarium goal is to restore the right to privacy for people and companies.<br />
+								The short term plan is to achieve in the Pharmatech, RegTech and InsurTech what
+								DLTs promise to achieve in the banking post-trade space.<br />
+								We provide the infrastructure rails for secrets intermediation. We do not seek to
+								monetize for ourselves the value of applications that can built with our technology.<br />
+								We have issued a legally enforceable charter where we take a commitment to keep
+								away and prevent any usage of our technology facilitating illegal practices.
+								This charter on this matter is very strict and aligned to legal
+								enforcement needs of democratic states.
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
 			<section id="team">
 				<div class="container">
-					<h2>The Secretarium team</h2>
-					<h3>A team of engineers, with deep investment banking and crypto background</h3>
+					<h2>The Secretarium founders</h2>
+					<h3>A team of engineers, with deep investment banking and technical background</h3>
 					<div class="row mx-0 mt-5">
-						<div class="col-md-4 px-0 py-2 pr-md-2">
-							<h4 class="mb-4">The secretarium team</h4>
+						<div class="col-md-8 px-0 py-2 pr-md-2">
+							<h4 class="mb-4">The secretarium founders</h4>
 							<div class="row m-0">
-								<div class="col-xs-4 pr-3 pb-3 team-member">
+								<div class="col-6 pb-4 team-member">
 									<img src="/images/bertrand.jpg" />
 									<h5>Bertrand Foing</h5>
-									<p>Founder - Strategy & Technology</p>
+									<p>Founder<br />Strategy & Technology</p>
 								</div>
-								<div class="col-xs-4 pr-3 pb-3 team-member">
+								<div class="col-6 pb-4 team-member">
 									<img src="/images/cedric.jpg" />
 									<h5>Cédric Wahl</h5>
-									<p>Founder - Strategy & Technology</p>
+									<p>Founder<br />Strategy & Technology</p>
 								</div>
-								<div class="col-xs-4 pr-3 pb-3 team-member">
+								<div class="col-6 pb-4 team-member">
 									<img src="/images/axel.png" />
 									<h5>Axel Oehmichen, PhD</h5>
-									<p>Co-founder - Data scientist</p>
+									<p>Co-founder<br />Bio medical, differential privacy</p>
 								</div>
 							</div>
 						</div>
 						<div class="col-md-4 px-0 py-2 pr-md-2">
-							<h4 class="mb-4">Our sponsors</h4>
-							<div class="row m-0">
-								<div class="col-xs-4 pr-3 pb-3 comp-logo">
-									<img src="/images/logo_intel.svg"/>
+							<h4 class="mb-4">Get in touch</h4>
+							<div class="row mx-0 contact">
+								<div class="col-sm pb-3">
+									<h5>Contact us</h5>
+									<p class="pl-3 mb-1" style="min-width: 7rem;">
+										<a href="https://secretarium.slack.com" target="_blank">
+											<img src="/images/Slack_Mark-120x120-3b17743.png">
+											<span>on Slack</span>
+										</a>
+									</p>
+									<p class="pl-3 mb-1" style="min-width: 7rem;">
+										<a href="https://github.com/Secretarium" target="_blank">
+											<img src="/images/GitHub-Mark-64px.png">
+											<span>on GitHub</span>
+										</a>
+									</p>
+									<p class="pl-3 mb-1" style="min-width: 7rem;">
+										<a href="mailto:contact@secretarium.org" target="_blank">
+											<i class="fas fa-envelope"></i>
+											<span>by email</span>
+										</a>
+									</p>
 								</div>
-							</div>
-						</div>
-						<div class="col-md-4 px-0 py-2 pr-md-2">
-							<h4 class="mb-4">Our partners</h4>
-							<div class="row m-0">
-								<div class="col-xs-4 pr-3 pb-3 comp-logo">
-									<img src="/images/logo_soge.svg"/>
-								</div>
-								<div class="col-xs-4 pr-3 pb-3 comp-logo">
-									<img src="/images/logo_swisscom_blockchain.jpg"/>
+								<div class="col-sm pb-3">
+									<h5>Visit us</h5>
+									<p class="pl-3" style="min-width: 12rem;">
+										Société Générale Incubator<br/>
+										The Greenhouse, 6th floor<br/>
+										41 Tower Hill,<br/>
+										EC3N 4SG, London, UK
+									</p>
 								</div>
 							</div>
 						</div>
 					</div>
-					<h4 class="my-4 d-none">Our clients</h4>
-					<div class="row d-none">
+				</div>
+			</section>
+			<section id="sponsors">
+				<div class="container">
+					<h2>Our sponsors and partners</h2>
+					<h3>A network of reputable business partners are helping us growing</h3>
+					<div class="row mx-0 mt-5">
+						<div class="col-md-4 pb-3 px-0 pr-0 pr-md-4">
+							<h4 class="mb-4">Intel Corporation</h4>
+							<div class="comp-logo">
+								<img src="/images/logo_intel.svg"/>
+							</div>
+							<p class="mt-3">
+								Intel supports Secretarium with free grants of hardware, early access,
+								free support with engineers, infrastructure and sales teams.
+							</p>
+						</div>
+						<div class="col-md-4 pb-3 px-0 px-md-4">
+							<h4 class="mb-4">Swisscom Blockchain</h4>
+							<div class="comp-logo">
+								<img src="/images/logo_swisscom_blockchain.jpg"/>
+							</div>
+							<p class="mt-3">
+								Swisscom Blockchain supports Secretarium with engineers, business developers,
+								infrastructure, and business advisory.
+								Secretarium & Swisscom Blockchain have an MoU with comprehensive joined
+								go-tomarket and revenue sharing agreement.
+								Secretarium & Swisscom Blockchain mutually approach and engage with banking clients.
+							</p>
+						</div>
+						<div class="col-md-4 pb-3 px-0 pl-0 pl-md-4">
+							<h4 class="mb-4">Société Générale UK</h4>
+							<div class="comp-logo">
+								<img src="/images/logo_soge.svg"/>
+							</div>
+							<p class="mt-3">
+								Socgen UK invited Secretarium in its London incubator “the Greenhouse”.
+								Secretarium has access to Socgen’s business leaders, influencers and
+								specialists.
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
+			<!-- <section id="clients">
+				<div class="container">
+					<h2>Our clients and success stories</h2>
+					<h3>We designed our technology with business players</h3>
+					<h4 class="my-4">Our clients</h4>
+					<div class="row">
 						<div class="col-xs-4 pr-3 pb-3 comp-logo">
 							<img src="/images/logo_soge.svg"/>
 						</div>
@@ -498,37 +613,8 @@
 							<img src="/images/logo_kbc.svg"/>
 						</div>
 					</div>
-					<h4 class="my-4">get in touch</h4>
-					<div class="row mx-0 contact">
-						<div class="col-md-4 px-0 pr-md-2 pb-3">
-							<h5>Contact us</h5>
-							<p class="pl-3 pl-md-0">
-								<a href="https://secretarium.slack.com" target="_blank">
-									<img src="/images/Slack_Mark-120x120-3b17743.png">
-									<span>on Slack</span>
-								</a>
-								<a href="https://github.com/Secretarium" target="_blank">
-									<img src="/images/GitHub-Mark-64px.png">
-									<span>on GitHub</span>
-								</a>
-								<a href="mailto:contact@secretarium.org" target="_blank">
-									<i class="fas fa-envelope"></i>
-									<span>by email</span>
-								</a>
-							</p>
-						</div>
-						<div class="col-md px-0 pr-md-2 pb-3">
-							<h5>Visit us</h5>
-							<p class="pl-3 pl-md-0">
-								Société Générale Incubator<br/>
-								The Greenhouse, 6th floor<br/>
-								41 Tower Hill,<br/>
-								EC3N 4SG, London, UK
-							</p>
-						</div>
-					</div>
 				</div>
-			</section>
+			</section> -->
 			<a class="go-to-next d-none d-sm-inline" href="#next" @click.prevent="goToNext"><i class="fas fa-arrow-down"></i></a>
 		</div>
 	</script>
@@ -942,6 +1028,7 @@
 						["what-it-is", "what-it-does", "scaling"],
 						["why", "whom-for"],
 						["technology", "secret-processing", "secret-mixing"],
+						["startup", "team", "sponsors", "clients"]
 					]
 				}
 			},
@@ -974,7 +1061,8 @@
 
 					let x = this.subMenu[0].includes(id) ? 1 :
 						this.subMenu[1].includes(id) ? 2 :
-						this.subMenu[2].includes(id) ? 3 : 0;
+						this.subMenu[2].includes(id) ? 3 :
+						this.subMenu[3].includes(id) ? 4 : 0;
 
 					// Toggle link
 					$("header a[href].active").removeClass("active");
@@ -985,14 +1073,16 @@
 					$("#presentation-sub-menu #sub-concept").toggle(x === 1);
 					$("#presentation-sub-menu #sub-rationale").toggle(x === 2);
 					$("#presentation-sub-menu #sub-techno").toggle(x === 3);
+					$("#presentation-sub-menu #sub-about").toggle(x === 4);
 
 					// Menu effects
 					$("#presentation-menu a[href='#what-it-is']").toggleClass("active", x === 1);
 					$("#presentation-menu a[href='#why']").toggleClass("active", x === 2);
 					$("#presentation-menu a[href='#technology']").toggleClass("active", x === 3);
+					$("#presentation-menu a[href='#startup']").toggleClass("active", x === 4);
 
 					// Go to next visibility
-					$("#presentation>a.go-to-next").toggleClass("d-sm-inline", id != "team");
+					$("#presentation>a.go-to-next").toggleClass("d-sm-inline", id != "sponsors");
 				},
 				goToNext(e) {
 					var s = window.scrollY, r = $("#presentation")[0].scrollHeight,
