@@ -555,7 +555,7 @@
 			<section id="sponsors">
 				<div class="container">
 					<h2>Our sponsors and partners</h2>
-					<h3>A network of reputable business partners are helping us growing</h3>
+					<h3>Reputable business partners are helping us growing</h3>
 					<div class="row mx-0 mt-5">
 						<div class="col-md-4 pb-3 px-0 pr-0 pr-md-4">
 							<h4 class="mb-4">Intel Corporation</h4>
@@ -563,31 +563,29 @@
 								<img src="/images/logo_intel.svg"/>
 							</div>
 							<p class="mt-3">
-								Intel supports Secretarium with free grants of hardware, early access,
-								free support with engineers, infrastructure and sales teams.
+								Intel supports Secretarium with sponsored hardware, early access,
+								support with engineers, infrastructure and sales teams.
 							</p>
 						</div>
-						<div class="col-md-4 pb-3 px-0 px-md-4">
+						<div class="col-md-4 pb-3 px-0 px-md-4 mt-4 mt-md-0">
 							<h4 class="mb-4">Swisscom Blockchain</h4>
 							<div class="comp-logo">
 								<img src="/images/logo_swisscom_blockchain.jpg"/>
 							</div>
 							<p class="mt-3">
 								Swisscom Blockchain supports Secretarium with engineers, business developers,
-								infrastructure, and business advisory.
-								Secretarium & Swisscom Blockchain have an MoU with comprehensive joined
-								go-tomarket and revenue sharing agreement.
-								Secretarium & Swisscom Blockchain mutually approach and engage with banking clients.
+								infrastructure. Our partnership includes a comprehensive joined go-to-market
+								agreement, as well as a mutually approach to engage with large institutions.
 							</p>
 						</div>
-						<div class="col-md-4 pb-3 px-0 pl-0 pl-md-4">
+						<div class="col-md-4 pb-3 px-0 pl-0 pl-md-4 mt-4 mt-md-0">
 							<h4 class="mb-4">Société Générale UK</h4>
 							<div class="comp-logo">
 								<img src="/images/logo_soge.svg"/>
 							</div>
 							<p class="mt-3">
-								Socgen UK invited Secretarium in its London incubator “the Greenhouse”.
-								Secretarium has access to Socgen’s business leaders, influencers and
+								Société Générale UK hosts Secretarium in its London incubator “the Greenhouse”.
+								This partnership grants us access to Socgen’s business leaders, influencers and
 								specialists.
 							</p>
 						</div>
