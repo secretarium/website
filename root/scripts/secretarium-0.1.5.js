@@ -303,32 +303,33 @@ var sec, secretarium = sec = {
     keysManager: class {
 
         constructor() {
-            this.keys = {};
-            this.exports = {};
-            this.cryptoKeys = {};
+            this.keys = [];
 
             if (sec.utils.localStorage.canUse) {
                 let v = localStorage.getItem('secretarium-keys');
                 if(v != null) {
                     try {
                         let keys = JSON.parse(v);
-                        for(var name in keys) {
-                            this.keys[name] = keys[name];
-                            this.exports[name] = this._createObjectURL(keys[name]);
+                        for(var key of keys) {
+                            key.exportUrl = this._createObjectURL(key);
+                            key.saved = true;
+                            this.keys.push(key);
                         }
-                    } catch (e) { }
+                    } catch (e) {
+                        console.error(e);
+                    }
                 }
             }
         }
 
         _createObjectURL(key) {
-            let j = JSON.stringify(this._toExportable(key)),
+            let j = JSON.stringify(this._toExportable(key), null, 4),
                 b = new Blob([j], { type: 'application/json;charset=utf-8;' });
             return URL.createObjectURL(b);
         }
 
         _toExportable(key) {
-            let exp = { };
+            let exp = { name: key.name };
             if(key.encrypted) {
                 exp.encrypted = true;
                 exp.iv = key.iv;
@@ -340,6 +341,13 @@ var sec, secretarium = sec = {
             return exp;
         }
 
+        find(name) {
+            for(var i = 0; i < this.keys.length; i++) {
+                if(this.keys[i].name == name) return i;
+            }
+            return -1;
+        }
+
         async createKey(name, save = true) {
             if(name.length == 0) throw "Invalid key name";
 
@@ -348,8 +356,7 @@ var sec, secretarium = sec = {
                 privateKey = new Uint8Array(await sec.utils.ecdsa.exportPri(cryptoKey, "pkcs8")),
                 keys = sec.utils.concatUint8Array(publicKey, privateKey).secToBase64();
 
-            this.cryptoKeys[name] = cryptoKey;
-            this.addKey(name, { keys: keys }, save);
+            this.addKey({ name: name, cryptoKey: cryptoKey, keys: keys, saved: false }, save);
             return cryptoKey;
         }
 
@@ -363,13 +370,14 @@ var sec, secretarium = sec = {
                 reader.onloadend = x => {
                     try {
                         let key = JSON.parse(reader.result);
+                        key.imported = true;
                         if(key.iv && !key.encrypted) { // retro comp
                             key.encrypted = true;
                             key.encryptedKeys = key.keys;
                             delete key.keys;
                         }
-                        this.addKey(name, key, save);
-                        resolve(name);
+                        this.addKey(key, save);
+                        resolve(key);
                     }
                     catch (e) { reject(e.message); }
                 };
@@ -378,9 +386,7 @@ var sec, secretarium = sec = {
             });
         }
 
-        async encryptKey(name, pwd, save = true) {
-            let key = this.keys[name];
-            if(name.length == 0 || !key) throw "Invalid key name";
+        async encryptKey(key, pwd, save = true) {
             if(!key.keys) throw "Key is encrypted";
 
             let salt = sec.utils.getRandomUint8Array(32),
@@ -394,14 +400,13 @@ var sec, secretarium = sec = {
             key.iv = iv.secToBase64();
             key.encryptedKeys = new Uint8Array(encryptedKeys).secToBase64();
             key.encrypted = true;
-            this.addKey(name, key, save);
+            this.addKey(key, save);
             return key;
         }
 
-        async decryptKey(name, pwd) {
-            let key = this.keys[name];
-            if(name.length == 0 || !key) throw "Invalid key name";
-            if(!key.encrypted) return await this.getCryptoKey(name);
+        async decryptKey(key, pwd) {
+            if(key.cryptoKey) return key.cryptoKey;
+            if(key.keys) return await this.getCryptoKey(key);
 
             let iv = Uint8Array.secFromBase64(key.iv),
                 salt = Uint8Array.secFromBase64(key.salt),
@@ -410,62 +415,60 @@ var sec, secretarium = sec = {
                 strongPwd = await sec.utils.hash(sec.utils.concatUint8Array(salt, weakpwd)),
                 aesgcmKey = await sec.utils.aesgcm.import(strongPwd);
             try {
-                let keys = new Uint8Array(await sec.utils.aesgcm.decrypt(aesgcmKey, iv, encryptedKeys));
+                keys = new Uint8Array(await sec.utils.aesgcm.decrypt(aesgcmKey, iv, encryptedKeys));
                 key.keys = keys.secToBase64();
-                return this.cryptoKeys[name] = {
+                return key.cryptoKey = {
                     publicKey: await sec.utils.ecdsa.importPub(keys.subarray(0, 65), "raw"),
                     privateKey: await sec.utils.ecdsa.importPri(keys.subarray(65), "pkcs8")
                 };
-            } catch (e) { throw "can't decrypt/invalid password"; }
+            }
+            catch (e) { throw "can't decrypt/invalid password"; }
         }
 
-        async getCryptoKey(name) {
-            let key = this.keys[name];
-            if(name.length == 0 || !key) throw "Invalid key name";
+        async getCryptoKey(key) {
+            if(key.cryptoKey) return key.cryptoKey;
             if(!key.keys) throw "The key is encrypted";
-            if(this.cryptoKeys[name]) return this.cryptoKeys[name];
 
             let keys = Uint8Array.secFromBase64(key.keys);
-            return this.cryptoKeys[name] = {
+            return key.cryptoKey = {
                 publicKey: await sec.utils.ecdsa.importPub(keys.subarray(0, 65), "raw"),
                 privateKey: await sec.utils.ecdsa.importPri(keys.subarray(65), "pkcs8")
             };
         }
 
-        getPublicKeyHex(name, delimiter = '') {
-            let key = this.keys[name];
-            if(name.length == 0 || !key) throw "Invalid key name";
+        getPublicKeyHex(key, delimiter = '') {
+            if(!key.keys) throw "Key is encrypted";
             return Uint8Array.secFromBase64(key.keys).subarray(0, 65).secToHex(delimiter);
         }
 
-        addKey(name, key, save = true) {
-            if(this.exports[name]) {
-                URL.revokeObjectURL(this.exports[name]);
-            }
-            this.keys[name] = this._toExportable(key);
-            this.exports[name] = this._createObjectURL(key);
-            if(!save) this.keys[name].save = false;
-            else this.save();
+        addKey(key, save = true) {
+            let index = this.find(key.name);
+            if(key.exportUrl) URL.revokeObjectURL(key.exportUrl);
+            key.exportUrl = this._createObjectURL(key);
+            if(!save) key.save = false;
+            if(index < 0) this.keys.push(key);
+            else this.keys.splice(index, 1, key); // for reactivity purposes
+            if(save) this.save();
         }
 
         removeKey(name) {
-            if(this.exports[name]) {
-                URL.revokeObjectURL(this.exports[name]);
-            }
-            delete this.keys[name];
-            delete this.exports[name];
-            delete this.cryptoKeys[name];
+            let index = this.find(name);
+            if(index < 0) return;
+            if(this.keys[index].exportUrl) URL.revokeObjectURL(this.keys[index].exportUrl);
+            this.keys.splice(index, 1); // for reactivity purposes
             this.save();
         }
 
         save() {
-            let toSave = {};
-            for(var name in this.keys) {
-                if(this.keys[name].save !== false)
-                    toSave[name] = this._toExportable(this.keys[name]);
+            if (!sec.utils.localStorage.canUse) return;
+            let toSave = [];
+            for(var key of this.keys) {
+                if(key.save !== false) {
+                    key.saved = true;
+                    toSave.push(this._toExportable(key));
+                }
             }
-            if (sec.utils.localStorage.canUse)
-                localStorage.setItem('secretarium-keys', JSON.stringify(toSave));
+            localStorage.setItem('secretarium-keys', JSON.stringify(toSave));
         }
     },
 

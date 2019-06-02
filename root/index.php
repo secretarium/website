@@ -554,27 +554,27 @@
 			<div v-if="$root.keysManager.keys.length>0">
 				<div class="py-2">
 					<h6 class="card-title">Choose a key</h6>
-					<p class="mt-3 mb-0">The following keys are present on your device</p>
-					<ul class="sec-key-list">
-						<li v-for="(key, name) in $root.keysManager.keys" :key="name">
-							<p>{{name}}</p>
-							<button type="button" class="btn-sm" @click.prevent="$root.keysManager.removeKey(name)" title="Delete key">
-								<i class="fas fa-fw fa-trash-alt pr-3"></i>
-							</button>
-							<a class="dropdown-item" :href="$root.keysManager.exports[name]" :download="name" title="Export">
-								<i class="fas fa-fw fa-download"></i>
-							</a>
-						</li>
-					</ul>
+					<p class="mt-3">The following keys are present on your device</p>
+					<div class="form-row sec-key"
+						v-for="(key, i) in $root.keysManager.keys" :key="key.name"
+						v-if="key.save!==false||key.imported||key.saved">
+						<div class="col">
+							<router-link :to="'/key/decrypt/'+i" class="btn btn-sec text-left">
+								{{key.name}}
+								<i v-if="key.encrypted" class="fas fa-key fa-flip-both pr-2 text-warning"></i>
+							</router-link>
+						</div>
+						<div class="col-auto">
+							<router-link :to="'/key/manage/'+i" class="btn btn-secondary">
+								<i class="fas fa-cogs"></i>
+							</router-link>
+						</div>
+					</div>
 				</div>
 				<hr class="my-4 sec" />
-				<div class="py-2">
-					<p class="card-text">
-						Additionnally, you can also
-						<router-link to="/key/create" class="btn btn-link p-0 sec-color">create a new key</router-link>
-					</p>
-					<sec-browse-key></sec-browse-key>
-				</div>
+				<sec-create-key class="hide-desc"></sec-create-key>
+				<hr class="my-4 sec" />
+				<sec-browse-key></sec-browse-key>
 			</div>
 			<div v-else>
 				<sec-create-key></sec-create-key>
@@ -584,10 +584,35 @@
 		</div>
 	</script>
 
+	<script type="text/x-template" id="sec-decrypt-key">
+		<div>
+			<div class="py-2">
+				<h6 class="card-title mb-3">Decrypt "{{key.name}}"</h6>
+				<p class="card-text">
+					Please enter the password used for securing the key
+				</p>
+				<form @submit.prevent>
+					<div class="form-row">
+						<div class="col-sm">
+							<input id="ckPwd" type="password" class="form-control" placeholder="Password" autocomplete="current-password">
+						</div>
+						<div class="col-sm-auto mt-3 mt-sm-0">
+							<button type="submit" class="btn btn-sec" @click.prevent="decryptKey">
+								<i class="fas fa-fw fa-lock pr-3"></i> Decrypt
+							</button>
+							<sec-notif-state :state="decryptionNs.data" class="pl-3 d-sm-none"></sec-notif-state>
+						</div>
+					</div>
+					<sec-notif-state :state="decryptionNs.data" class="mt-2 d-none d-sm-block"></sec-notif-state>
+				</form>
+			</div>
+		</div>
+	</script>
+
 	<script type="text/x-template" id="sec-create-key">
 		<div class="py-2">
-			<h6 class="card-title">Create a new key</h6>
-			<p class="card-text mt-3">
+			<h6 class="card-title mb-3">Create a new key</h6>
+			<p class="card-text">
 				A new key will be generated, locally in your browser.<br />
 				It will allow authentication when interacting with the Secretarium platform.
 			</p>
@@ -598,10 +623,10 @@
 					</div>
 					<div class="col-sm-auto mt-3 mt-sm-0">
 						<button type="submit" class="btn btn-sec" @click.prevent="createKey">Generate a new key</button>
-						<sec-notif-state :state="generation.ns.data" class="pl-3 d-sm-none"></sec-notif-state>
+						<sec-notif-state :state="generationNs.data" class="pl-3 d-sm-none"></sec-notif-state>
 					</div>
 				</div>
-				<sec-notif-state :state="generation.ns.data" class="mt-2 d-none d-sm-block"></sec-notif-state>
+				<sec-notif-state :state="generationNs.data" class="mt-2 d-none d-sm-block"></sec-notif-state>
 			</form>
 		</div>
 	</script>
@@ -616,25 +641,25 @@
 		</div>
 	</script>
 
-	<script type="text/x-template" id="sec-export-key">
+	<script type="text/x-template" id="sec-manage-key">
 		<div>
 			<div class="py-2">
 				<p class="card-text border rounded-sm bg-light p-2 fs-85">
-					<strong>Key Name</strong>: "{{name}}"<br />
+					<strong>Key Name</strong>: "{{key.name}}"<br />
 					<strong>Public Key</strong>: {{publicKeyStr}}
 				</p>
 			</div>
 			<hr class="my-3 sec" />
 			<div class="py-2">
-				<h6 class="card-title"
-					data-toggle="collapse" data-target="#sec-export-key-encrypt-collapse"
-					:aria-expanded="!encryption.success" aria-controls="sec-export-key-encrypt-collapse">
+				<h6 class="card-title" :class="{'mb-0':key.encrypted}"
+					data-toggle="collapse" data-target="#sec-manage-key-encrypt-collapse"
+					:aria-expanded="!key.encrypted" aria-controls="sec-manage-key-encrypt-collapse">
 					Encrypt your key
-					<i class="fas fa-chevron-down float-right" v-if="encryption.success"></i>
+					<i class="fas fa-chevron-down float-right" v-if="key.encrypted"></i>
 				</h6>
-				<div class="mt-3 collapse" id="sec-export-key-encrypt-collapse" :class="{'show':!encryption.success}">
+				<div class="mt-3 collapse" id="sec-manage-key-encrypt-collapse" :class="{'show':!key.encrypted}">
 					<p class="card-text">
-						To safely store your key, please choose a strong password.
+						To safely store your key, please choose a strong password
 					</p>
 					<form @submit.prevent>
 						<div class="form-row">
@@ -645,10 +670,10 @@
 								<button type="submit" class="btn btn-sec" @click.prevent="encryptKey">
 									<i class="fas fa-fw fa-lock pr-3"></i> Encrypt
 								</button>
-								<sec-notif-state :state="encryption.ns.data" class="pl-3 d-sm-none"></sec-notif-state>
+								<sec-notif-state :state="encryptionNs.data" class="pl-3 d-sm-none"></sec-notif-state>
 							</div>
 						</div>
-						<sec-notif-state :state="encryption.ns.data" class="mt-2 d-none d-sm-block"></sec-notif-state>
+						<sec-notif-state :state="encryptionNs.data" class="mt-2 d-none d-sm-block"></sec-notif-state>
 					</form>
 				</div>
 			</div>
@@ -659,13 +684,12 @@
 					Export your key to back it up locally, or on a secure hardware.
 				</p>
 				<form class="form-inline" @submit.prevent>
-					<div class="form-check lg mr-3 mb-3 mb-sm-0">
-						<input type="checkbox" class="form-check-input" id="ckExportEncrypted"
-							:disabled="!encryption.success" :checked="encryption.success">
+					<div v-if="key.encrypted" class="form-check lg mr-3 mb-3 mb-sm-0">
+						<input type="checkbox" class="form-check-input" id="ckExportEncrypted" :checked="key.encrypted">
 						<label class="form-check-label" for="ckExportEncrypted">Export encrypted</label>
 					</div>
-					<a class="btn btn-sec" :href="exportUrl"
-						:download="name+'.secretarium'">
+					<a class="btn btn-sec" :href="key.exportUrl"
+						:download="key.name+'.secretarium'">
 						<i class="fas fa-fw fa-download pr-3"></i> Export
 					</a>
 				</form>
@@ -676,16 +700,28 @@
 					<h6 class="card-title">Save in this browser</h6>
 					<p class="card-text mt-3">If you trust this machine, save your key in this browser to ease future connections.</p>
 					<form class="form-inline" @submit.prevent>
-						<div class="form-check lg mr-3 mb-3 mb-sm-0">
-							<input type="checkbox" class="form-check-input" id="ckSaveEncrypted"
-								:disabled="!encryption.success" :checked="encryption.success">
+						<div v-if="key.encrypted" class="form-check lg mr-3 mb-3 mb-sm-0">
+							<input type="checkbox" class="form-check-input" id="ckSaveEncrypted" :checked="key.encrypted">
 							<label class="form-check-label" for="ckSaveEncrypted">Save encrypted</label>
 						</div>
-						<button type="button" class="btn btn-sec" :disabled="name.length==0" @click.prevent="saveKey">
+						<button type="button" class="btn btn-sec mr-3" :disabled="key.name.length==0" @click.prevent="saveKey">
 							<i class="fas fa-fw fa-save pr-3"></i> Save
 						</button>
-						<sec-notif-state :state="save.ns.data"></sec-notif-state>
+						<sec-notif-state :state="saveNs.data"></sec-notif-state>
 					</form>
+				</div>
+			</div>
+			<div v-if="key.saved">
+				<hr class="my-3 sec" />
+				<div class="py-2">
+					<h6 class="card-title">Delete</h6>
+					<p class="card-text mt-3">
+						Remove this key from this browser.
+					</p>
+					<button type="button" class="btn btn-sec mr-3" @click.prevent="deleteKey">
+						<i class="fas fa-fw fa-trash-alt pr-3"></i> Delete
+					</button>
+					<sec-notif-state :state="deleteNs.data"></sec-notif-state>
 				</div>
 			</div>
 		</div>
@@ -720,7 +756,6 @@
 					ECDSAPubBase64: undefined,
 					dcapps: {}
 				},
-				transition: "page",
 				isPresentationPages: window.location.pathname == "/",
 				isLogoPage: window.location.pathname == "/" && (window.location.hash.length == 0 || window.location.hash == "#welcome"),
 				gateways: [
@@ -973,10 +1008,30 @@
 			template: '#sec-connect'
 		});
 		const LoadKey = Vue.component('sec-load-key', {
-			template: '#sec-load-key',
+			template: '#sec-load-key'
+		});
+		const DecryptKey = Vue.component('sec-decrypt-key', {
+			template: '#sec-decrypt-key',
+			props: ['id'],
 			data: () => {
 				return {
-					key: {}
+					decryptionNs: new notifState(),
+				}
+			},
+			computed: {
+				key() { return this.$root.keysManager.keys[this.id]; }
+			},
+			methods: {
+				async decryptKey() {
+					this.decryptionNs.processing("Decrypting key", true);
+					let pwd = $('#ckPwd').val();
+					if(pwd.length < 1) { this.decryptionNs.failed("invalid password", true); return; }
+					try {
+						await this.$root.keysManager.decryptKey(this.key, pwd, false);
+						this.decryptionNs.executed("Success", true).hide(1500);
+					} catch (err) {
+						this.decryptionNs.failed(err, true);
+					}
 				}
 			}
 		});
@@ -984,24 +1039,25 @@
 			template: '#sec-create-key',
 			data: () => {
 				return {
-					generation: { ns: new notifState() }
+					generationNs: new notifState()
 				}
 			},
 			methods: {
 				async createKey() {
-					this.generation.ns.processing("Creating key", true);
+					this.generationNs.processing("Creating key", true);
 					let name = $('#ckName').val();
 					if(name.length < 1) {
-						this.generation.ns.failed("invalid key name", true);
+						this.generationNs.failed("invalid key name", true);
 						return;
 					}
 					try {
 						await this.$root.keysManager.createKey(name, false);
-						this.generation.ns.executed("Success", true).hide(1500);
-						setTimeout(() => { router.push({ name: 'key-export', params : { name: name }}); }, 500);
+						this.generationNs.executed("Success", true).hide(1500);
+						let id = this.$root.keysManager.find(name);
+						setTimeout(() => { router.push({ name: 'key-manage', params : { id: id }}); }, 500);
 					}
 					catch(e) {
-						this.generation.ns.failed(e, true);
+						this.generationNs.failed(e, true);
 					}
 				}
 			}
@@ -1016,48 +1072,54 @@
 			},
 			methods: {
 				onKeyFile(evt) {
-					this.$root.keysManager.importKeyFile(evt, false).catch(err => {
+					this.$root.keysManager.importKeyFile(evt, false)
+					.catch(err => {
 						alerts.push({ key: "invalid-key-file", isError: true, html: err });
 					})
 				}
 			}
 		});
-		const ExportKey = Vue.component('sec-export-key', {
-			template: '#sec-export-key',
-			props: ['name'],
+		const ManageKey = Vue.component('sec-manage-key', {
+			template: '#sec-manage-key',
+			props: ['id'],
 			data: () => {
 				return {
-					encryption: { ns: new notifState(), success: false },
-					save: { ns: new notifState() }
+					encryptionNs: new notifState(),
+					saveNs: new notifState(),
+					deleteNs: new notifState()
 				}
 			},
 			computed: {
-				key() { return this.$root.keysManager.keys[this.name]; },
-				exportUrl() { return this.$root.keysManager.exports[this.name]; },
+				key() { return this.$root.keysManager.keys[this.id] || { name: '--deleted--' }; },
 				publicKeyStr() {
 					if(this.key.encrypted) return "(encrypted)";
-					return this.$root.keysManager.getPublicKeyHex(this.name, " ").toUpperCase();
+					if(this.key.name == "--deleted--") return "(deleted)";
+					return this.$root.keysManager.getPublicKeyHex(this.key, " ").toUpperCase();
 				}
 			},
 			methods: {
 				async encryptKey() {
-					this.encryption.success = false;
-					this.encryption.ns.processing("Encrypting key", true);
+					this.encryptionNs.processing("Encrypting key", true);
 					let pwd = $('#ckPwd').val();
-					if(pwd.length < 1) { this.encryption.ns.failed("invalid password", true); return; }
+					if(pwd.length < 1) { this.encryptionNs.failed("invalid password", true); return; }
 					try {
-						await this.$root.keysManager.encryptKey(this.name, pwd, false);
-						this.encryption.ns.executed("Success", true).hide(1500);
+						await this.$root.keysManager.encryptKey(this.key, pwd, false);
+						this.encryptionNs.executed("Success", true).hide(1500);
 					} catch (err) {
-						this.encryption.ns.failed(err, true);
+						this.encryptionNs.failed(err, true);
 					}
-					this.encryption.success = true;
 				},
 				saveKey() {
-					this.save.ns.processing();
+					this.saveNs.processing();
 					this.key.save = true;
 					this.$root.keysManager.save();
-					this.save.ns.executed().hide();
+					this.saveNs.executed().hide();
+				},
+				deleteKey() {
+					this.deleteNs.processing("Deleting key", true);
+					this.$root.keysManager.removeKey(this.key.name);
+					this.deleteNs.executed("Success", true).hide(1500);
+					router.push("/key/load");
 				}
 			}
 		});
@@ -1084,12 +1146,10 @@
 					children: [
 						{ path: '', redirect: 'load' },
 						{ path: 'load', component: LoadKey },
-						{ path: 'create', component: CreateKey },
-						{ path: 'export/:name', component: ExportKey, name: 'key-export', props: true }
+						{ path: 'decrypt/:id', component: DecryptKey, name: 'key-decrypt', props: true },
+						{ path: 'manage/:id', component: ManageKey, name: 'key-manage', props: true }
 					]
 				},
-				{ path: '/create-key', component: CreateKey },
-				{ path: '/export-key', component: ExportKey },
 				{ path: '/app-store', component: AppStore },
 				{ path: '/app/:id', component: AppAccessDenied },
 			]
@@ -1097,7 +1157,6 @@
 		router.beforeEach((to, from, next) => {
 			store.isPresentationPages = to.path == '/';
 			store.isLogoPage = store.isPresentationPages && (to.hash.length == 0 || to.hash == "#welcome");
-			store.transition = ["/create-key", "/load-key", "/export-key"].includes(to.path) ? "none" : "page";
 			$("body").toggleClass("page-presentation", store.isPresentationPages);
 			next();
 		});
@@ -1106,7 +1165,6 @@
 			router,
 			data: () => {
 				return {
-					transition: "page",
 					canStore: sec.utils.localStorage.canUse,
 					store: store,
 					connection: {
