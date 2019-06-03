@@ -233,10 +233,9 @@
 							<h4 class="mb-2">Distributed Confidential computing platform</h4>
 							<p>
 								Relying on trusted execution environments and powered by secure multi-party
-								computing, Secretarium has been designed to
-								run applications on encrypted data in a trustable, distributed, scalable and
-								efficient way, with no possible data
-								leakage or manipulation, and no single point of failure.
+								computing, Secretarium has been designed to run applications on encrypted
+								data in a trustable, distributed, scalable and efficient way, with no
+								possible data leakage or manipulation, and no single point of failure.
 							</p>
 						</div>
 						<div class="col-md-6 px-0 pl-md-5 mt-4 mt-md-0">
@@ -245,11 +244,10 @@
 							</div>
 							<h4 class="mb-2">Hosting Distributed Confidential Applications </h4>
 							<p>
-								Distributed Confidential Applications (DCApps) are smart contracts systems with
-								cryptographic proof of integrity.
-								End-users can grant access to subsets of their private data to DCApps; and
-								DCApps can request access to user's data for
-								pre-defined specific processing.
+								Distributed Confidential Applications (DCApps) are smart contracts systems
+								with cryptographic proof of integrity.
+								End-users can grant access to subsets of their private data to DCApps, and
+								DCApps can request access to user's data for pre-defined specific processing.
 							</p>
 						</div>
 					</div>
@@ -267,11 +265,10 @@
 							<h4 class="mb-2">Protects intellectual property and commercial rights</h4>
 							<p>
 								Secretarium guarantees privacy by default and by design: users always keep
-								control of their data. Secretarium uses
-								end-to-end encryption: data uploaded to Secretarium remains the property of its
-								originators and no one can access it in
-								clear text. DCApps intellectual property remains the property of the DCApp
-								writer.
+								control of their data. Secretarium uses end-to-end encryption: data
+								uploaded to Secretarium remains the property of its originators and no one
+								can access it in cleartext. DCApps intellectual property remains the
+								property of the DCApp writer.
 							</p>
 						</div>
 						<div class="col-md-6 px-0 pl-md-5 mt-4 mt-md-0">
@@ -281,12 +278,10 @@
 							<h4 class="mb-2">Offers easy integration to your processes</h4>
 							<p>
 								Every Secretarium node is coupled with a web server. Secretarium connection
-								protocol integrates easily into recent
-								browser and tablets. Secretarium is real-time and has the capacity of pushing
-								data to end-users. Secretarium is designed
-								for speed: we achieve finality of execution within a split second, simplifying
-								integration in an unparalleled way for a
-								Blockchain.
+								protocol integrates easily into recent browsers and tablets.
+								Secretarium is real-time and has the capacity of pushing data to end-users.
+								Secretarium is designed for speed: we achieve finality of execution within a
+								split second, simplifying integration in an unparalleled way for a Blockchain.
 							</p>
 						</div>
 					</div>
@@ -301,8 +296,8 @@
 							<h4 class="mb-2">Facilitates confidential computing at scale</h4>
 							<p>
 								The throughput and latency of a confidential computing system should be
-								compatible with real life scenarios. We believe
-								in a system that can grow organically in the same way the internet did.
+								compatible with real-life scenarios. We believe in a system that can
+								grow organically in the same way the internet did.
 							</p>
 						</div>
 					</div>
@@ -335,7 +330,7 @@
 							<p>
 								The internet was intended for driving collaboration, but the balance between
 								data originators and data aggregators has been heavily tilted toward the latter.
-								Our goal is to achieve the same level of service automation without visibility
+								Our goal is to achieve the same level of service automation without disclosing
 								of private data.
 							</p>
 						</div>
@@ -400,11 +395,11 @@
 						<div class="col-md-7 px-0">
 							<p>
 								Some parties have proprietary algorithms, other parties have confidential
-								data-banks. Secret processing involves
-								combining both, whilst guaranteeing secrecy.
+								data-banks. Secret processing involves combining both while guaranteeing
+								secrecy.
 								Designed for data analytics, it can be used to risk analyse some parties'
-								financial portfolios using other parties'
-								quantitative models and/or market data.
+								financial portfolios using other parties' quantitative models and/or market
+								data.
 								Other usages can be genomic diagnostic, for individuals, or of one medical firm
 								over the DNA bank of another firm.
 								When secured with Differential Privacy techniques, it is perfectly adapted for
@@ -462,7 +457,7 @@
 								The numerous prototypes and studies resulting from this experience evidenced the
 								unsuitability of blockchains and DLTs when faced with confidentiality, performance
 								and user experience constraints.<br />
-								Early 2016, they started experiments in trusted execution evironments and pivoted
+								Early 2016, they started experiments in trusted execution environments and pivoted
 								into confidential computing.<br />
 								At the end of 2016, recognizing the much wider applicability of confidential
 								computing, Bertrand left the bank to create Secretarium, to be joined a year later
@@ -475,10 +470,10 @@
 								Secretarium seeks to restore the right to privacy for people and companies.<br/>
 								Our short term markets are located in the Pharmatech, RegTech and InsurTech
 								sectors, where we provide the infrastructure rails for secrets intermediation.<br/>
-								We do not seek to monetize for ourselves the value of applications that can built
+								We do not seek to monetize for ourselves the value of applications that can be built
 								with our technology - but support third parties in building these applications.<br/>
-								We have issued a legally enforceable charter where we take a commitment to prevent
-								any usage of our technology facilitating illegal practices.
+								We have issued a legally enforceable charter where we commit to preventing any
+								usage of our technology facilitating illegal practices.
 							</p>
 						</div>
 					</div>
@@ -580,8 +575,8 @@
 							</div>
 							<p class="mt-3">
 								Société Générale UK hosts Secretarium in its London incubator “the Greenhouse”.
-								This partnership grants us access to Socgen’s business leaders, influencers and
-								specialists.
+								This partnership grants us access to Société Générale's business leaders,
+								influencers and specialists.
 							</p>
 						</div>
 					</div>
