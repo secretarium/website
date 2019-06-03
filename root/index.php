@@ -888,7 +888,10 @@
 							}
 						});
 					}
-					if(store.isLogoPage) start(10000);
+					if(store.isLogoPage) {
+						stop();
+						start(10000);
+					}
 				};
 				function start(delay = 1500) {
 					if(redrawLoop != null) return; // already started
