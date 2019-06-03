@@ -451,7 +451,7 @@
 			<section id="startup">
 				<div class="container">
 					<h2>Secretarium startup</h2>
-					<h3>Pationate people at the intersetion of technology, pharma, banking and cryptograhpy</h3>
+					<h3>Passionate people at the intersection of technology, pharma, banking and cryptography</h3>
 					<div class="row mx-0 mt-5">
 						<div class="col-md-6 px-0 pr-md-5">
 							<h4 class="mb-2">Our story</h4>
