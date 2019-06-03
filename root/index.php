@@ -612,7 +612,7 @@
 		</div>
 	</script>
 
-	<script type="text/x-template" id="sec-connect">
+	<script type="text/x-template" id="sec-key-loader">
 		<div id="connect" class="container fixed-center">
 			<div class="card sec-card mw-md border-0">
 				<div class="card-header">
@@ -628,8 +628,8 @@
 		</div>
 	</script>
 
-	<script type="text/x-template" id="sec-load-key">
-		<div id="load-key">
+	<script type="text/x-template" id="sec-key-picker">
+		<div id="key-picker">
 			<div v-if="$root.keysManager.keys.length>0">
 				<div class="py-2">
 					<h6 class="card-title">Choose a key</h6>
@@ -650,19 +650,19 @@
 					</div>
 				</div>
 				<hr class="my-4 sec" />
-				<sec-create-key class="hide-desc"></sec-create-key>
+				<sec-key-create class="hide-desc"></sec-key-create>
 				<hr class="my-4 sec" />
-				<sec-browse-key></sec-browse-key>
+				<sec-key-browse></sec-key-browse>
 			</div>
 			<div v-else>
-				<sec-create-key></sec-create-key>
+				<sec-key-create></sec-key-create>
 				<hr class="mt-4 mb-3 sec" />
-				<sec-browse-key></sec-browse-key>
+				<sec-key-browse></sec-key-browse>
 			</div>
 		</div>
 	</script>
 
-	<script type="text/x-template" id="sec-decrypt-key">
+	<script type="text/x-template" id="sec-key-decrypt">
 		<div>
 			<div class="py-2">
 				<h6 class="card-title mb-3">Decrypt "{{key.name}}"</h6>
@@ -687,7 +687,7 @@
 		</div>
 	</script>
 
-	<script type="text/x-template" id="sec-create-key">
+	<script type="text/x-template" id="sec-key-create">
 		<div class="py-2">
 			<h6 class="card-title mb-3">Create a new key</h6>
 			<p class="card-text">
@@ -709,7 +709,7 @@
 		</div>
 	</script>
 
-	<script type="text/x-template" id="sec-browse-key">
+	<script type="text/x-template" id="sec-key-browse">
 		<div>
 			<p class="card-text">
 				Alternatively drag and drop a key or
@@ -719,7 +719,7 @@
 		</div>
 	</script>
 
-	<script type="text/x-template" id="sec-manage-key">
+	<script type="text/x-template" id="sec-key-manage">
 		<div>
 			<div class="py-2">
 				<p class="card-text border rounded-sm bg-light p-2 fs-85">
@@ -730,12 +730,12 @@
 			<hr class="my-3 sec" />
 			<div class="py-2">
 				<h6 class="card-title" :class="{'mb-0':key.encrypted}"
-					data-toggle="collapse" data-target="#sec-manage-key-encrypt-collapse"
-					:aria-expanded="!key.encrypted" aria-controls="sec-manage-key-encrypt-collapse">
+					data-toggle="collapse" data-target="#sec-key-manage-encrypt-collapse"
+					:aria-expanded="!key.encrypted" aria-controls="sec-key-manage-encrypt-collapse">
 					Encrypt your key
 					<i class="fas fa-chevron-down float-right" v-if="key.encrypted"></i>
 				</h6>
-				<div class="mt-3 collapse" id="sec-manage-key-encrypt-collapse" :class="{'show':!key.encrypted}">
+				<div class="mt-3 collapse" id="sec-key-manage-encrypt-collapse" :class="{'show':!key.encrypted}">
 					<p class="card-text">
 						To safely store your key, please choose a strong password
 					</p>
@@ -1089,14 +1089,14 @@
 			}
 		});
 
-		const Connect = Vue.component('sec-connect', {
-			template: '#sec-connect'
+		const KeyLoader = Vue.component('sec-key-loader', {
+			template: '#sec-key-loader'
 		});
-		const LoadKey = Vue.component('sec-load-key', {
-			template: '#sec-load-key'
+		const KeyPicker = Vue.component('sec-key-picker', {
+			template: '#sec-key-picker'
 		});
-		const DecryptKey = Vue.component('sec-decrypt-key', {
-			template: '#sec-decrypt-key',
+		const KeyDecrypt = Vue.component('sec-key-decrypt', {
+			template: '#sec-key-decrypt',
 			props: ['id'],
 			data: () => {
 				return {
@@ -1120,8 +1120,8 @@
 				}
 			}
 		});
-		const CreateKey = Vue.component('sec-create-key', {
-			template: '#sec-create-key',
+		const KeyCreate = Vue.component('sec-key-create', {
+			template: '#sec-key-create',
 			data: () => {
 				return {
 					generationNs: new notifState()
@@ -1147,8 +1147,8 @@
 				}
 			}
 		});
-		const BrowseKey = Vue.component('sec-browse-key', {
-			template: '#sec-browse-key',
+		const KeyBrowse = Vue.component('sec-key-browse', {
+			template: '#sec-key-browse',
 			mounted() {
 				setOnDrop(this.onKeyFile);
 			},
@@ -1164,8 +1164,8 @@
 				}
 			}
 		});
-		const ManageKey = Vue.component('sec-manage-key', {
-			template: '#sec-manage-key',
+		const KeyManage = Vue.component('sec-key-manage', {
+			template: '#sec-key-manage',
 			props: ['id'],
 			data: () => {
 				return {
@@ -1227,12 +1227,12 @@
 			mode: 'history',
 			routes: [
 				{ path: '/', component: Presentation },
-				{ path: '/key', component: Connect,
+				{ path: '/key', component: KeyLoader,
 					children: [
 						{ path: '', redirect: 'load' },
-						{ path: 'load', component: LoadKey },
-						{ path: 'decrypt/:id', component: DecryptKey, name: 'key-decrypt', props: true },
-						{ path: 'manage/:id', component: ManageKey, name: 'key-manage', props: true }
+						{ path: 'load', component: KeyPicker },
+						{ path: 'decrypt/:id', component: KeyDecrypt, name: 'key-decrypt', props: true },
+						{ path: 'manage/:id', component: KeyManage, name: 'key-manage', props: true }
 					]
 				},
 				{ path: '/app-store', component: AppStore },
