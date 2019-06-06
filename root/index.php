@@ -774,7 +774,8 @@
 				for(let id in scrollSpies) {
 					scrollSpies[id](entries, observer);
 				}
-			}, { threshold: 0.5 });
+				// only interested in 0.5 but sections can be taller than viewport
+			}, { threshold: [0.2, 0.3, 0.4, 0.5] });
 		const onResize = {},
 			store = {
 				user: {
@@ -969,7 +970,7 @@
 				return {
 					subMenu: [
 						["what-it-is", "what-it-does", "scaling"],
-						["why", "vision", "whom-for"],
+						["why", "whom-for", "vision"],
 						["technology", "secretive-insight", "sponsors", "documentation"]
 					],
 					documents: [
@@ -979,6 +980,7 @@
 						{ id: "white-paper", name: "White paper (49 pages)" },
 						{ id: "secure-connection-protocol", name: "Secure Connection Protocol (15 pages)" },
 					],
+					scrolledIn: '',
 					message: "",
 					docsNs: new notifState(),
 				}
@@ -986,8 +988,10 @@
 			mounted() {
 				subscribeOnScroll("presentation", (entries, observer) => {
 					entries.forEach(entry => {
-						if(entry.isIntersecting && entry.intersectionRatio>=.5 && entry.target.id)
-							this.onScroll(entry.target.id);
+						if(entry.isIntersecting && entry.target.id &&
+						   (entry.intersectionRatio >= .5 || entry.intersectionRect.height/entry.rootBounds.height>=.5) &&
+						   this.scrolledIn != entry.target.id)
+								this.onScroll(this.scrolledIn = entry.target.id);
 					});
 				});
 				document.querySelectorAll('#presentation>section').forEach(target => {
