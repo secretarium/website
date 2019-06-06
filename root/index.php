@@ -11,7 +11,7 @@
 
 	<link rel="stylesheet" href="/styles/bootstrap-4.3.1.min.css" />
 	<link rel="stylesheet" href="/styles/fontawesome-5.7.2.all.min.css" />
-	<link rel="stylesheet" href="/styles/secretarium-0.0.2.min.css" />
+	<link rel="stylesheet" href="/styles/secretarium-0.0.4.min.css" />
 
 	<script src="/scripts/jquery-3.3.1.min.js"></script>
 	<script src="/scripts/popper-1.14.7.min.js"></script>
@@ -43,9 +43,6 @@
 						</li>
 						<li class="nav-item py-0 px-2">
 							<a class="nav-link" href="#technology">Technology</a>
-						</li>
-						<li class="nav-item py-0 px-2">
-							<a class="nav-link" href="#startup">About us</a>
 						</li>
 					</ul>
 					<ul id="sec-menu" class="navbar-nav flex-row ml-auto">
@@ -106,30 +103,22 @@
 							<li class="nav-item py-0 px-2">
 								<a href="#whom-for" class="nav-link">Who is it for ?</a>
 							</li>
+							<li class="nav-item py-0 px-2">
+								<a href="#vision" class="nav-link">Our story & vision</a>
+							</li>
 						</ul>
 						<ul id="sub-techno" class="navbar-nav flex-row m-0 p-0 my-2">
 							<li class="nav-item py-0 px-2">
 								<a href="#technology" class="nav-link">How does it work ?</a>
 							</li>
 							<li class="nav-item py-0 px-2">
-								<a href="#secret-processing" class="nav-link">Secret processing</a>
-							</li>
-							<li class="nav-item py-0 px-2">
-								<a href="#secret-mixing" class="nav-link">Secret mixing</a>
-							</li>
-						</ul>
-						<ul id="sub-about" class="navbar-nav flex-row m-0 p-0 my-2">
-							<li class="nav-item py-0 px-2">
-								<a href="#startup" class="nav-link">Our story and vision</a>
-							</li>
-							<li class="nav-item py-0 px-2">
-								<a href="#team" class="nav-link">The team</a>
+								<a href="#secretive-insight" class="nav-link">Secretive insight</a>
 							</li>
 							<li class="nav-item py-0 px-2">
 								<a href="#sponsors" class="nav-link">Sponsors & partners</a>
 							</li>
-							<li class="nav-item py-0 px-2 d-none"><!--d-md-flex-->
-								<a href="#clients" class="nav-link">Cients and success stories</a>
+							<li class="nav-item py-0 px-2">
+								<a href="#documentation" class="nav-link">Documentation</a>
 							</li>
 						</ul>
 					</div>
@@ -238,7 +227,7 @@
 								possible data leakage or manipulation, and no single point of failure.
 							</p>
 						</div>
-						<div class="col-md-6 px-0 pl-md-5 mt-4 mt-md-0">
+						<div class="col-md-6 px-0 pl-md-5 mt-5 mt-md-0">
 							<div class="sec-img dcApp">
 								<img src="images/figure_dcApp.svg" alt="DCApp image"/>
 							</div>
@@ -271,7 +260,7 @@
 								property of the DCApp writer.
 							</p>
 						</div>
-						<div class="col-md-6 px-0 pl-md-5 mt-4 mt-md-0">
+						<div class="col-md-6 px-0 pl-md-5 mt-5 mt-md-0">
 							<div class="sec-img puzzle">
 								<img src="images/figure_puzzle.svg" alt="easy integration image"/>
 							</div>
@@ -322,7 +311,7 @@
 								a technology that enforces their privacy.
 							</p>
 						</div>
-						<div class="col-md-6 px-0 pl-md-5 mt-4 mt-md-0">
+						<div class="col-md-6 px-0 pl-md-5 mt-5 mt-md-0">
 							<div class="sec-img reaper">
 								<img src="images/figure_reaper.svg" alt="prevent scavenging image"/>
 							</div>
@@ -346,6 +335,46 @@
 						single party from pulling the plug.</h3>
 					<div class="sec-img map">
 						<img src="images/figure_map.png" alt="map image"/>
+					</div>
+				</div>
+			</section>
+			<section id="vision">
+				<div class="container">
+					<h2>Our story and vision</h2>
+					<h3>From technology, pharma, banking, cryptography, and restoring privacy for all</h3>
+					<div class="row mx-0 mt-5">
+						<div class="col-md-6 px-0 pr-md-5">
+							<h4 class="mb-2">Our story</h4>
+							<p>
+								Secretarium founders are engineers who have worked for many years in challenging
+								environments.<br />
+								In 2014, they volunteered to create a blockchain lab for a tier-one European bank.
+								The numerous prototypes and studies resulting from this experience evidenced the
+								unsuitability of blockchains and DLTs when faced with confidentiality, performance
+								and user experience constraints.<br />
+								Early 2016, they started experiments in trusted execution environments and pivoted
+								into confidential computing. At the end of 2016, recognizing the much wider
+								applicability of confidential computing, Secretarium was founded.<br />
+								Working closely with clients, we have designed and improved our technology from real
+								business cases. Starting with Fintech, we are now actively extending our application
+								base to Pharma and Bio-medical, with the goal of powering privacy-respecting medical
+								progress.
+							</p>
+						</div>
+						<div class="col-md-6 px-0 pl-md-5 mt-5 mt-md-0">
+							<h4 class="mb-2">Our vision and philosophy</h4>
+							<p>
+								Secretarium seeks to restore the right to privacy for people and companies.<br/>
+								Our short term objectives are located in the Pharmatech, RegTech and InsurTech
+								sectors, where we provide the infrastructure rails for secrets intermediation.<br/>
+								We envision Secretarium as the safe harbour for private data. Our goal is to
+								simplify the setup and integration of privacy-respecting applications. We are
+								building an open ecosystem where anyone can create, host, control and monetise
+								applications powered by our technology.<br/>
+								We have issued a legally enforceable charter where we commit to preventing any
+								usage of our technology facilitating illegal practices.<br/>
+							</p>
+						</div>
 					</div>
 				</div>
 			</section>
@@ -387,124 +416,111 @@
 					</div>
 				</div>
 			</section>
-			<section id="secret-processing">
+			<section id="secretive-insight">
 				<div class="container">
-					<h2>Secret processing</h2>
-					<h3>Provides insight on data without seeing the data</h3>
-					<div class="row mx-0 mt-5">
-						<div class="col-md-7 px-0">
+					<h2>Secretive insight</h2>
+					<h3>Build insight on data, without disclosing the data</h3>
+					<div class="row mx-0 mt-4">
+						<div class="col-md-6 px-0 pr-md-5">
+							<div class="sec-img secretProcessing">
+								<img src="images/figure_secretProcessing.svg" alt="secret processing image"/>
+							</div>
+							<h4 class="mb-2">Secret processing</h4>
 							<p>
 								Some parties have proprietary algorithms, other parties have confidential
 								data-banks. Secret processing involves combining both while guaranteeing
 								secrecy.
-								Designed for data analytics, it can be used to risk analyse some parties'
-								financial portfolios using other parties' quantitative models and/or market
-								data.
-								Other usages can be genomic diagnostic, for individuals, or of one medical firm
-								over the DNA bank of another firm.
+								Designed for data analytics, it can be used for genomic diagnostic, either
+								by individuals, or by medical firm over the DNA bank of another firm.
 								When secured with Differential Privacy techniques, it is perfectly adapted for
-								data rental, a new way of monetizing
-								confidential data.
+								data rental, a new way of monetizing confidential data.
 							</p>
 						</div>
-						<div class="col-md-5 px-0">
-							<div class="sec-img secretProcessing my-md-0">
-								<img src="images/figure_secretProcessing.svg" alt="secret processing image"/>
+						<div class="col-md-6 px-0 pl-md-5 mt-5 mt-md-0">
+							<div class="sec-img secretMixing">
+								<img src="images/figure_secretMixing.svg" alt="secret mixing image"/>
 							</div>
-						</div>
-					</div>
-				</div>
-			</section>
-			<section id="secret-mixing">
-				<div class="container">
-					<h2>Secret mixing</h2>
-					<div class="row mx-0">
-						<div class="col-md-6 px-0">
-							<h3>Allows a group to pool data together and collectively achieve insight</h3>
-							<p class="mt-5">
-								Untrusting parties can use Secretarium to build a consensus using each parties
-								private data, without any other party
-								getting access, including Secretarium itself.
-								Designed for data pooling and data matching, it can be used for example to
-								compute market data benchmarks, detect
-								fraudulent insurance claims, compare reference data.
+							<h4 class="mb-2">Secret mixing</h4>
+							<p>
+								Allows a group to pool private data together and collectively achieve insight.
+								Designed for data pooling and data matching, it can be used to compute market
+								data benchmarks, detect fraudulent insurance claims, compare reference data.
 								Other usages involve enforcement of statistical secrecy, like the pricing of
 								insurance policies on real data.
 								Finally, it is a solution to the voting problem, Secretarium being able to
-								enforce voting secrecy, voting protocol and a
-								guaranteed honest outcome.
+								enforce voting secrecy, voting protocol and a guaranteed honest outcome.
 							</p>
-						</div>
-						<div class="col-md-6 px-0">
-							<div class="sec-img secretMixing my-md-0">
-								<img src="images/figure_secretMixing.svg" alt="secret mixing image"/>
-							</div>
 						</div>
 					</div>
 				</div>
 			</section>
-			<section id="startup">
+			<section id="sponsors">
 				<div class="container">
-					<h2>Secretarium startup</h2>
-					<h3>Passionate people at the intersection of technology, pharma, banking and cryptography</h3>
+					<h2>Our sponsors and partners</h2>
+					<h3>Reputable partners are helping us growing</h3>
+					<div class="row mx-0 mt-5">
+						<div class="col-md-4 px-0 pr-0 pr-md-4">
+							<h4 class="mb-3">Intel Corporation</h4>
+							<div class="comp-logo">
+								<img src="/images/logo_intel.svg"/>
+							</div>
+							<p class="mt-3">
+								Intel supports Secretarium with sponsored hardware, early access,
+								support with engineers, infrastructure and sales teams.
+							</p>
+						</div>
+						<div class="col-md-4 px-0 px-md-4 mt-5 mt-md-0">
+							<h4 class="mb-3">Swisscom Blockchain</h4>
+							<div class="comp-logo">
+								<img src="/images/logo_swisscom_blockchain.jpg"/>
+							</div>
+							<p class="mt-3">
+								Swisscom Blockchain supports Secretarium with engineers, business developers,
+								infrastructure. Our partnership includes a comprehensive joined go-to-market
+								agreement, as well as a mutually approach to engage with large institutions.
+							</p>
+						</div>
+						<div class="col-md-4 px-0 pl-0 pl-md-4 mt-5 mt-md-0">
+							<h4 class="mb-3">Société Générale</h4>
+							<div class="comp-logo">
+								<img src="/images/logo_soge.svg"/>
+							</div>
+							<p class="mt-3">
+								Société Générale UK hosts Secretarium in its London incubator “the Greenhouse”.
+								This partnership grants us access to Société Générale's business leaders,
+								influencers and specialists.
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section id="documentation">
+				<div class="container">
+					<h2>Documentation and Contacts</h2>
+					<h3>Please get in touch</h3>
 					<div class="row mx-0 mt-5">
 						<div class="col-md-6 px-0 pr-md-5">
-							<h4 class="mb-2">Our story</h4>
+							<h4 class="mb-4">Documentation</h4>
 							<p>
-								Secretarium founders are engineers who have worked for many years in various
-								challenging environments.<br />
-								In 2014, they volunteered to create a blockchain lab for a tier-one European bank.
-								The numerous prototypes and studies resulting from this experience evidenced the
-								unsuitability of blockchains and DLTs when faced with confidentiality, performance
-								and user experience constraints.<br />
-								Early 2016, they started experiments in trusted execution environments and pivoted
-								into confidential computing.<br />
-								At the end of 2016, recognizing the much wider applicability of confidential
-								computing, Bertrand left the bank to create Secretarium, to be joined a year later
-								by Cedric.
+								Please provide a short summary of your interest in Secretarium and we will happily provide a copy of our papers.
 							</p>
-						</div>
-						<div class="col-md-6 px-0 pl-md-5 mt-4 mt-md-0">
-							<h4 class="mb-2">Our vision and philosophy</h4>
-							<p>
-								Secretarium seeks to restore the right to privacy for people and companies.<br/>
-								Our short term markets are located in the Pharmatech, RegTech and InsurTech
-								sectors, where we provide the infrastructure rails for secrets intermediation.<br/>
-								We do not seek to monetize for ourselves the value of applications that can be built
-								with our technology - but support third parties in building these applications.<br/>
-								We have issued a legally enforceable charter where we commit to preventing any
-								usage of our technology facilitating illegal practices.
-							</p>
-						</div>
-					</div>
-				</div>
-			</section>
-			<section id="team">
-				<div class="container">
-					<h2>The Secretarium founders</h2>
-					<h3>A team of engineers, with deep investment banking and technical background</h3>
-					<div class="row mx-0 mt-5">
-						<div class="col-md-8 px-0 py-2 pr-md-2">
-							<h4 class="mb-4">The secretarium founders</h4>
-							<div class="row m-0">
-								<div class="col-6 pb-4 team-member">
-									<img src="/images/bertrand.jpg" />
-									<h5>Bertrand Foing</h5>
-									<p>Founder<br />Strategy & Technology</p>
+							<form class="form-sec mt-3" @submit.prevent>
+								<input type="email" name="email" class="form-control form-control-sm" placeholder="Your professional/academic email">
+    							<textarea name="interest" class="form-control form-control-sm my-2" rows="4"
+									v-model="message" placeholder="Please detail who you are and a summary of your interest"></textarea>
+								<span class="float-right text-black-50 small" style="margin-top: -.4rem;">{{message.length==0||message.length>=50?'':'at least 50 chars'}}</span>
+								<div class="custom-control custom-checkbox checkbox-sec"
+									v-for="(f) in documents" :key="f.name">
+									<input type="checkbox" name="documents" class="custom-control-input form-control-sm" :id="'ckbx-'+f.id" :value="f.id">
+									<label class="custom-control-label form-control-sm" :for="'ckbx-'+f.id">{{f.name}}</label>
 								</div>
-								<div class="col-6 pb-4 team-member">
-									<img src="/images/cedric.jpg" />
-									<h5>Cédric Wahl</h5>
-									<p>Founder<br />Strategy & Technology</p>
+								<div class="mt-2">
+									<button type="submit" class="btn btn-sec" @click.prevent="requestDocs">Submit</button>
+									<sec-notif-state :state="docsNs.data" class="pl-3"></sec-notif-state>
 								</div>
-								<div class="col-6 pb-4 team-member">
-									<img src="/images/axel.png" />
-									<h5>Axel Oehmichen, PhD</h5>
-									<p>Co-founder<br />Bio medical, differential privacy</p>
-								</div>
-							</div>
+							</form>
 						</div>
-						<div class="col-md-4 px-0 py-2 pr-md-2">
+						<div class="col-md-6 px-0 pl-md-5 mt-5 mt-md-0">
 							<h4 class="mb-4">Get in touch</h4>
 							<div class="row mx-0 contact">
 								<div class="col-sm pb-3">
@@ -542,67 +558,6 @@
 					</div>
 				</div>
 			</section>
-			<section id="sponsors">
-				<div class="container">
-					<h2>Our sponsors and partners</h2>
-					<h3>Reputable business partners are helping us growing</h3>
-					<div class="row mx-0 mt-5">
-						<div class="col-md-4 pb-3 px-0 pr-0 pr-md-4">
-							<h4 class="mb-4">Intel Corporation</h4>
-							<div class="comp-logo">
-								<img src="/images/logo_intel.svg"/>
-							</div>
-							<p class="mt-3">
-								Intel supports Secretarium with sponsored hardware, early access,
-								support with engineers, infrastructure and sales teams.
-							</p>
-						</div>
-						<div class="col-md-4 pb-3 px-0 px-md-4 mt-4 mt-md-0">
-							<h4 class="mb-4">Swisscom Blockchain</h4>
-							<div class="comp-logo">
-								<img src="/images/logo_swisscom_blockchain.jpg"/>
-							</div>
-							<p class="mt-3">
-								Swisscom Blockchain supports Secretarium with engineers, business developers,
-								infrastructure. Our partnership includes a comprehensive joined go-to-market
-								agreement, as well as a mutually approach to engage with large institutions.
-							</p>
-						</div>
-						<div class="col-md-4 pb-3 px-0 pl-0 pl-md-4 mt-4 mt-md-0">
-							<h4 class="mb-4">Société Générale UK</h4>
-							<div class="comp-logo">
-								<img src="/images/logo_soge.svg"/>
-							</div>
-							<p class="mt-3">
-								Société Générale UK hosts Secretarium in its London incubator “the Greenhouse”.
-								This partnership grants us access to Société Générale's business leaders,
-								influencers and specialists.
-							</p>
-						</div>
-					</div>
-				</div>
-			</section>
-			<!-- <section id="clients">
-				<div class="container">
-					<h2>Our clients and success stories</h2>
-					<h3>We designed our technology with business players</h3>
-					<h4 class="my-4">Our clients</h4>
-					<div class="row">
-						<div class="col-xs-4 pr-3 pb-3 comp-logo">
-							<img src="/images/logo_soge.svg"/>
-						</div>
-						<div class="col-xs-4 pr-3 pb-3 comp-logo">
-							<img src="/images/logo_ubs.svg"/>
-						</div>
-						<div class="col-xs-4 pr-3 pb-3 comp-logo">
-							<img src="/images/logo_creds.svg"/>
-						</div>
-						<div class="col-xs-4 pr-3 pb-3 comp-logo">
-							<img src="/images/logo_kbc.svg"/>
-						</div>
-					</div>
-				</div>
-			</section> -->
 			<a class="go-to-next d-none d-sm-inline" href="#next" @click.prevent="goToNext"><i class="fas fa-arrow-down"></i></a>
 		</div>
 	</script>
@@ -612,12 +567,10 @@
 			<div class="card sec-card mw-md border-0">
 				<div class="card-header">
 					<h4>Entrust your secrets with Secretarium</h4>
-					<p class="mb-0">Access to the most privacy respecting apps in the industry</p>
+					<p class="mb-0">Access to the most privacy-respecting apps in the industry</p>
 				</div>
 				<div class="card-body">
-					<transition name="no-transition">
-						<router-view></router-view>
-					</transition>
+					<router-view></router-view>
 				</div>
 			</div>
 		</div>
@@ -664,7 +617,7 @@
 				<p class="card-text">
 					Please enter the password used for securing the key
 				</p>
-				<form @submit.prevent>
+				<form class="form-sec" @submit.prevent>
 					<div class="form-row">
 						<div class="col-sm">
 							<input id="ckPwd" type="password" class="form-control" placeholder="Password" autocomplete="current-password">
@@ -689,7 +642,7 @@
 				A new key will be generated, locally in your browser.<br />
 				It will allow authentication when interacting with the Secretarium platform.
 			</p>
-			<form @submit.prevent>
+			<form class="form-sec" @submit.prevent>
 				<div class="form-row">
 					<div class="col-sm">
 						<input id="ckName" type="text" class="form-control" placeholder="Key name">
@@ -734,7 +687,7 @@
 					<p class="card-text">
 						To safely store your key, please choose a strong password
 					</p>
-					<form @submit.prevent>
+					<form class="form-sec" @submit.prevent>
 						<div class="form-row">
 							<div class="col-sm">
 								<input id="ckPwd" type="password" class="form-control" placeholder="Password" autocomplete="current-password">
@@ -757,9 +710,9 @@
 					Export your key to back it up locally, or on a secure hardware.
 				</p>
 				<form class="form-inline" @submit.prevent>
-					<div v-if="key.encrypted" class="form-check lg mr-3 mb-3 mb-sm-0">
-						<input type="checkbox" class="form-check-input" id="ckExportEncrypted" :checked="key.encrypted">
-						<label class="form-check-label" for="ckExportEncrypted">Export encrypted</label>
+					<div v-if="key.encrypted" class="custom-control custom-checkbox checkbox-lg checkbox-sec ml-0 mr-3 mb-3 mb-sm-0">
+						<input type="checkbox" class="custom-control-input" id="ckExportEncrypted" :checked="key.encrypted">
+						<label class="custom-control-label" for="ckExportEncrypted">Export encrypted</label>
 					</div>
 					<a class="btn btn-sec" :href="key.exportUrl"
 						:download="key.name+'.secretarium'">
@@ -773,9 +726,9 @@
 					<h6 class="card-title">Save in this browser</h6>
 					<p class="card-text mt-3">If you trust this machine, save your key in this browser to ease future connections.</p>
 					<form class="form-inline" @submit.prevent>
-						<div v-if="key.encrypted" class="form-check lg mr-3 mb-3 mb-sm-0">
-							<input type="checkbox" class="form-check-input" id="ckSaveEncrypted" :checked="key.encrypted">
-							<label class="form-check-label" for="ckSaveEncrypted">Save encrypted</label>
+						<div v-if="key.encrypted" class="custom-control custom-checkbox checkbox-lg checkbox-sec ml-0 mr-3 mb-3 mb-sm-0">
+							<input type="checkbox" class="custom-control-input" id="ckSaveEncrypted" :checked="key.encrypted">
+							<label class="custom-control-label" for="ckSaveEncrypted">Save encrypted</label>
 						</div>
 						<button type="button" class="btn btn-sec mr-3" :disabled="key.name.length==0" @click.prevent="saveKey">
 							<i class="fas fa-fw fa-save pr-3"></i> Save
@@ -1016,10 +969,18 @@
 				return {
 					subMenu: [
 						["what-it-is", "what-it-does", "scaling"],
-						["why", "whom-for"],
-						["technology", "secret-processing", "secret-mixing"],
-						["startup", "team", "sponsors", "clients"]
-					]
+						["why", "vision", "whom-for"],
+						["technology", "secretive-insight", "sponsors", "documentation"]
+					],
+					documents: [
+						{ id: "presentation", name: "Presentation (15 slides)" },
+						{ id: "short-presentation", name: "Short presentation (2 pages)" },
+						{ id: "short-technical-presentation", name: "Short presentation - technical (2 pages)" },
+						{ id: "white-paper", name: "White paper (49 pages)" },
+						{ id: "secure-connection-protocol", name: "Secure Connection Protocol (15 pages)" },
+					],
+					message: "",
+					docsNs: new notifState(),
 				}
 			},
 			mounted() {
@@ -1051,8 +1012,7 @@
 
 					let x = this.subMenu[0].includes(id) ? 1 :
 						this.subMenu[1].includes(id) ? 2 :
-						this.subMenu[2].includes(id) ? 3 :
-						this.subMenu[3].includes(id) ? 4 : 0;
+						this.subMenu[2].includes(id) ? 3 : 0;
 
 					// Toggle link
 					$("header a[href].active").removeClass("active");
@@ -1063,16 +1023,14 @@
 					$("#presentation-sub-menu #sub-concept").toggle(x === 1);
 					$("#presentation-sub-menu #sub-rationale").toggle(x === 2);
 					$("#presentation-sub-menu #sub-techno").toggle(x === 3);
-					$("#presentation-sub-menu #sub-about").toggle(x === 4);
 
 					// Menu effects
 					$("#presentation-menu a[href='#what-it-is']").toggleClass("active", x === 1);
 					$("#presentation-menu a[href='#why']").toggleClass("active", x === 2);
 					$("#presentation-menu a[href='#technology']").toggleClass("active", x === 3);
-					$("#presentation-menu a[href='#startup']").toggleClass("active", x === 4);
 
 					// Go to next visibility
-					$("#presentation>a.go-to-next").toggleClass("d-sm-inline", id != "sponsors");
+					$("#presentation>a.go-to-next").toggleClass("d-sm-inline", id != "documentation");
 				},
 				goToNext(e) {
 					var s = window.scrollY, r = $("#presentation")[0].scrollHeight,
@@ -1080,6 +1038,18 @@
 						p = $("#presentation section").length,
 						x = 1 + Math.round(p * s / r);
 					window.scrollTo(0, x * h);
+				},
+				requestDocs(e) {
+					this.docsNs.start("Requesting...", true);
+					let o = $(e.target).closest("form").serializeObject();
+					$.post("/services/", { type: "user.request-docs", data: o }, "json")
+						.done(x => {
+							if(x.success) this.docsNs.executed("Success", true);
+							else this.docsNs.failed("Unable to request documents: " + x.message, true);
+						})
+						.fail((j, t, e) => {
+							this.docsNs.failed("Unable to request documents: " + e, true);
+						});
 				}
 			}
 		});
@@ -1319,6 +1289,20 @@
 					}, 100);
 				});
 			})();
+			$.fn.serializeObject = function () {
+				var o = {}, a = this.serializeArray();
+				$.each(a, function () {
+					if (o[this.name] !== undefined) {
+						if (!o[this.name].push) {
+							o[this.name] = [o[this.name]];
+						}
+						o[this.name].push(this.value || '');
+					} else {
+						o[this.name] = this.value || '';
+					}
+				});
+				return o;
+			};
 
 			$("#stage").css("z-index", -1);
 			$("#app").css("opacity", 1);

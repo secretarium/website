@@ -3,16 +3,16 @@
        {
            "format": "expanded",
            "extensionName": ".css",
-           "savePath": "/styles"
+           "savePath": "/root/styles"
        },
        {
            "extensionName": ".min.css",
            "format": "compressed",
-           "savePath": "/styles"
+           "savePath": "/root/styles"
        }
    ],
    "liveSassCompile.settings.includeItems": [
-      "/styles/secretarium-0.0.1.scss"
+      "/root/styles/secretarium-0.0.1.scss"
    ],
    "liveSassCompile.settings.generateMap": false
 }
