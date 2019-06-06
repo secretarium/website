@@ -34,7 +34,7 @@
 				<div id="menu" class="container-fluid py-2" :class="{container:!store.isLogoPage}">
 					<router-link v-if="!store.isPresentationPages" to="/#welcome" class="navbar-brand logo"></router-link>
 					<a v-else class="navbar-brand logo" href="#welcome"></a>
-					<ul id="presentation-menu" class="navbar-nav flex-row d-none d-flex">
+					<ul id="presentation-menu" class="navbar-nav flex-row d-none d-sm-flex">
 						<li class="nav-item py-0 px-2">
 							<a class="nav-link" href="#what-it-is">Concept</a>
 						</li>
@@ -151,14 +151,14 @@
 		<footer v-else>
 			<div class="container py-4">
 				<div class="row">
-					<div class="col-md-3">
+					<div class="col-sm">
 						<h5 class="footer-category">Community</h5>
 						<ul>
 							<li><a href="https://twitter.com/secretarium1" target="_blank">Twitter</a></li>
 							<li><a href="https://www.linkedin.com/company/secretarium" target="_blank">LinkedIn</a></li>
 						</ul>
 					</div>
-					<div class="col-md-3">
+					<div class="col-sm mt-3 mt-sm-0">
 						<h5 class="footer-category">Secretarium</h5>
 						<ul>
 							<li><a href="#">Blog</a></li>
