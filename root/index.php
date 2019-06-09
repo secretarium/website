@@ -701,7 +701,7 @@
 				<p class="card-text mt-3">
 					Export your key to back it up locally, or on a secure hardware.
 				</p>
-				<form class="form-inline" @submit.prevent>
+				<form class="form-inline form-sec" @submit.prevent>
 					<div v-if="key.encrypted" class="custom-control custom-checkbox checkbox-lg checkbox-sec ml-0 mr-3 mb-3 mb-sm-0">
 						<input type="checkbox" class="custom-control-input" id="ckExportEncrypted" :checked="key.encrypted">
 						<label class="custom-control-label" for="ckExportEncrypted">Export encrypted</label>
@@ -717,7 +717,7 @@
 				<div class="py-2">
 					<h6 class="card-title">Save in this browser</h6>
 					<p class="card-text mt-3">If you trust this machine, save your key in this browser to ease future connections.</p>
-					<form class="form-inline" @submit.prevent>
+					<form class="form-inline form-sec" @submit.prevent>
 						<div v-if="key.encrypted" class="custom-control custom-checkbox checkbox-lg checkbox-sec ml-0 mr-3 mb-3 mb-sm-0">
 							<input type="checkbox" class="custom-control-input" id="ckSaveEncrypted" :checked="key.encrypted">
 							<label class="custom-control-label" for="ckSaveEncrypted">Save encrypted</label>
