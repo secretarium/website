@@ -10,6 +10,8 @@ function requestDocs($data) {
         returnError($error);
     if(!checkString($data, "interest", 20))
         returnError("please provide a summary of your interest (min 50 chars)");
+    if(!checkArray($data, "documents") && checkString($data, "documents"))
+        $data["documents"] = [$data["documents"]];
     if(!checkArray($data, "documents") || count($data["documents"]) == 0)
         returnError("please select at least one document");
 
