@@ -12,7 +12,7 @@
        }
    ],
    "liveSassCompile.settings.includeItems": [
-      "/root/styles/secretarium-0.0.1.scss"
+      "/root/styles/secretarium-0.0.4.scss"
    ],
    "liveSassCompile.settings.generateMap": false
 }

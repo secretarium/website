@@ -1,13 +1,94 @@
 "use strict"
 
-var sec, secretarium = sec = {
+var nng = {
 
-    knownTrustedKey: "rliD_CISqPEeYKbWYdwa-L-8oytAPvdGmbLC0KdvsH-OVMraarm1eo-q4fte0cWJ7-kmsq8wekFIJK0a83_yCg==",
+	WebSocket: class {
+
+		constructor() {
+			this._socket = {
+				readyState: 3,
+				bufferedAmount: 0
+			}
+			this.handlers = {
+				onMessage: null
+			}
+		}
+
+		get state() {
+			return this._socket.readyState;
+		}
+
+		get bufferedAmount() {
+			return this._socket.bufferedAmount;
+		}
+
+		connect(url, protocol) {
+			let s = new WebSocket(url, [protocol + ".sp.nanomsg.org"]);
+			s.binaryType = "arraybuffer";
+			s.requiresHop = protocol == "pair1";
+			s.onopen = this._socket.onopen;
+			s.onclose = this._socket.onclose;
+			s.onmessage = this._socket.onmessage;
+			s.onerror = this._socket.onerror;
+
+			this._socket = s;
+
+			return this;
+		}
+
+		on(evt, handler) {
+			var self = this;
+			switch(evt) {
+				case "open":
+					this._socket.onopen = handler;
+					break;
+				case "close":
+					this._socket.onclose = handler;
+					break;
+				case "message":
+					if(this.handlers.onMessage == null) {
+						this._socket.onmessage = e => {
+							let data = new Uint8Array(e.data);
+							if(self._socket.requiresHop) data = data.subarray(4);
+							self.handlers.onMessage(data);
+						}
+					}
+					this.handlers.onMessage = handler;
+					break;
+				case "error":
+					this._socket.onerror = handler;
+					break;
+			}
+			return this;
+		}
+
+		send(data) {
+			if(this._socket.requiresHop) data = data.nngAddHop();
+			this._socket.send(data);
+			return this;
+		}
+
+		close() {
+			this._socket.close();
+			return this;
+		}
+	},
+
+	utils: (function(){
+		Uint8Array.prototype.nngAddHop = function() {
+			let c = new Uint8Array(4 + this.length);
+			c.set([0, 0, 0, 1], 0);
+			c.set(this, 4);
+			return c;
+		}
+	})()
+};
+
+var sec, secretarium = sec = {
 
     states: {
         socket: ["connecting", "open", "closing", "closed"],
         security:[
-            "",
             "secure connection in progress",
             "secure connection established",
             "secure connection failed"
@@ -51,115 +132,115 @@ var sec, secretarium = sec = {
                 this.handlers.state.onChange(id);
         }
 
-        connect(url, protocol, userKey) {
-            let s = new nng.WebSocket(), self = this,
-                secKnownPubKey = new Uint8Array(sec.utils.base64ToUint8Array(sec.knownTrustedKey));
+        connect(url, userKey, knownTrustedKey, protocol = "pair1") {
+            let s = new nng.WebSocket(), self = this;
 
             this.socket = s;
             this._updateState(0);
 
             return new Promise((resolve, reject) => {
-                s.on("open", e => { resolve() })
-                .on("close", e => { reject() })
-                .on("error", e => { reject() })
-                .connect(url, protocol);
-            })
-            .then(async () => {
-                self._updateState(1);
-                s.on("open", e => { });
-                s.on("close", e => { self._updateState(0); });
-                s.on("error", e => { self._updateState(0); });
-                let userPubExp = await window.crypto.subtle.exportKey("raw", userKey.publicKey);
-                self.security.client.ecdsaPubRaw = new Uint8Array(userPubExp).subarray(1);
-                console.debug("client ECDSA pub key:" + Array.apply([], self.security.client.ecdsaPubRaw).join(","));
-                self.security.client.ecdh = await window.crypto.subtle.generateKey({ name: "ECDH", namedCurve: "P-256" }, true, ["deriveBits"]);
-                let ecdhPubExp = await window.crypto.subtle.exportKey("raw", self.security.client.ecdh.publicKey);
-                self.security.client.ecdhPubRaw = new Uint8Array(ecdhPubExp).subarray(1);
-                console.debug("client ephemereal ECDH pub key:" + Array.apply([], self.security.client.ecdhPubRaw).join(","));
-                return new Promise((resolve, reject) => {
-                    let clientHello = self.security.client.ecdhPubRaw;
-                    s.on("message", x => { resolve(x); }).send(clientHello);
-                });
-            })
-            .then(serverHello => {
-                let nonce = serverHello.subarray(0, 32),
-                    pow = sec.utils.getRandomUint8Array(32); // pow disabled for this demo
-                return new Promise((resolve, reject) => {
-                    let clientProofOfWork = sec.utils.concatUint8Arrays([pow, secKnownPubKey]);
-                    s.on("message", x => { resolve(x); }).send(clientProofOfWork);
+                new Promise((resolve, reject) => {
+                    s.on("open", e => { resolve() })
+                    .on("error", e => { reject(e) })
+                    .on("close", e => { reject(e) })
+                    .connect(url, protocol);
                 })
-            })
-            .then(async serverIdentity => {
-                self.security.server.preMasterSecret = new Uint8Array(serverIdentity.subarray(0, 32));
-                self.security.server.ecdhPub = await sec.utils.ecdh.importPub(sec.utils.concatUint8Array(/*uncompressed*/[4], serverIdentity.subarray(32, 96)));
-                self.security.server.ecdsaPub = await sec.utils.ecdsa.importPub(sec.utils.concatUint8Array(/*uncompressed*/[4], serverIdentity.subarray(serverIdentity.length - 64)));
+                .then(async () => {
+                    s.on("open", e => { })
+                    .on("error", e => { self._updateState(2); })
+                    .on("close", e => { self._updateState(2); });
+                    let userPubExp = await window.crypto.subtle.exportKey("raw", userKey.publicKey);
+                    self.security.client.ecdsaPubRaw = new Uint8Array(userPubExp).subarray(1);
+                    console.debug("client ECDSA pub key:" + Array.apply([], self.security.client.ecdsaPubRaw).join(","));
+                    self.security.client.ecdh = await window.crypto.subtle.generateKey({ name: "ECDH", namedCurve: "P-256" }, true, ["deriveBits"]);
+                    let ecdhPubExp = await window.crypto.subtle.exportKey("raw", self.security.client.ecdh.publicKey);
+                    self.security.client.ecdhPubRaw = new Uint8Array(ecdhPubExp).subarray(1);
+                    console.debug("client ephemereal ECDH pub key:" + Array.apply([], self.security.client.ecdhPubRaw).join(","));
+                    return new Promise((resolve, reject) => {
+                        let clientHello = self.security.client.ecdhPubRaw;
+                        s.on("message", x => { resolve(x); }).send(clientHello);
+                    });
+                })
+                .then(serverHello => {
+                    let nonce = serverHello.subarray(0, 32),
+                        pow = sec.utils.getRandomUint8Array(32); // pow disabled for this demo
+                    return new Promise((resolve, reject) => {
+                        let clientProofOfWork = sec.utils.concatUint8Arrays([pow, knownTrustedKey]);
+                        s.on("message", x => { resolve(x); }).send(clientProofOfWork);
+                    })
+                })
+                .then(async serverIdentity => {
+                    self.security.server.preMasterSecret = new Uint8Array(serverIdentity.subarray(0, 32));
+                    self.security.server.ecdhPub = await sec.utils.ecdh.importPub(sec.utils.concatUint8Array(/*uncompressed*/[4], serverIdentity.subarray(32, 96)));
+                    self.security.server.ecdsaPub = await sec.utils.ecdsa.importPub(sec.utils.concatUint8Array(/*uncompressed*/[4], serverIdentity.subarray(serverIdentity.length - 64)));
 
-                // Check inheritance from Secretarium KnownPubKey
-                let secKnownPubKeyPath = new Uint8Array(serverIdentity.subarray(96));
-                if (secKnownPubKeyPath.length == 64) {
-                    if(!secKnownPubKey.secSequenceEqual(secKnownPubKeyPath))
-                        throw "Invalid server proof of identity";
-                }
-                else {
-                    for (var i = 0; i < secKnownPubKeyPath.length - 64; i = i + 128) {
-                        let key = secKnownPubKeyPath.subarray(i, 64), proof = secKnownPubKeyPath.subarray(i + 64, 64),
-                            keyChild = secKnownPubKeyPath.subarray(i + 128, 64),
-                            ecdsaKey = await sec.utils.ecdsa.importPub(sec.utils.concatUint8Array(/*uncompressed*/[4], key));
-                        if (!await sec.utils.ecdsa.verify(keyChild, proof, ecdsaKey))
-                            throw "Invalid server proof of identity #" + i;
+                    // Check inheritance from Secretarium knownTrustedKey
+                    let knownTrustedKeyPath = new Uint8Array(serverIdentity.subarray(96));
+                    if (knownTrustedKeyPath.length == 64) {
+                        if(!knownTrustedKey.secSequenceEqual(knownTrustedKeyPath))
+                            throw "Invalid server proof of identity";
                     }
-                }
+                    else {
+                        for (var i = 0; i < knownTrustedKeyPath.length - 64; i = i + 128) {
+                            let key = knownTrustedKeyPath.subarray(i, 64), proof = knownTrustedKeyPath.subarray(i + 64, 64),
+                                keyChild = knownTrustedKeyPath.subarray(i + 128, 64),
+                                ecdsaKey = await sec.utils.ecdsa.importPub(sec.utils.concatUint8Array(/*uncompressed*/[4], key));
+                            if (!await sec.utils.ecdsa.verify(keyChild, proof, ecdsaKey))
+                                throw "Invalid server proof of identity #" + i;
+                        }
+                    }
 
-                let commonSecret = await sec.utils.ecdh.deriveBits(self.security.server.ecdhPub, self.security.client.ecdh.privateKey),
-                    sha256Common = await sec.utils.hash(commonSecret),
-                    symmetricKey = self.security.server.preMasterSecret.secXor(new Uint8Array(sha256Common)),
-                    key = symmetricKey.subarray(0, 16);
-                self.aesctr = {
-                    key: key, iv: symmetricKey.subarray(16),
-                    cryptokey: await window.crypto.subtle.importKey("raw", key, { name: "AES-CTR" }, false, ["encrypt", "decrypt"])
-                }
-                console.debug("aesctr.key:" + Array.apply([], self.aesctr.key).join(","));
-                console.debug("aesctr.iv:" + Array.apply([], self.aesctr.iv).join(","));
+                    let commonSecret = await sec.utils.ecdh.deriveBits(self.security.server.ecdhPub, self.security.client.ecdh.privateKey),
+                        sha256Common = await sec.utils.hash(commonSecret),
+                        symmetricKey = self.security.server.preMasterSecret.secXor(new Uint8Array(sha256Common)),
+                        key = symmetricKey.subarray(0, 16);
+                    self.aesctr = {
+                        key: key, iv: symmetricKey.subarray(16),
+                        cryptokey: await window.crypto.subtle.importKey("raw", key, { name: "AES-CTR" }, false, ["encrypt", "decrypt"])
+                    }
+                    console.debug("aesctr.key:" + Array.apply([], self.aesctr.key).join(","));
+                    console.debug("aesctr.iv:" + Array.apply([], self.aesctr.iv).join(","));
 
-                let nonce = sec.utils.getRandomUint8Array(32),
-                    signedNonce = new Uint8Array(await sec.utils.ecdsa.sign(nonce, userKey.privateKey)),
-                    clientProofOfIdentity = sec.utils.concatUint8Arrays(
-                        [nonce, self.security.client.ecdhPubRaw, self.security.client.ecdsaPubRaw, signedNonce]),
-                    ivOffset = sec.utils.getRandomUint8Array(16),
-                    iv = self.aesctr.iv.secIncrementBy(ivOffset),
-                    encryptedClientProofOfIdentity = await window.crypto.subtle.encrypt(
-                        { name: "AES-CTR", counter: iv, length: 128 }, self.aesctr.cryptokey, clientProofOfIdentity)
-                console.debug("ivOffset:" + Array.apply([], ivOffset).join(","));
-                console.debug("ivIncremented:" + Array.apply([], iv).join(","));
-                console.debug("clientProofOfIdentity:" + Array.apply([], clientProofOfIdentity).join(","));
-                return new Promise((resolve, reject) => {
-                    let m = sec.utils.concatUint8Arrays([ivOffset, new Uint8Array(encryptedClientProofOfIdentity)]);
-                    s.on("message", x => { resolve(x); }).send(m);
+                    let nonce = sec.utils.getRandomUint8Array(32),
+                        signedNonce = new Uint8Array(await sec.utils.ecdsa.sign(nonce, userKey.privateKey)),
+                        clientProofOfIdentity = sec.utils.concatUint8Arrays(
+                            [nonce, self.security.client.ecdhPubRaw, self.security.client.ecdsaPubRaw, signedNonce]),
+                        ivOffset = sec.utils.getRandomUint8Array(16),
+                        iv = self.aesctr.iv.secIncrementBy(ivOffset),
+                        encryptedClientProofOfIdentity = await window.crypto.subtle.encrypt(
+                            { name: "AES-CTR", counter: iv, length: 128 }, self.aesctr.cryptokey, clientProofOfIdentity)
+                    console.debug("ivOffset:" + Array.apply([], ivOffset).join(","));
+                    console.debug("ivIncremented:" + Array.apply([], iv).join(","));
+                    console.debug("clientProofOfIdentity:" + Array.apply([], clientProofOfIdentity).join(","));
+                    return new Promise((resolve, reject) => {
+                        let m = sec.utils.concatUint8Arrays([ivOffset, new Uint8Array(encryptedClientProofOfIdentity)]);
+                        s.on("message", x => { resolve(x); }).send(m);
+                    })
                 })
-            })
-            .then(async serverProofOfIdentityEncrypted => {
-                let ivOffset = serverProofOfIdentityEncrypted.subarray(0, 16),
-                    iv = self.aesctr.iv.secIncrementBy(ivOffset),
-                    serverProofOfIdentity = await window.crypto.subtle.decrypt(
-                        { name: "AES-CTR", counter: iv, length: 128 }, self.aesctr.cryptokey, serverProofOfIdentityEncrypted.subarray(16)),
-                    welcome = sec.utils.encode("Hey you! Welcome to Secretarium!"),
-                    toVerify = sec.utils.concatUint8Array(new Uint8Array(serverProofOfIdentity).subarray(0, 32), welcome),
-                    serverSignedHash = new Uint8Array(serverProofOfIdentity).subarray(32, 96),
-                    ok = await sec.utils.ecdsa.verify(toVerify, serverSignedHash, self.security.server.ecdsaPub);
-                if(!ok)
-                    throw "Invalid server proof of identity";
+                .then(async serverProofOfIdentityEncrypted => {
+                    let ivOffset = serverProofOfIdentityEncrypted.subarray(0, 16),
+                        iv = self.aesctr.iv.secIncrementBy(ivOffset),
+                        serverProofOfIdentity = await window.crypto.subtle.decrypt(
+                            { name: "AES-CTR", counter: iv, length: 128 }, self.aesctr.cryptokey, serverProofOfIdentityEncrypted.subarray(16)),
+                        welcome = sec.utils.encode("Hey you! Welcome to Secretarium!"),
+                        toVerify = sec.utils.concatUint8Array(new Uint8Array(serverProofOfIdentity).subarray(0, 32), welcome),
+                        serverSignedHash = new Uint8Array(serverProofOfIdentity).subarray(32, 96),
+                        ok = await sec.utils.ecdsa.verify(toVerify, serverSignedHash, self.security.server.ecdsaPub);
+                    if(!ok)
+                        throw "Invalid server proof of identity";
 
-                self._updateState(2);
-                if(self.handlers.onMessage == null)
-                    self.handlers.onMessage = self._notify.bind(self);
-                s.on("message", self._onMessage.bind(self));
-                self.connectionArgs = [url, protocol, userKey];
-            })
-            .catch(err => {
-                console.error(err);
-                self._updateState(3);
-                s.close();
-                throw "secure connection failed";
+                    self._updateState(1);
+                    if(self.handlers.onMessage == null)
+                        self.handlers.onMessage = self._notify.bind(self);
+                    s.on("message", self._onMessage.bind(self));
+                    resolve();
+                })
+                .catch(err => {
+                    console.error("secure connection failed", err);
+                    self._updateState(2);
+                    s.close();
+                    reject(err);
+                });
             });
         }
 
@@ -304,22 +385,6 @@ var sec, secretarium = sec = {
 
         constructor() {
             this.keys = [];
-
-            if (sec.utils.localStorage.canUse) {
-                let v = localStorage.getItem('secretarium-keys');
-                if(v != null) {
-                    try {
-                        let keys = JSON.parse(v);
-                        for(var key of keys) {
-                            key.exportUrl = this._createObjectURL(key);
-                            key.saved = true;
-                            this.keys.push(key);
-                        }
-                    } catch (e) {
-                        console.error(e);
-                    }
-                }
-            }
         }
 
         _createObjectURL(key) {
@@ -331,7 +396,6 @@ var sec, secretarium = sec = {
         _toExportable(key) {
             let exp = { name: key.name };
             if(key.encrypted) {
-                exp.encrypted = true;
                 exp.iv = key.iv;
                 exp.salt = key.salt;
                 exp.encryptedKeys = key.encryptedKeys;
@@ -341,6 +405,48 @@ var sec, secretarium = sec = {
             return exp;
         }
 
+        async _setCryptoKey(key, keys) {
+            key.cryptoKey = {
+                publicKey: await sec.utils.ecdsa.importPub(keys.subarray(0, 65), "raw"),
+                privateKey: await sec.utils.ecdsa.importPri(keys.subarray(65), "pkcs8")
+            };
+            key.ready = true;
+        }
+
+        async _addKey(key) {
+            // ensure props creation for reactivity
+            key.saved = key.saved || false;
+            key.save = key.save || false;
+            key.modified = key.modified || false;
+            key.imported = key.imported || false;
+            key.encrypted = key.encryptedKeys !== undefined;
+            key.ready = key.cryptoKey !== undefined;
+            if(key.exportUrl) URL.revokeObjectURL(key.exportUrl);
+            key.exportUrl = this._createObjectURL(key);
+            // compute cryptoKey if needed/possible
+            if(!key.ready && key.keys) {
+                await this._setCryptoKey(key, Uint8Array.secFromBase64(key.keys));
+            }
+            // unusual logic for reactivity
+            let index = this.find(key.name);
+            if(index < 0) this.keys.push(key);
+            else this.keys.splice(index, 1, key);
+            return key;
+        }
+
+        async init() {
+            if (!sec.utils.localStorage.canUse) return;
+
+            let v = localStorage.getItem('secretarium-keys');
+            if (v == null) return;
+
+            let keys = JSON.parse(v);
+            for(var key of keys) {
+                key.saved = key.save = true;
+                await this._addKey(key);
+            }
+        }
+
         find(name) {
             for(var i = 0; i < this.keys.length; i++) {
                 if(this.keys[i].name == name) return i;
@@ -348,19 +454,19 @@ var sec, secretarium = sec = {
             return -1;
         }
 
-        async createKey(name, save = true) {
+        async createKey(name) {
             if(name.length == 0) throw "Invalid key name";
 
             let cryptoKey = await sec.utils.ecdsa.generateKeyPair(true),
                 publicKey = new Uint8Array(await sec.utils.ecdsa.exportPub(cryptoKey, "raw")),
                 privateKey = new Uint8Array(await sec.utils.ecdsa.exportPri(cryptoKey, "pkcs8")),
-                keys = sec.utils.concatUint8Array(publicKey, privateKey).secToBase64();
+                keys = sec.utils.concatUint8Array(publicKey, privateKey).secToBase64(),
+                key = { name: name, cryptoKey: cryptoKey, keys: keys };
 
-            this.addKey({ name: name, cryptoKey: cryptoKey, keys: keys, saved: false }, save);
-            return cryptoKey;
+            return await this._addKey(key);
         }
 
-        importKeyFile(evt, save = true) {
+        importKeyFile(evt) {
             return new Promise((resolve, reject) => {
                 let e = evt.dataTransfer || evt.target; // dragged or browsed
                 if(!e || !e.files) reject("Unsupported, missing key file");
@@ -371,13 +477,12 @@ var sec, secretarium = sec = {
                     try {
                         let key = JSON.parse(reader.result);
                         key.imported = true;
-                        if(key.iv && !key.encrypted) { // retro comp
-                            key.encrypted = true;
+                        if(key.iv && !key.encryptedKeys && key.keys) { // retro comp
+                            key.name = name;
                             key.encryptedKeys = key.keys;
                             delete key.keys;
                         }
-                        this.addKey(key, save);
-                        resolve(key);
+                        this._addKey(key).then(k => { resolve(k); });
                     }
                     catch (e) { reject(e.message); }
                 };
@@ -386,7 +491,7 @@ var sec, secretarium = sec = {
             });
         }
 
-        async encryptKey(key, pwd, save = true) {
+        async encryptKey(key, pwd) {
             if(!key.keys) throw "Key is encrypted";
 
             let salt = sec.utils.getRandomUint8Array(32),
@@ -399,14 +504,11 @@ var sec, secretarium = sec = {
             key.salt = salt.secToBase64();
             key.iv = iv.secToBase64();
             key.encryptedKeys = new Uint8Array(encryptedKeys).secToBase64();
-            key.encrypted = true;
-            this.addKey(key, save);
-            return key;
+            return await this._addKey(key);
         }
 
         async decryptKey(key, pwd) {
             if(key.cryptoKey) return key.cryptoKey;
-            if(key.keys) return await this.getCryptoKey(key);
 
             let iv = Uint8Array.secFromBase64(key.iv),
                 salt = Uint8Array.secFromBase64(key.salt),
@@ -417,38 +519,15 @@ var sec, secretarium = sec = {
             try {
                 keys = new Uint8Array(await sec.utils.aesgcm.decrypt(aesgcmKey, iv, encryptedKeys));
                 key.keys = keys.secToBase64();
-                return key.cryptoKey = {
-                    publicKey: await sec.utils.ecdsa.importPub(keys.subarray(0, 65), "raw"),
-                    privateKey: await sec.utils.ecdsa.importPri(keys.subarray(65), "pkcs8")
-                };
+                await this._setCryptoKey(key, keys);
+                return key;
             }
             catch (e) { throw "can't decrypt/invalid password"; }
-        }
-
-        async getCryptoKey(key) {
-            if(key.cryptoKey) return key.cryptoKey;
-            if(!key.keys) throw "The key is encrypted";
-
-            let keys = Uint8Array.secFromBase64(key.keys);
-            return key.cryptoKey = {
-                publicKey: await sec.utils.ecdsa.importPub(keys.subarray(0, 65), "raw"),
-                privateKey: await sec.utils.ecdsa.importPri(keys.subarray(65), "pkcs8")
-            };
         }
 
         getPublicKeyHex(key, delimiter = '') {
             if(!key.keys) throw "Key is encrypted";
             return Uint8Array.secFromBase64(key.keys).subarray(0, 65).secToHex(delimiter);
-        }
-
-        addKey(key, save = true) {
-            let index = this.find(key.name);
-            if(key.exportUrl) URL.revokeObjectURL(key.exportUrl);
-            key.exportUrl = this._createObjectURL(key);
-            if(!save) key.save = false;
-            if(index < 0) this.keys.push(key);
-            else this.keys.splice(index, 1, key); // for reactivity purposes
-            if(save) this.save();
         }
 
         removeKey(name) {

@@ -16,9 +16,8 @@
 	<script src="/scripts/jquery-3.3.1.min.js"></script>
 	<script src="/scripts/popper-1.14.7.min.js"></script>
 	<script src="/scripts/bootstrap-4.3.1.min.js"></script>
-	<script src="/scripts/vue-2.6.10.min.js"></script>
+	<script src="/scripts/vue-2.6.10.js"></script>
 	<script src="/scripts/vue-router-3.0.2.min.js"></script>
-	<script src="/scripts/nng-0.1.0.js"></script>
 	<script src="/scripts/secretarium-0.1.5.js"></script>
 </head>
 
@@ -52,7 +51,10 @@
 						<li v-else-if="!store.isPresentationPages" class="nav-item mr-3" >
 							<router-link to="/#what-it-is" class="nav-link shift-left">Presentation</router-link>
 						</li>
-						<li v-if="connection.retrying" class="nav-item">
+						<li class="nav-item" style="margin-right: 2vw;">
+							<router-link to="/demo-apps" class="nav-link">Demos</router-link>
+						</li>
+						<!-- <li v-if="connection.retrying" class="nav-item">
 							<div class="alert alert-warning py-1 px-2 m-0 mr-3 d-inline-block btn-sm" role="alert" v-if="connection.retryingMsg.length>0">
 								{{connection.retryingMsg}}
 							</div>
@@ -67,7 +69,7 @@
 											v-for="gw in store.gateways" :key="gw.endpoint" @click.prevent="connect(gw.endpoint)">{{gw.name}}</button>
 								</div>
 							</div>
-						</li>
+						</li> -->
 						<li v-if="isLoggedIn" class="nav-item dropdown" style="margin-right: 2vw;">
 							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
 								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">me</a>
@@ -77,9 +79,6 @@
 								<router-link to="/app/identity" class="dropdown-item">Personal settings</router-link>
 								<button type="button" class="dropdown-item" @click.prevent="disconnect">Disconnect</button>
 							</div>
-						</li>
-						<li v-else class="nav-item" style="margin-right: 2vw;">
-							<router-link to="/key" class="nav-link">Connect</router-link>
 						</li>
 					</ul>
 				</div>
@@ -187,7 +186,7 @@
 					:title="s.title" :style="{ opacity: s.opacity||1, 'margin-right': '0.2em' }">
 				<i v-for="(i, k) in s.icons" :key="s.id+'_'+k" class="fas fa" :class="[i.icon, i.color]" :style="i.styles"></i>
 			</span>
-			<span :title="state.global.title" :style="{ opacity: state.global.opacity||1 }" @click.predent="state.showChain=!state.showChain">
+			<span :title="state.global.title" :style="{ opacity: state.global.opacity||1 }" @click.prevent="state.showChain=!state.showChain">
 				<i v-for="(i, k) in state.global.icons" :key="'g_'+k" class="fas fa" :class="[i.icon, i.color]" :style="i.styles"></i>
 			</span>
 			<span v-show="state.msg" class="small text-muted" style="vertical-align: 10%;">{{state.msg}}</span>
@@ -256,7 +255,7 @@
 								Secretarium guarantees privacy by default and by design: users always keep
 								control of their data. Secretarium uses end-to-end encryption: data
 								uploaded to Secretarium remains the property of its originators and no one
-								can access it in cleartext. DCApps intellectual property remains the
+								can access it in clear-text. DCApps intellectual property remains the
 								property of the DCApp writer.
 							</p>
 						</div>
@@ -563,8 +562,8 @@
 	</script>
 
 	<script type="text/x-template" id="sec-key-loader">
-		<div id="connect" class="container fixed-center">
-			<div class="card sec-card mw-md border-0">
+		<div class="container fixed-center mw-md">
+			<div class="card card-sec mw-md border-0">
 				<div class="card-header">
 					<h4>Entrust your secrets with Secretarium</h4>
 					<p class="mb-0">Access to the most privacy-respecting apps in the industry</p>
@@ -575,7 +574,6 @@
 			</div>
 		</div>
 	</script>
-
 	<script type="text/x-template" id="sec-key-picker">
 		<div id="key-picker">
 			<div v-if="$root.keysManager.keys.length>0">
@@ -585,10 +583,10 @@
 					<div class="form-row sec-key"
 						v-for="(key, i) in $root.keysManager.keys" :key="key.name">
 						<div class="col">
-							<router-link :to="'/key/decrypt/'+i" class="btn btn-sec text-left">
+							<button class="btn btn-sec text-left" @click.prevent="onPick(key, i)">
 								{{key.name}}
 								<i v-if="key.encrypted" class="fas fa-key fa-flip-both pr-2 text-warning"></i>
-							</router-link>
+							</button>
 						</div>
 						<div class="col-auto">
 							<router-link :to="'/key/manage/'+i" class="btn btn-secondary">
@@ -609,32 +607,28 @@
 			</div>
 		</div>
 	</script>
-
 	<script type="text/x-template" id="sec-key-decrypt">
-		<div>
-			<div class="py-2">
-				<h6 class="card-title mb-3">Decrypt "{{key.name}}"</h6>
-				<p class="card-text">
-					Please enter the password used for securing the key
-				</p>
-				<form class="form-sec" @submit.prevent>
-					<div class="form-row">
-						<div class="col-sm">
-							<input id="ckPwd" type="password" class="form-control" placeholder="Password" autocomplete="current-password">
-						</div>
-						<div class="col-sm-auto mt-3 mt-sm-0">
-							<button type="submit" class="btn btn-sec" @click.prevent="decryptKey">
-								<i class="fas fa-fw fa-lock pr-3"></i> Decrypt
-							</button>
-							<sec-notif-state :state="decryptionNs.data" class="pl-3 d-sm-none"></sec-notif-state>
-						</div>
+		<div class="py-2">
+			<h6 class="card-title mb-3">Decrypt "{{key.name}}"</h6>
+			<p class="card-text">
+				Please enter the password used for securing the key
+			</p>
+			<form class="form-sec" @submit.prevent>
+				<div class="form-row">
+					<div class="col-sm">
+						<input id="ckPwd" type="password" class="form-control" placeholder="Password" autocomplete="current-password">
 					</div>
-					<sec-notif-state :state="decryptionNs.data" class="mt-2 d-none d-sm-block"></sec-notif-state>
-				</form>
-			</div>
+					<div class="col-sm-auto mt-3 mt-sm-0">
+						<button type="submit" class="btn btn-sec" @click.prevent="decryptKey">
+							<i class="fas fa-fw fa-lock pr-3"></i> Decrypt
+						</button>
+						<sec-notif-state :state="decryptionNs.data" class="pl-3 d-sm-none"></sec-notif-state>
+					</div>
+				</div>
+				<sec-notif-state :state="decryptionNs.data" class="mt-2 d-none d-sm-block"></sec-notif-state>
+			</form>
 		</div>
 	</script>
-
 	<script type="text/x-template" id="sec-key-create">
 		<div class="py-2">
 			<h6 class="card-title mb-3">Create a new key</h6>
@@ -656,17 +650,15 @@
 			</form>
 		</div>
 	</script>
-
 	<script type="text/x-template" id="sec-key-browse">
 		<div>
 			<p class="card-text">
 				Alternatively drag and drop a key or
-				<label for="sec-loadkey-file" class="btn btn-link p-0 sec-color">browse from disk</label>
+				<label for="sec-loadkey-file" class="btn btn-link p-0 text-sec">browse from disk</label>
 				<input type="file" id="sec-loadkey-file" accept=".secretarium" class="d-none" @change="onKeyFile" />
 			</p>
 		</div>
 	</script>
-
 	<script type="text/x-template" id="sec-key-manage">
 		<div>
 			<div class="py-2">
@@ -753,6 +745,157 @@
 		</div>
 	</script>
 
+	<script type="text/x-template" id="sec-identity">
+		<div class="container fixed-center mw-md">
+			<div class="card card-sec mw-md border-0">
+				<div class="card-header">
+					<h4>Entrust your secrets with Secretarium</h4>
+					<p class="mb-0">Information below cannot be accessed without your consent</p>
+				</div>
+				<div class="card-body">
+					<div v-if="isBlankProfile" class="py-2">
+						<h6 class="card-title mb-3">Lets become identifiable</h6>
+						<p class="card-text">
+							Register personal records, get them verified by Secretarium, and use them as identity proofs.
+						</p>
+						<button class="btn btn-sec" @click.prevent="start">Start</button>
+					</div>
+					<div v-else>
+						<div class="py-2">
+							<h6 class="card-title" :class="{'mb-0':identityInfo.updated}"
+								data-toggle="collapse" data-target="#sec-identity-me-collapse"
+								:aria-expanded="!identityInfo.updated" aria-controls="sec-identity-me-collapse">
+								Identity information
+								<i class="fas fa-chevron-down float-right" v-if="identityInfo.updated"></i>
+							</h6>
+							<div class="mt-3 collapse" id="sec-identity-me-collapse" :class="{'show':!identityInfo.updated}">
+								<form @submit.prevent>
+									<div class="form-group">
+										<label for="prFirstName">First name</label>
+										<input type="text" class="form-control" id="prFirstName" placeholder="your first name" :value="firstname">
+									</div>
+									<div class="form-group">
+										<label for="prLastName">Last name</label>
+										<input type="text" class="form-control" id="prLastName" placeholder="your last name" :value="lastname">
+									</div>
+									<div>
+										<button type="button" class="btn btn-sec" @click.prevent="save">Save</button>
+										<sec-notif-state :state="identityInfo.ns.data"></sec-notif-state>
+									</div>
+								</form>
+							</div>
+						</div>
+						<hr class="my-3 sec" />
+						<div class="py-2">
+							<h6 class="card-title" :class="{'mb-0':personalrecord.updated}"
+								data-toggle="collapse" data-target="#sec-identity-pr-collapse"
+								:aria-expanded="!personalrecord.updated" aria-controls="sec-identity-pr-collapse">
+								Personal records
+								<i class="fas fa-chevron-down float-right" v-if="personalrecord.updated"></i>
+							</h6>
+							<div class="mt-3 collapse" id="sec-identity-pr-collapse" :class="{'show':!personalrecord.updated}">
+								<sec-identity-personal-record
+									:name="'phone'" :placeholder="'+44 7 111 222 333'"
+									:help="'Please enter your phone number with its international extension (+x).'"></sec-identity-personal-record>
+								<sec-identity-personal-record class="mt-3"
+									:name="'email'" :placeholder="'you@example.com'"></sec-identity-personal-record>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</script>
+	<script type="text/x-template" id="sec-identity-personal-record">
+		<form class="form-sec" @submit.prevent>
+			<label :for="'id-pr-'+name">Your {{name}}</label>
+			<div class="form-row">
+				<div class="col-sm">
+					<input type="text" class="form-control" :class="{'border-right-0':record.verified}" :id="'id-pr-'+name"
+						:aria-describedby="'id-pr-help-'+name" :placeholder="placeholder" :value="record.value" required>
+					<div v-if="record.verified" class="input-group-append">
+						<span class="input-group-text bg-white">
+							<i  class="fas fa-check-circle text-primary"></i>
+						</span>
+					</div>
+					<small v-if="help" :id="'id-pr-help-'+name" class="form-text text-muted">{{help}}</small>
+				</div>
+				<div class="col-sm-auto mt-3 mt-sm-0">
+					<button type="button" class="btn btn-sec" @click.prevent="send">Send {{newCode?'new':''}} security code</button>
+					<sec-notif-state :state="sendCodeNs.data" class="pl-3 d-sm-none"></sec-notif-state>
+				</div>
+			</div>
+			<sec-notif-state :state="sendCodeNs.data" class="mt-2 d-none d-sm-block"></sec-notif-state>
+			<div v-if="newCode" class="form-row mt-3">
+				<div class="col-sm-4">
+					<label :for="'id-pr-code-'+name" class="sr-only">Security code</label>
+					<input type="text" class="form-control" :id="'id-pr-code-'+name" placeholder="security code" required>
+				</div>
+				<div class="col-sm-8">
+					<button type="button" class="btn btn-sec" @click.prevent="verify">Verify</button>
+					<sec-notif-state :state="verifyNs.data"></sec-notif-state>
+				</div>
+			</div>
+			<div v-else-if="record.verified" class="mt-3">
+				<p class="card-text pt-2">Your {{name}} was successfully verified</p>
+			</div>
+		</form>
+	</script>
+
+	<script type="text/x-template" id="sec-demo-apps">
+		<div class="container fixed-center mw-md">
+			<div class="card card-sec mw-md border-0">
+				<div class="card-header">
+					<h4>Entrust your secrets with Secretarium</h4>
+					<p class="mb-0">Access to the most privacy-respecting apps in the industry</p>
+				</div>
+				<div class="card-body">
+					<router-link class="dcapp-pres" v-for="app in $root.store.dcapps" :key="app.name" :to="'/demo/'+app.name" tag="div">
+						<div>
+							<i class="fas fa-fw mr-2 text-sec" :class="[app.icon]"></i>
+							{{app.display}}
+						</div>
+						<p class="m-0 mt-2">{{app.description}}</p>
+					</router-link>
+					<div v-if="Object.keys($root.store.dcapps).length==0">
+						{{loaderMsg}}
+					</div>
+				</div>
+			</div>
+		</div>
+	</script>
+	<script type="text/x-template" id="sec-connect">
+		<div class="container fixed-center mw-md">
+			<div class="card card-sec mw-md border-0">
+				<div class="card-header">
+					<h4>Entrust your secrets with Secretarium</h4>
+					<p class="mb-0">Access to the most privacy-respecting apps in the industry</p>
+				</div>
+				<div class="card-body">
+					<div class="py-2">
+						<h6 class="card-title mb-3">Connect to "{{dcapp.display}}"</h6>
+						<p class="card-text">
+							Please choose the node you would like to use
+						</p>
+						<form class="form-sec" @submit.prevent>
+							<div class="form-row">
+								<div class="col-sm">
+									<select id="id-connect" class="form-control">
+										<option v-for="(g, i) in dcapp.gateways" :value="i">{{g.name}}</option>
+									</select>
+								</div>
+								<div class="col-sm-auto mt-3 mt-sm-0">
+									<button type="submit" class="btn btn-sec" @click.prevent="connect">Connect</button>
+									<sec-notif-state :state="connectionNs.data" class="pl-3 d-sm-none"></sec-notif-state>
+								</div>
+							</div>
+							<sec-notif-state :state="connectionNs.data" class="mt-2 d-none d-sm-block"></sec-notif-state>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</script>
 	<script type="text/x-template" id="sec-app-access-denied">
 		<div class="container mt-4 mb-4">
 			<div class="card mb-4">
@@ -779,19 +922,13 @@
 		const onResize = {},
 			store = {
 				user: {
-					ECDSA: undefined,
-					ECDSAPubBase64: undefined,
-					dcapps: {}
+					ECDSA: null,
+					ECDSAPubHex: null,
+					dcapps: { identity: { data: { personalRecords: {} } } }
 				},
 				isPresentationPages: window.location.pathname == "/",
 				isLogoPage: window.location.pathname == "/" && (window.location.hash.length == 0 || window.location.hash == "#welcome"),
-				gateways: [
-					{ endpoint: "wss://ovh2.node.secretarium.org:443/", name: "PROD (OVH #2)" },
-					{ endpoint: "wss://ovh3.node.secretarium.org:443/", name: "PROD (OVH #3)" },
-					{ endpoint: "wss://ovh5.node.secretarium.org:443/", name: "PROD (OVH #5)" },
-					{ endpoint: "wss://ovh6.node.secretarium.org:443/", name: "PROD (OVH #6)" },
-					{ endpoint: "wss://ovh7.node.secretarium.org:443/", name: "PROD (OVH #7)" }
-				],
+				SCPs: {},
 				dcapps: {}
 			},
 			alerts = [],
@@ -1059,10 +1196,21 @@
 		});
 
 		const KeyLoader = Vue.component('sec-key-loader', {
-			template: '#sec-key-loader'
+			template: '#sec-key-loader',
+			data: function () { return { referrer: null } },
+			beforeRouteEnter(to, from, next) { next(self => { self.referrer = {...from}; }); }
 		});
 		const KeyPicker = Vue.component('sec-key-picker', {
-			template: '#sec-key-picker'
+			template: '#sec-key-picker',
+			methods: {
+				onPick(key, id) {
+					if(key.ready) {
+						this.$root.setKey(key);
+						router.push(this.$parent.referrer);
+					}
+					else router.push({ name: 'key-decrypt', params : { id: id }});
+				}
+			}
 		});
 		const KeyDecrypt = Vue.component('sec-key-decrypt', {
 			template: '#sec-key-decrypt',
@@ -1081,8 +1229,10 @@
 					let pwd = $('#ckPwd').val();
 					if(pwd.length < 1) { this.decryptionNs.failed("invalid password", true); return; }
 					try {
-						await this.$root.keysManager.decryptKey(this.key, pwd, false);
+						await this.$root.keysManager.decryptKey(this.key, pwd);
+						this.$root.setKey(this.key);
 						this.decryptionNs.executed("Success", true).hide(1500);
+						router.push(this.$parent.referrer);
 					} catch (err) {
 						this.decryptionNs.failed(err, true);
 					}
@@ -1105,7 +1255,7 @@
 						return;
 					}
 					try {
-						await this.$root.keysManager.createKey(name, false);
+						await this.$root.keysManager.createKey(name);
 						this.generationNs.executed("Success", true).hide(1500);
 						let id = this.$root.keysManager.find(name);
 						router.push({ name: 'key-manage', params : { id: id }});
@@ -1126,7 +1276,7 @@
 			},
 			methods: {
 				onKeyFile(evt) {
-					this.$root.keysManager.importKeyFile(evt, false)
+					this.$root.keysManager.importKeyFile(evt)
 					.catch(err => {
 						alerts.push({ key: "invalid-key-file", isError: true, html: err });
 					})
@@ -1157,7 +1307,7 @@
 					let pwd = $('#ckPwd').val();
 					if(pwd.length < 1) { this.encryptionNs.failed("invalid password", true); return; }
 					try {
-						await this.$root.keysManager.encryptKey(this.key, pwd, false);
+						await this.$root.keysManager.encryptKey(this.key, pwd);
 						this.encryptionNs.executed("Success", true).hide(1500);
 					} catch (err) {
 						this.encryptionNs.failed(err, true);
@@ -1178,13 +1328,159 @@
 			}
 		});
 
-		const AppStore = Vue.component('sec-app-store', {
-			template: '#sec-appstore',
+		const Identity = Vue.component('sec-identity', {
+			template: '#sec-identity',
 			data: () => {
 				return {
+					started: false,
+					identityInfo: { updated: false, ns: new notifState() },
+					personalrecord: { updated: false, ns: new notifState() },
 				}
 			},
+			computed: {
+				firstname() { return store.user.dcapps.identity.data.firstname || ""; },
+				lastname() { return store.user.dcapps.identity.data.lastname || ""; },
+				isBlankProfile() { return !this.started && this.firstname != "" && this.lastname != ""; }
+			},
 			methods: {
+				start() { this.started = true; },
+				save() {
+					this.started = true;
+				}
+			}
+		});
+		const IdentityPersonalRecord = Vue.component('sec-identity-personal-record', {
+			template: '#sec-identity-personal-record',
+			props: ["name", "placeholder", "help"],
+			data: () => {
+				return {
+					newCode: false,
+					sendCodeNs: new notifState(2),
+					verifyNs: new notifState(2)
+				}
+			},
+			computed: {
+				record() { return store.user.dcapps.identity.data.personalRecords[this.name] || {}; }
+			},
+			methods: {
+				send() {
+					let name = this.name, value = $('#id-pr-' + name).val(), args = { name: name, value: value };
+					this.sendCodeNs.start();
+					store.SCPs["sec-demo-1"]
+						.sendTx("identity", "set-personal-record", "identity-set-personal-record-" + name, args)
+						.onError(x => { this.sendCodeNs.failed(x, true); })
+						.onAcknowledged(x => { this.sendCodeNs.acknowledged(); })
+						.onProposed(x => { this.sendCodeNs.proposed(); })
+						.onCommitted(x => { this.sendCodeNs.committed(); })
+						.onExecuted(x => {
+							this.sendCodeNs.executed();
+							let cmd = "send-personal-record-challenge";
+							store.SCPs["sec-demo-1"]
+								.sendQuery("identity", cmd, "identity-" + cmd + "-" + name, { name: name })
+								.onError(x => { this.sendCodeNs.failed(x, true); })
+								.onResult(x => {
+									this.sendCodeNs.executed().hide();
+									Vue.set(store.user.dcapps.identity.data.personalRecords, name, { value: value, verified: false });
+								});
+						});
+				},
+				verify() {
+					let name = this.name, code = $('#id-pr-code-' + name).val().toUpperCase(),
+						args = { name: name, code: code };
+					this.verifyNs.start();
+					store.SCPs["sec-demo-1"]
+						.sendTx("identity", "verify-personal-record", "identity-verify-personal-record-" + name, args)
+						.onError(x => { this.verifyNs.failed(x, true); })
+						.onAcknowledged(x => { this.verifyNs.acknowledged(); })
+						.onProposed(x => { this.verifyNs.proposed(); })
+						.onCommitted(x => { this.verifyNs.committed(); })
+						.onExecuted(x => {
+							this.verifyNs.executed();
+							store.SCPs["sec-demo-1"].sendQuery("identity", "get", "identity-get")
+								.onResult(x => { Vue.set(store.user.dcapps.identity, "data", x); })
+								.onError(x => { this.verifyNs.failed(x, true); })
+								.onResult(x => {
+									if(x.personalRecords[name].verified)
+										this.verifyNs.executed().hide();
+									else
+										this.verifyNs.failed("invalid security code", true);
+								});
+						});
+				}
+			}
+		});
+
+		const DemoApps = Vue.component('sec-demo-apps', {
+			template: '#sec-demo-apps',
+			data: () => {
+				return {
+					loaderMsg: "Loading App list..."
+				}
+			},
+			created() {
+				if(Object.keys(store.dcapps).length == 0) {
+					return $.getJSON("/dcapps-demo/")
+						.done(async x => {
+							for (var name in x) { x[name].id = await sec.utils.hashBase64(name); }
+							Vue.set(store, "dcapps", x);
+						})
+						.fail((j, t, e) => { this.loaderMsg = "Could not load the demo applications list: " + e; });
+				}
+			}
+		});
+		const DemoLoader = Vue.component('sec-demo-loader', {
+			template: '<div></div>',
+			props: ["name"],
+			data: () => {
+				return {
+					loaderMsg: "Loading App..."
+				}
+			},
+			computed: {
+				dcapp() { return store.dcapps[this.name]; }
+			},
+			created() {
+				if(store.user.ECDSA == null)
+					router.push("/key"); // key not loaded yet
+				else if(!this.dcapp || !store.SCPs[this.dcapp.network])
+					router.push("/connect/" + this.name); // not connected yet
+				else {
+					if(!this.dcapp.loaded) { // we need to load the app code
+						$.get("/dcapps-demo/" + this.name + ".html")
+							.done(data => {
+								$("body").append(data); // will register new view and route
+								this.dcapp.loaded = true;
+								router.push("/" + this.name);
+							})
+							.fail((j, t, e) => { this.loaderMsg = "Unable to load the app: " + e });
+					} else {
+						router.push("/" + this.name);
+					}
+				}
+			}
+		});
+		const Connect = Vue.component('sec-connect', {
+			template: '#sec-connect',
+			props: ["name"],
+			data: () => {
+				return {
+					referrer: null,
+					connectionNs: new notifState()
+				}
+			},
+			beforeRouteEnter(to, from, next) { next(self => { self.referrer = {...from}; }); },
+			computed: {
+				dcapp() { return store.dcapps[this.name]; }
+			},
+			methods: {
+				connect() {
+					let x = $("#id-connect").val(),
+						gateway = this.dcapp.gateways[x];
+					this.connectionNs.processing("Connecting...", true);
+					this.$root.connect(this.dcapp, gateway.endpoint)
+						.then(() => { router.push(this.referrer); })
+						.catch((e) => { this.connectionNs.failed(e, true); });
+				}
 			}
 		});
 
@@ -1204,8 +1500,10 @@
 						{ path: 'manage/:id', component: KeyManage, name: 'key-manage', props: true }
 					]
 				},
-				{ path: '/app-store', component: AppStore },
-				{ path: '/app/:id', component: AppAccessDenied },
+				{ path: '/me', component: Identity },
+				{ path: '/demo-apps', component: DemoApps },
+				{ path: '/demo/:name', component: DemoLoader, name: 'demo-loader', props: true },
+				{ path: '/connect/:name', component: Connect, name: 'connect', props: true },
 			]
 		});
 		router.beforeEach((to, from, next) => {
@@ -1221,13 +1519,15 @@
 				return {
 					canStore: sec.utils.localStorage.canUse,
 					store: store,
-					connection: {
-						endpoint: "",
-						retrying: false, retryingMsg: "", retryFailures: 0, retrier: null, lastState: 0, timeoutSec: 30,
-						ns: {data: {}}
-					},
-					scp: new secretarium.scp(),
-					keysManager: new secretarium.keysManager()
+					connections: {},
+					keysManager: new secretarium.keysManager(),
+				}
+			},
+			created() {
+				try {
+					this.keysManager.init().catch(e => { throw e });
+				} catch (e) {
+					alerts.push({ key: "invalid-stored-keys", isError: true, html: "Could not load stored keys: " + e });
 				}
 			},
 			computed: {
@@ -1237,15 +1537,88 @@
 				isLoggedIn() { return false; },
 			},
 			methods: {
-				async connect(endpoint = "") {
+				setKey(key) {
+					store.user.ECDSA = key.cryptoKey;
+					store.user.ECDSAPubHex = this.$root.keysManager.getPublicKeyHex(key, " ").toUpperCase();
 				},
-				getDCApps() {
-					return $.getJSON("https://secretarium.org/dcapps/")
-						.done(async x => {
-							for (var name in x) { x[name].id = await sec.utils.hashBase64(name); }
-							Vue.set(store, "dcapps", x);
-						});
-				}
+				retryConnection(dcapp) {
+					let scp = store.SCPs[dcapp.network];
+					if(scp.securityState < 2)
+						return; // already connected or connecting
+
+					let connection = this.connections[dcapp.network];
+					connection.retrying = true;
+
+					let countDowner = (t) => {
+							if(--t > 0) {
+								connection.retryingMsg = "Connection dropped - retrying in " + t + " sec";
+								connection.retrier = setTimeout(() => countDowner(t), 1000);
+							}
+							else {
+								connection.retryingMsg = "Connection dropped - retrying now";
+								setTimeout(() => this.connect(dcapp, connection.endpoint), 0);
+							}
+						},
+						timeout = 30 * 2^Math.min(connection.retryFailures++, 4);
+					connection.timer = setTimeout(() => countDowner(timeout), 0);
+				},
+				connect(dcapp, endpoint = "") {
+					if(store.user.ECDSA == null)
+						throw "User key not loaded";
+					if(endpoint == "")
+						endpoint = dcapp.gateways[0].endpoint;
+
+					let connection = this.connections[dcapp.network];
+					if(!connection) {
+						connection = {
+							endpoint: endpoint, lastState: 0, timer: null,
+							retrying: false, retryFailures: 0, retryingMsg: ""
+						};
+						Vue.set(this.connections, dcapp.network, connection);
+					}
+
+					let scp = store.SCPs[dcapp.network];
+					if(!scp) {
+						scp = Vue.set(store.SCPs, dcapp.network, new secretarium.scp());
+					} else {
+						if (scp.socket.state < 2 && scp.securityState < 3)
+							return true;
+						else { // retrying
+							clearTimeout(connection.timer);
+							if(connection.retrying) {
+								connection.retryingMsg = "Connection dropped - retrying now";
+								connection.retryFailures = 0;
+							}
+						}
+					}
+
+					return new Promise((resolve, reject) => {
+						scp.reset()
+							.on("statechange", x => {
+								if(connection.lastState != 0 && x == 0) // connection dropped
+									this.retryConnection(dcapp);
+								connection.lastState = x;
+							})
+							.connect(endpoint, store.user.ECDSA, sec.utils.base64ToUint8Array(dcapp.key), "pair1")
+							.then(() => {
+								connection.retrying = false;
+								connection.retryingMsg = "";
+								connection.retryFailures = 0;
+								resolve();
+							})
+							.catch(e => {
+								this.retryConnection(dcapp);
+								reject(e);
+							});
+					});
+				},
+				disconnect(dcapp) {
+					let scp = store.SCPs[dcapp.network],
+						connection = this.connections[dcapp.network];
+					if(!scp) return;
+					scp.close();
+					clearTimeout(connection.timer);
+				},
 			}
 		}).$mount('#app');
 
