@@ -89,9 +89,9 @@ var sec, secretarium = sec = {
     states: {
         socket: ["connecting", "open", "closing", "closed"],
         security:[
-            "secure connection in progress",
-            "secure connection established",
-            "secure connection failed"
+            "Secure Connection in Progress",
+            "Secure Connection Established",
+            "Secure Connection Failed"
         ]
     },
 

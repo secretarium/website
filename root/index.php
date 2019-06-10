@@ -44,40 +44,26 @@
 							<a class="nav-link" href="#technology">Technology</a>
 						</li>
 					</ul>
-					<ul id="sec-menu" class="navbar-nav flex-row ml-auto">
+					<ul id="sec-menu" class="navbar-nav flex-row ml-auto" :style="{marginRight:(store.isLogoPage?'2vw':0)}">
 						<li v-if="store.isLogoPage" class="nav-item mr-3" >
 							<a class="nav-link shift-left" href="#what-it-is">Presentation</a>
 						</li>
 						<li v-else-if="!store.isPresentationPages" class="nav-item mr-3" >
 							<router-link to="/#what-it-is" class="nav-link shift-left">Presentation</router-link>
 						</li>
-						<li class="nav-item" style="margin-right: 2vw;">
+						<li class="nav-item">
 							<router-link to="/demos" class="nav-link">Demos</router-link>
 						</li>
-						<!-- <li v-if="connection.retrying" class="nav-item">
-							<div class="alert alert-warning py-1 px-2 m-0 mr-3 d-inline-block btn-sm" role="alert" v-if="connection.retryingMsg.length>0">
-								{{connection.retryingMsg}}
-							</div>
-							<div class="btn-group">
-								<button type="button" class="btn btn-outline-primary btn-sm" @click.prevent="connect('')">Retry now</button>
-								<button type="button" class="btn btn-outline-primary btn-sm dropdown-toggle dropdown-toggle-split"
-										data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<span class="sr-only">Toggle Dropdown</span>
-								</button>
-								<div class="dropdown-menu dropdown-menu-right">
-									<button type="button" class="dropdown-item btn-sm"
-											v-for="gw in store.gateways" :key="gw.endpoint" @click.prevent="connect(gw.endpoint)">{{gw.name}}</button>
-								</div>
-							</div>
-						</li> -->
-						<li v-if="isLoggedIn" class="nav-item dropdown" style="margin-right: 2vw;">
-							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">me</a>
-							<div class="dropdown-menu dropdown-menu-right p-3" aria-labelledby="navbarDropdown">
-								<router-link to="/apps" class="dropdown-item">DCApp store</router-link>
+						<li v-if="isConnected" class="nav-item ml-3 dropdown">
+							<a class="nav-link dropdown-toggle no-caret" href="#" id="navbarDropdown" role="button"
+								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 2rem;">
+								<i class="fas fa-user-circle mr-1 text-sec"></i>
+							</a>
+							<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+								<router-link to="/key" class="dropdown-item">Keys manager</router-link>
 								<div class="dropdown-divider"></div>
-								<router-link to="/app/identity" class="dropdown-item">Personal settings</router-link>
-								<button type="button" class="dropdown-item" @click.prevent="disconnect">Disconnect</button>
+								<router-link to="/me" class="dropdown-item">Personal records</router-link>
+								<button type="button" class="dropdown-item" @click.prevent="disconnectAll">Disconnect</button>
 							</div>
 						</li>
 					</ul>
@@ -785,7 +771,7 @@
 										<input type="text" class="form-control" id="prLastName" placeholder="your last name" :value="lastname">
 									</div>
 									<div>
-										<button type="button" class="btn btn-sec" @click.prevent="save">Save</button>
+										<button type="button" class="btn btn-sec mr-3" @click.prevent="save">Save</button>
 										<sec-notif-state :state="identityInfo.ns.data"></sec-notif-state>
 									</div>
 								</form>
@@ -838,7 +824,7 @@
 					<input type="text" class="form-control" :id="'id-pr-code-'+name" placeholder="security code" required>
 				</div>
 				<div class="col-sm-8">
-					<button type="button" class="btn btn-sec" @click.prevent="verify">Verify</button>
+					<button type="button" class="btn btn-sec mr-3" @click.prevent="verify">Verify</button>
 					<sec-notif-state :state="verifyNs.data"></sec-notif-state>
 				</div>
 			</div>
@@ -896,7 +882,7 @@
 									</select>
 								</div>
 								<div class="col-sm-auto mt-3 mt-sm-0">
-									<button type="submit" class="btn btn-sec" @click.prevent="connect">Connect</button>
+									<button type="submit" class="btn btn-sec" id="id-btn-connect" @click.prevent="connect">Connect</button>
 									<sec-notif-state :state="connectionNs.data" class="pl-3 d-sm-none"></sec-notif-state>
 								</div>
 							</div>
@@ -997,9 +983,10 @@
 					fill: fill, draw: draw, start: start, stop: stop
 				}
 			})(),
+			identityNetwork = "sec-demo-1",
 			state = {
-				icons: ["fa-check", "fa-hourglass-start", "fa-exclamation-circle"],
-				colors: ["text-success", "text-warning", "text-danger"]
+				icons: ["fa-hourglass-start", "fa-check", "fa-exclamation-circle"],
+				colors: ["text-warning", "text-success", "text-danger"]
 			},
 			notifStates = {
 				processing: [
@@ -1217,6 +1204,7 @@
 					decryptionNs: new notifState(),
 				}
 			},
+			mounted() { $('#ckPwd').focus(); },
 			computed: {
 				key() { return this.$root.keysManager.keys[this.id]; }
 			},
@@ -1331,7 +1319,7 @@
 				return {
 					started: false,
 					identityInfo: { updated: false, ns: new notifState() },
-					personalrecord: { updated: false, ns: new notifState() },
+					personalrecord: { updated: false },
 				}
 			},
 			computed: {
@@ -1342,7 +1330,19 @@
 			methods: {
 				start() { this.started = true; },
 				save() {
-					this.started = true;
+					let args = { firstname: $('#prFirstName').val(), lastname: $('#prLastName').val() };
+					this.identityInfo.ns.start();
+					store.SCPs[identityNetwork]
+						.sendTx("identity", "set", "identity-set", args)
+						.onError(x => { this.identityInfo.ns.failed(x, true); })
+						.onAcknowledged(x => { this.identityInfo.ns.acknowledged(); })
+						.onProposed(x => { this.identityInfo.ns.proposed(); })
+						.onCommitted(x => { this.identityInfo.ns.committed(); })
+						.onExecuted(x => {
+							this.identityInfo.ns.executed().hide();
+							Vue.set(store.user.dcapps.identity.data, "firstname", args.firstname);
+							Vue.set(store.user.dcapps.identity.data, "lastname", args.lastname);
+						});
 				}
 			}
 		});
@@ -1351,19 +1351,19 @@
 			props: ["name", "placeholder", "help"],
 			data: () => {
 				return {
-					newCode: false,
 					sendCodeNs: new notifState(2),
 					verifyNs: new notifState(2)
 				}
 			},
 			computed: {
-				record() { return store.user.dcapps.identity.data.personalRecords[this.name] || {}; }
+				record() { return store.user.dcapps.identity.data.personalRecords[this.name] || {}; },
+				newCode() { let x = this.record; return x.value && x.value.length > 0 && x.verified !== true; }
 			},
 			methods: {
 				send() {
 					let name = this.name, value = $('#id-pr-' + name).val(), args = { name: name, value: value };
 					this.sendCodeNs.start();
-					store.SCPs["sec-demo-1"]
+					store.SCPs[identityNetwork]
 						.sendTx("identity", "set-personal-record", "identity-set-personal-record-" + name, args)
 						.onError(x => { this.sendCodeNs.failed(x, true); })
 						.onAcknowledged(x => { this.sendCodeNs.acknowledged(); })
@@ -1372,7 +1372,7 @@
 						.onExecuted(x => {
 							this.sendCodeNs.executed();
 							let cmd = "send-personal-record-challenge";
-							store.SCPs["sec-demo-1"]
+							store.SCPs[identityNetwork]
 								.sendQuery("identity", cmd, "identity-" + cmd + "-" + name, { name: name })
 								.onError(x => { this.sendCodeNs.failed(x, true); })
 								.onResult(x => {
@@ -1385,7 +1385,7 @@
 					let name = this.name, code = $('#id-pr-code-' + name).val().toUpperCase(),
 						args = { name: name, code: code };
 					this.verifyNs.start();
-					store.SCPs["sec-demo-1"]
+					store.SCPs[identityNetwork]
 						.sendTx("identity", "verify-personal-record", "identity-verify-personal-record-" + name, args)
 						.onError(x => { this.verifyNs.failed(x, true); })
 						.onAcknowledged(x => { this.verifyNs.acknowledged(); })
@@ -1393,7 +1393,7 @@
 						.onCommitted(x => { this.verifyNs.committed(); })
 						.onExecuted(x => {
 							this.verifyNs.executed();
-							store.SCPs["sec-demo-1"].sendQuery("identity", "get", "identity-get")
+							store.SCPs[identityNetwork].sendQuery("identity", "get", "identity-get")
 								.onResult(x => { Vue.set(store.user.dcapps.identity, "data", x); })
 								.onError(x => { this.verifyNs.failed(x, true); })
 								.onResult(x => {
@@ -1466,6 +1466,7 @@
 				}
 			},
 			beforeRouteEnter(to, from, next) { next(self => { self.referrer = {...from}; }); },
+			mounted() { $('#id-btn-connect').focus(); },
 			computed: {
 				dcapp() { return store.dcapps[this.name]; }
 			},
@@ -1513,7 +1514,7 @@
 					canStore: sec.utils.localStorage.canUse,
 					store: store,
 					connections: {},
-					keysManager: new secretarium.keysManager(),
+					keysManager: new secretarium.keysManager()
 				}
 			},
 			created() {
@@ -1524,13 +1525,25 @@
 				}
 			},
 			computed: {
-				state() { return { text: "not connected", color: "text-danger", icon: "fa-exclamation-circle" } },
-				connectedAs() { return ""; },
-				isConnected() { return false; },
-				isLoggedIn() { return false; },
+				state() {
+					let scp = store.SCPs[identityNetwork],
+						msg = scp ? sec.states.security[scp.securityState] : "closed",
+						id = scp ? scp.securityState : 2;
+					return { text: msg, color: state.colors[id], icon: state.icons[id] };
+				},
+				connectedAs() {
+					var k = store.user.ECDSAPubHex, x = store.user.dcapps.identity.data,
+						z = x.firstname && x.firstname.length > 0;
+					return z ? "Connected as " + x.firstname + " " + x.lastname :
+						   k ? "Public key is " + k.substring(0, 18).replace(/\s/g, "") + "..." : "";
+				},
+				isConnected() {
+					return !!this.connections[identityNetwork];
+				}
 			},
 			methods: {
 				setKey(key) {
+					this.disconnectAll();
 					store.user.ECDSA = key.cryptoKey;
 					store.user.ECDSAPubHex = this.$root.keysManager.getPublicKeyHex(key, " ").toUpperCase();
 				},
@@ -1567,7 +1580,6 @@
 							endpoint: endpoint, lastState: 0, timer: null,
 							retrying: false, retryFailures: 0, retryingMsg: ""
 						};
-						Vue.set(this.connections, dcapp.network, connection);
 					}
 
 					let scp = store.SCPs[dcapp.network];
@@ -1597,6 +1609,7 @@
 								connection.retrying = false;
 								connection.retryingMsg = "";
 								connection.retryFailures = 0;
+								Vue.set(this.connections, dcapp.network, connection);
 								resolve();
 							})
 							.catch(e => {
@@ -1606,12 +1619,20 @@
 					});
 				},
 				disconnect(dcapp) {
-					let scp = store.SCPs[dcapp.network],
-						connection = this.connections[dcapp.network];
-					if(!scp) return;
-					scp.close();
-					clearTimeout(connection.timer);
+					if(store.SCPs[dcapp.network]) {
+						store.SCPs[dcapp.network].close();
+						Vue.delete(store.SCPs, dcapp.network);
+					}
+					if(this.connections[dcapp.network]) {
+						clearTimeout(this.connections[dcapp.network].timer);
+						Vue.delete(this.connections, dcapp.network);
+					}
 				},
+				disconnectAll() {
+					for (var dcapp in store.dcapps) {
+						this.disconnect(store.dcapps[dcapp]);
+					}
+				}
 			}
 		}).$mount('#app');
 
