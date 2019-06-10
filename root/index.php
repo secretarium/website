@@ -525,19 +525,19 @@
 								<div class="col-sm pb-3">
 									<h5>Contact us</h5>
 									<p class="pl-3 mb-1" style="min-width: 7rem;">
-										<a href="https://secretarium.slack.com" target="_blank">
+										<a class="link-unstyled" href="https://secretarium.slack.com" target="_blank">
 											<img src="/images/Slack_Mark-120x120-3b17743.png">
 											<span>on Slack</span>
 										</a>
 									</p>
 									<p class="pl-3 mb-1" style="min-width: 7rem;">
-										<a href="https://github.com/Secretarium" target="_blank">
+										<a class="link-unstyled" href="https://github.com/Secretarium" target="_blank">
 											<img src="/images/GitHub-Mark-64px.png">
 											<span>on GitHub</span>
 										</a>
 									</p>
 									<p class="pl-3 mb-1" style="min-width: 7rem;">
-										<a href="mailto:contact@secretarium.org" target="_blank">
+										<a class="link-unstyled" href="mailto:contact@secretarium.org" target="_blank">
 											<i class="fas fa-envelope"></i>
 											<span>by email</span>
 										</a>
