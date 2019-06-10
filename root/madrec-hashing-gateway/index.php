@@ -87,87 +87,98 @@
 					<p class="mb-0">Hash your documents before uploading them to the MADRec app.</p>
 				</div>
 				<div class="card-body">
-					<h5 class="card-title">Hash each field of your MADRec csv file</h5>
-					<p class="card-text">
-						Please find the
-						<a class="btn-link text-sec" href="https://github.com/Secretarium/MADRec/wiki/Instructions#madrec" target="_blank">instructions</a>
-						on Github.
-					</p>
-					<p class="card-text py-3">Want to test ? Please use the samples:<br />
-						<a class="btn btn-sec btn-sm mt-2 mr-2" href="/downloads/sample.250.csv" download="sample.250.csv">250 LEIs</a>
-						<a class="btn btn-sec btn-sm mt-2 mr-2" href="/downloads/sample.20000.csv" download="sample.20000.csv">20k LEIs</a>
-						<a class="btn btn-sec btn-sm mt-2 mr-2" href="/downloads/sample.100000.csv" download="sample.100000.csv">100k LEIs</a>
-						<a class="btn btn-sec btn-sm mt-2 mr-2" href="/downloads/sample.234567.csv" download="sample.234567.csv">234k+ LEIs</a>
-						<a class="btn btn-sec btn-sm mt-2 mr-2" href="/downloads/sample.500000.csv" download="sample.500000.csv">500k LEIs</a>
-						<a class="btn btn-sec btn-sm mt-2 mr-2" href="/downloads/sample.1325966.csv" download="sample.1325966.csv">1.3M+ LEIs</a>
-					</p>
-					<p v-if="!hasFile" class="card-text">
-						Please
-						<label for="hashing-gateway-csv-file" class="btn btn-link p-0 text-sec">browse from disk</label>
-						<input type="file" id="hashing-gateway-csv-file" accept=".csv" class="d-none" @change="csvFileChange" />
-						for your local MADRec csv file or drop it here.
-					</p>
-					<div v-else class="card-text">
+					<div class="py-2">
+						<h6 class="card-title">Instructions</h6>
 						<p class="card-text">
-							<i class="fas fa-check text-success fa-fw mr-2"></i>
-							File "{{file.name}}" ({{humanFileSize(file.size)}}) successfully loaded
+							Please find the
+							<a href="https://github.com/Secretarium/MADRec/wiki/Instructions#madrec"
+								class="btn-link text-sec" target="_blank">instructions</a>
+							on Github.
 						</p>
-						<div v-if="!verify.done" class="mt-3">
-							<p class="card-text" v-if="fileMsg.length>0">
-								<i class="fas fa-exclamation-circle text-primary fa-fw mr-2"></i>
-								{{fileMsg}}
-							</p>
-							<p class="card-text">
-								<i class="fas fa-hourglass-start text-warning fa-fw mr-2"></i>
-								Verifying "{{file.name}}" data formats
-							</p>
-							<p class="card-text" v-if="verify.msg.length>0">
-								{{verify.msg}}
-							</p>
-							<div class="progress mt-3" style="height: 5px;">
-								<div class="progress-bar no-transition bg-success" role="progressbar" :aria-valuenow="verifyBar.verified" aria-valuemin="0" aria-valuemax="100" :style="{'width': `${verifyBar.verified}%`}"></div>
-								<div class="progress-bar no-transition bg-secondary" role="progressbar" :aria-valuenow="verifyBar.read" aria-valuemin="0" aria-valuemax="100" :style="{'width': `${verifyBar.read}%`}"></div>
-							</div>
-						</div>
-						<div v-else class="mt-3">
+					</div>
+					<hr class="my-3 sec" />
+					<div class="py-2">
+						<h6 class="card-title">Want to test ?</h6>
+						<p class="card-text">Please use the samples:<br />
+							<a class="btn btn-sec btn-sm mt-2 mr-2" href="/downloads/sample.250.csv" download="sample.250.csv">250 LEIs</a>
+							<a class="btn btn-sec btn-sm mt-2 mr-2" href="/downloads/sample.20000.csv" download="sample.20000.csv">20k LEIs</a>
+							<a class="btn btn-sec btn-sm mt-2 mr-2" href="/downloads/sample.100000.csv" download="sample.100000.csv">100k LEIs</a>
+							<a class="btn btn-sec btn-sm mt-2 mr-2" href="/downloads/sample.234567.csv" download="sample.234567.csv">234k+ LEIs</a>
+							<a class="btn btn-sec btn-sm mt-2 mr-2" href="/downloads/sample.500000.csv" download="sample.500000.csv">500k LEIs</a>
+							<a class="btn btn-sec btn-sm mt-2 mr-2" href="/downloads/sample.1325966.csv" download="sample.1325966.csv">1.3M+ LEIs</a>
+						</p>
+					</div>
+					<hr class="my-3 sec" />
+					<div class="py-2">
+						<h6 class="card-title">Hash each field of your MADRec csv file</h6>
+						<p v-if="!hasFile" class="card-text">
+							Please
+							<label for="hashing-gateway-csv-file" class="btn btn-link p-0 text-sec">browse from disk</label>
+							<input type="file" id="hashing-gateway-csv-file" accept=".csv" class="d-none" @change="csvFileChange" />
+							for your local MADRec csv file or drop it here.
+						</p>
+						<div v-else class="card-text">
 							<p class="card-text">
 								<i class="fas fa-check text-success fa-fw mr-2"></i>
-								All {{rowsCount}} LEIs and associated fields have been successfully verified
+								File "{{file.name}}" ({{humanFileSize(file.size)}}) successfully loaded
 							</p>
-							<p class="card-text" v-if="hash.started&&!hash.done">
-								<i class="fas fa-hourglass-start text-warning fa-fw mr-2"></i>
-								Hashing and streaming ({{hash.hashed}} / {{rowsCount}})
-							</p>
-							<p class="card-text" v-else-if="hash.done">
-								<i class="fas fa-check text-success fa-fw mr-2"></i>
-								All {{hash.hashed}} LEIs and associated fields have been successfully hashed and streamed
-							</p>
-							<div class="mt-2 alert alert-warning alert-dismissible fade show" role="alert" v-if="verify.warnings.length>0">
-								<div v-for="warning in verify.warnings" class="warning">{{warning}}</div>
-								<button type="button" class="close" aria-label="Close" @click="verify.warnings=[]">
-									<span aria-hidden="true">&times;</span>
-								</button>
-							</div>
-							<p v-if="hash.msg.length>0" class="card-text">
-								{{hash.msg}}
-							</p>
-							<div class="mt-4" v-if="!hash.done">
-								<div v-if="!hash.started">
-									<button type="button" class="btn btn-sec" @click.prevent="hashFile">Start hashing</button>
-									<span v-if="rowsCount>50000" class="ml-3">Split into files of
-										<select class="custom-select ml-1 mr-1" style="width: auto;" id="hashing-gateway-file-max-leis">
-											<option value="50000" selected>50,000</option>
-											<option value="100000">100,000</option>
-											<option value="150000">150,000</option>
-											<option value="200000">200,000</option>
-											<option value="0">unlimited</option>
-										</select>
-										rows
-									<span>
+							<div v-if="!verify.done" class="mt-3">
+								<p class="card-text" v-if="fileMsg.length>0">
+									<i class="fas fa-exclamation-circle text-primary fa-fw mr-2"></i>
+									{{fileMsg}}
+								</p>
+								<p class="card-text">
+									<i class="fas fa-hourglass-start text-warning fa-fw mr-2"></i>
+									Verifying "{{file.name}}" data formats
+								</p>
+								<p class="card-text" v-if="verify.msg.length>0">
+									{{verify.msg}}
+								</p>
+								<div class="progress mt-3" style="height: 5px;">
+									<div class="progress-bar no-transition bg-success" role="progressbar" :aria-valuenow="verifyBar.verified" aria-valuemin="0" aria-valuemax="100" :style="{'width': `${verifyBar.verified}%`}"></div>
+									<div class="progress-bar no-transition bg-secondary" role="progressbar" :aria-valuenow="verifyBar.read" aria-valuemin="0" aria-valuemax="100" :style="{'width': `${verifyBar.read}%`}"></div>
 								</div>
-								<div v-else class="progress mt-3" style="height: 5px;">
-									<div class="progress-bar no-transition bg-success" role="progressbar" :aria-valuenow="hashingBar.hashed*100.0/rowsCount" aria-valuemin="0" aria-valuemax="100" :style="{'width': `${hashingBar.hashed*100.0/rowsCount}%`}"></div>
-									<div class="progress-bar no-transition bg-secondary" role="progressbar" :aria-valuenow="hashingBar.read*100.0/rowsCount" aria-valuemin="0" aria-valuemax="100" :style="{'width': `${hashingBar.read*100.0/rowsCount}%`}"></div>
+							</div>
+							<div v-else class="mt-3">
+								<p class="card-text">
+									<i class="fas fa-check text-success fa-fw mr-2"></i>
+									All {{rowsCount}} LEIs and associated fields have been successfully verified
+								</p>
+								<p class="card-text" v-if="hash.started&&!hash.done">
+									<i class="fas fa-hourglass-start text-warning fa-fw mr-2"></i>
+									Hashing and streaming ({{hash.hashed}} / {{rowsCount}})
+								</p>
+								<p class="card-text" v-else-if="hash.done">
+									<i class="fas fa-check text-success fa-fw mr-2"></i>
+									All {{hash.hashed}} LEIs and associated fields have been successfully hashed and streamed
+								</p>
+								<div class="mt-2 alert alert-warning alert-dismissible fade show" role="alert" v-if="verify.warnings.length>0">
+									<div v-for="warning in verify.warnings" class="warning">{{warning}}</div>
+									<button type="button" class="close" aria-label="Close" @click="verify.warnings=[]">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<p v-if="hash.msg.length>0" class="card-text">
+									{{hash.msg}}
+								</p>
+								<div class="mt-4" v-if="!hash.done">
+									<div v-if="!hash.started">
+										<button type="button" class="btn btn-sec" @click.prevent="hashFile">Start hashing</button>
+										<span v-if="rowsCount>50000" class="ml-3">Split into files of
+											<select class="custom-select ml-1 mr-1" style="width: auto;" id="hashing-gateway-file-max-leis">
+												<option value="50000" selected>50,000</option>
+												<option value="100000">100,000</option>
+												<option value="150000">150,000</option>
+												<option value="200000">200,000</option>
+												<option value="0">unlimited</option>
+											</select>
+											rows
+										<span>
+									</div>
+									<div v-else class="progress mt-3" style="height: 5px;">
+										<div class="progress-bar no-transition bg-success" role="progressbar" :aria-valuenow="hashingBar.hashed*100.0/rowsCount" aria-valuemin="0" aria-valuemax="100" :style="{'width': `${hashingBar.hashed*100.0/rowsCount}%`}"></div>
+										<div class="progress-bar no-transition bg-secondary" role="progressbar" :aria-valuenow="hashingBar.read*100.0/rowsCount" aria-valuemin="0" aria-valuemax="100" :style="{'width': `${hashingBar.read*100.0/rowsCount}%`}"></div>
+									</div>
 								</div>
 							</div>
 						</div>
