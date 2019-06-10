@@ -896,20 +896,6 @@
 			</div>
 		</div>
 	</script>
-	<script type="text/x-template" id="sec-app-access-denied">
-		<div class="container mt-4 mb-4">
-			<div class="card mb-4">
-				<h5 class="card-header">
-					<i class="fas fa-fw mr-2 text-primary" :class="$root.store.dcapps[$route.params.id].icon"></i>
-					{{ $root.store.dcapps[$route.params.id].display }}
-				</h5>
-				<div class="card-body">
-					<h5 class="card-title">Restricted access</h5>
-					<p class="card-text">You do not have access to this application.</p>
-				</div>
-			</div>
-		</div>
-	</script>
 
 	<script>
 		var onDrop = null, scrollSpies = {},
@@ -1482,10 +1468,6 @@
 						.catch((e) => { this.connectionNs.failed(e, true); });
 				}
 			}
-		});
-
-		const AppAccessDenied = Vue.component('sec-app-access-denied', {
-			template: '#sec-app-access-denied'
 		});
 
 		const router = new VueRouter({

@@ -795,7 +795,9 @@
             return json;
         }
     };
+
     const MADRecNetwork = store.dcapps["madrec"].network;
+
     Vue.set(store.user.dcapps, "madrec", {});
     Vue.set(store.user.dcapps.madrec, "data", { accessStatus: "denied", grants: 0 });
     const MADRecApp = Vue.component('sec-madrec', {
