@@ -1,10 +1,10 @@
 {
     "liveSassCompile.settings.formats":[
-       {
-           "format": "expanded",
-           "extensionName": ".css",
-           "savePath": "/root/styles"
-       },
+    //    {
+    //        "format": "expanded",
+    //        "extensionName": ".css",
+    //        "savePath": "/root/styles"
+    //    },
        {
            "extensionName": ".min.css",
            "format": "compressed",
@@ -12,7 +12,7 @@
        }
    ],
    "liveSassCompile.settings.includeItems": [
-      "/root/styles/secretarium-0.0.4.scss"
+      "root/styles/secretarium-*.scss"
    ],
    "liveSassCompile.settings.generateMap": false
 }
