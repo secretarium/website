@@ -11,14 +11,14 @@
 
 	<link rel="stylesheet" href="/styles/bootstrap-4.3.1.min.css" />
 	<link rel="stylesheet" href="/styles/fontawesome-5.7.2.all.min.css" />
-	<link rel="stylesheet" href="/styles/secretarium-0.0.6.min.css" />
+	<link rel="stylesheet" href="/styles/secretarium-0.0.7.min.css" />
 
 	<script src="/scripts/jquery-3.3.1.min.js"></script>
 	<script src="/scripts/popper-1.14.7.min.js"></script>
 	<script src="/scripts/bootstrap-4.3.1.min.js"></script>
 	<script src="/scripts/vue-2.6.10.min.js"></script>
 	<script src="/scripts/vue-router-3.0.2.min.js"></script>
-	<script src="/scripts/secretarium-0.1.6.js"></script>
+	<script src="/scripts/secretarium-0.1.7.js"></script>
 </head>
 
 <body>
