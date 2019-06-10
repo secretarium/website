@@ -472,13 +472,12 @@ var sec, secretarium = sec = {
                 if(!e || !e.files) reject("Unsupported, missing key file");
                 if(e.files.length != 1) reject("Unsupported, expecting a single key file");
 
-                let reader = new FileReader(), file = e.files[0], name = file.name;
+                let reader = new FileReader(), file = e.files[0];
                 reader.onloadend = x => {
                     try {
                         let key = JSON.parse(reader.result);
                         key.imported = true;
                         if(key.iv && !key.encryptedKeys && key.keys) { // retro comp
-                            key.name = name;
                             key.encryptedKeys = key.keys;
                             delete key.keys;
                         }
@@ -517,7 +516,7 @@ var sec, secretarium = sec = {
                 strongPwd = await sec.utils.hash(sec.utils.concatUint8Array(salt, weakpwd)),
                 aesgcmKey = await sec.utils.aesgcm.import(strongPwd);
             try {
-                keys = new Uint8Array(await sec.utils.aesgcm.decrypt(aesgcmKey, iv, encryptedKeys));
+                let keys = new Uint8Array(await sec.utils.aesgcm.decrypt(aesgcmKey, iv, encryptedKeys));
                 key.keys = keys.secToBase64();
                 await this._setCryptoKey(key, keys);
                 return key;

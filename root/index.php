@@ -52,7 +52,7 @@
 							<router-link to="/#what-it-is" class="nav-link shift-left">Presentation</router-link>
 						</li>
 						<li class="nav-item" style="margin-right: 2vw;">
-							<router-link to="/demo-apps" class="nav-link">Demos</router-link>
+							<router-link to="/demos" class="nav-link">Demos</router-link>
 						</li>
 						<!-- <li v-if="connection.retrying" class="nav-item">
 							<div class="alert alert-warning py-1 px-2 m-0 mr-3 d-inline-block btn-sm" role="alert" v-if="connection.retryingMsg.length>0">
@@ -601,6 +601,13 @@
 				<sec-key-browse></sec-key-browse>
 			</div>
 			<div v-else>
+				<p class="card-text">
+					To securely connect to an App, we need to run our Secure Connection Protocol (SCP).<br/>
+					The SCP requires mutual authentication: you are genuinely authenticated, and the
+					integrity of the remote Secretarium network is verified.<br/>
+					You therefore need a key to connect to an App on the Secretarium network.
+				</p>
+				<hr class="mt-4 mb-3 sec" />
 				<sec-key-create></sec-key-create>
 				<hr class="mt-4 mb-3 sec" />
 				<sec-key-browse></sec-key-browse>
@@ -668,7 +675,7 @@
 				</p>
 			</div>
 			<hr class="my-3 sec" />
-			<div class="py-2">
+			<div class="py-2" v-if="key.keys">
 				<h6 class="card-title" :class="{'mb-0':key.encrypted}"
 					data-toggle="collapse" data-target="#sec-key-manage-encrypt-collapse"
 					:aria-expanded="!key.encrypted" aria-controls="sec-key-manage-encrypt-collapse">
@@ -695,19 +702,18 @@
 					</form>
 				</div>
 			</div>
-			<hr class="my-3 sec" />
+			<hr class="my-3 sec" v-if="key.keys" />
 			<div class="py-2">
 				<h6 class="card-title">Export your key</h6>
 				<p class="card-text mt-3">
 					Export your key to back it up locally, or on a secure hardware.
 				</p>
-				<form class="form-inline form-sec" @submit.prevent>
-					<div v-if="key.encrypted" class="custom-control custom-checkbox checkbox-lg checkbox-sec ml-0 mr-3 mb-3 mb-sm-0">
+				<form class="form-sec" @submit.prevent>
+					<div v-show="key.encrypted&&key.keys" class="custom-control custom-checkbox checkbox-lg checkbox-sec mb-3">
 						<input type="checkbox" class="custom-control-input" id="ckExportEncrypted" :checked="key.encrypted">
 						<label class="custom-control-label" for="ckExportEncrypted">Export encrypted</label>
 					</div>
-					<a class="btn btn-sec" :href="key.exportUrl"
-						:download="key.name+'.secretarium'">
+					<a class="btn btn-sec" :href="key.exportUrl" :download="key.name+'.secretarium'">
 						<i class="fas fa-fw fa-download pr-3"></i> Export
 					</a>
 				</form>
@@ -717,8 +723,8 @@
 				<div class="py-2">
 					<h6 class="card-title">Save in this browser</h6>
 					<p class="card-text mt-3">If you trust this machine, save your key in this browser to ease future connections.</p>
-					<form class="form-inline form-sec" @submit.prevent>
-						<div v-if="key.encrypted" class="custom-control custom-checkbox checkbox-lg checkbox-sec ml-0 mr-3 mb-3 mb-sm-0">
+					<form class="form-sec" @submit.prevent>
+						<div v-show="key.encrypted&&key.keys" class="custom-control custom-checkbox checkbox-lg checkbox-sec mb-3">
 							<input type="checkbox" class="custom-control-input" id="ckSaveEncrypted" :checked="key.encrypted">
 							<label class="custom-control-label" for="ckSaveEncrypted">Save encrypted</label>
 						</div>
@@ -850,6 +856,11 @@
 					<p class="mb-0">Access to the most privacy-respecting apps in the industry</p>
 				</div>
 				<div class="card-body">
+					<p class="card-text">
+						Welcome to the demo platform.<br />
+						Please find below a list of Apps we have recently implemented.
+					</p>
+					<hr class="my-3 sec" />
 					<router-link class="dcapp-pres" v-for="app in $root.store.dcapps" :key="app.name" :to="'/demo/'+app.name" tag="div">
 						<div>
 							<i class="fas fa-fw mr-2 text-sec" :class="[app.icon]"></i>
@@ -875,7 +886,7 @@
 					<div class="py-2">
 						<h6 class="card-title mb-3">Connect to "{{dcapp.display}}"</h6>
 						<p class="card-text">
-							Please choose the node you would like to use
+							Please choose the node you would like to connect to
 						</p>
 						<form class="form-sec" @submit.prevent>
 							<div class="form-row">
@@ -1483,7 +1494,7 @@
 					]
 				},
 				{ path: '/me', component: Identity },
-				{ path: '/demo-apps', component: DemoApps },
+				{ path: '/demos', component: DemoApps },
 				{ path: '/demo/:name', component: DemoLoader, name: 'demo-loader', props: true },
 				{ path: '/connect/:name', component: Connect, name: 'connect', props: true },
 			]
