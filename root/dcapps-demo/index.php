@@ -15,9 +15,19 @@
 		"network" : "sec-demo-1",
 		"gateways": [
 			{ "endpoint": "wss://ovh1.node.secretarium.org:443/", "name": "DEMO (OVH UK)" },
-			{ "endpoint": "wss://ovh2.node.secretarium.org:443/", "name": "DEMO (OVH FR)" },
-			{ "endpoint": "wss://ovh3.node.secretarium.org:443/", "name": "DEMO (OVH DE)" }
-		]
+			{ "endpoint": "wss://ovh2.node.secretarium.org:443/", "name": "DEMO (OVH DE)" },
+			{ "endpoint": "wss://ovh3.node.secretarium.org:443/", "name": "DEMO (OVH FR-1)" },
+			{ "endpoint": "wss://ovh4.node.secretarium.org:443/", "name": "DEMO (OVH FR-2)" }
+		],
+		"ui": {
+			"src": "/dcapps-demo/madrec.html",
+			"require": [
+				{ "name": "papaparse-4.6.0", "src": "/scripts/papaparse-4.6.0.min.js" },
+				{ "name": "chart-2.8.0", "src": "/scripts/chart-2.8.0.min.js"},
+				{ "name": "stream-saver-0.0.0", "src": "/scripts/stream-saver-0.0.0.js" },
+				{ "name": "madrec-formats-0.0.15", "src": "/scripts/madrec.formats-0.0.15.js" }
+			]
+		}
     },
     "sbx": {
         "name": "sbx",

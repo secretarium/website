@@ -861,6 +861,24 @@
 			</div>
 		</div>
 	</script>
+	<script type="text/x-template" id="sec-demo-loader">
+		<div class="container fixed-center mw-md">
+			<div class="card card-sec mw-md border-0">
+				<div class="card-header">
+					<h4>Entrust your secrets with Secretarium</h4>
+					<p class="mb-0">Access to the most privacy-respecting apps in the industry</p>
+				</div>
+				<div class="card-body">
+					<p class="card-text">
+						Loading "{{name}}" and its dependencies...
+					</p>
+					<div v-if="loaderMsg.length">
+						{{loaderMsg}}
+					</div>
+				</div>
+			</div>
+		</div>
+	</script>
 	<script type="text/x-template" id="sec-connect">
 		<div class="container fixed-center mw-md">
 			<div class="card card-sec mw-md border-0">
@@ -902,7 +920,11 @@
 				}
 				// only interested in 0.5 but sections can be taller than viewport
 			}, { threshold: [0.2, 0.3, 0.4, 0.5] });
-		const onResize = {},
+		const requiredScripts = [
+				"jquery-3.3.1", "popper-1.14.7", "bootstrap-4.3.1",
+				"vue-2.6.10", "vue-router-3.0.2", "secretarium-0.1.7"
+			],
+			onResize = {},
 			store = {
 				user: {
 					ECDSA: null,
@@ -1428,11 +1450,7 @@
 		const DemoLoader = Vue.component('sec-demo-loader', {
 			template: '<div></div>',
 			props: ["name"],
-			data: () => {
-				return {
-					loaderMsg: "Loading App..."
-				}
-			},
+			data: () => { return { loaderMsg: "" }},
 			computed: {
 				dcapp() { return store.dcapps[this.name]; }
 			},
@@ -1443,13 +1461,25 @@
 					router.push("/connect/" + this.name); // not connected yet
 				else {
 					if(!this.dcapp.loaded) { // we need to load the app code
-						$.get("/dcapps-demo/" + this.name + ".html")
-							.done(data => {
-								$("body").append(data); // will register new view and route
-								this.dcapp.loaded = true;
-								router.push("/" + this.name);
-							})
-							.fail((j, t, e) => { this.loaderMsg = "Unable to load the app: " + e });
+						if(this.dcapp.ui) {
+							let loadViews = () => {
+								$.get(this.dcapp.ui.src)
+									.done(data => {
+										$("body").append(data);
+										this.dcapp.loaded = true;
+										router.push("/" + this.name);
+									})
+									.fail((j, t, e) => { this.loaderMsg = "Unable to load: " + e });
+							}
+							if(this.dcapp.ui.require) {
+								let p = this.dcapp.ui.require.map(info => { return loadScript(info); });
+								Promise.all(p)
+									.then(loadViews)
+									.catch(e => { this.loaderMsg = "Unable to load the app or one of its dependency"; })
+							} else {
+								loadViews();
+							}
+						}
 					} else {
 						router.push("/" + this.name);
 					}
@@ -1648,6 +1678,16 @@
 		}
 		function unsubscribeOnScroll(id) {
 			delete scrollSpies[id];
+		}
+		function loadScript(info) {
+			return new Promise((resolve, reject) => {
+				if(requiredScripts.includes(info.name)) { resolve(); return; }
+				let script = document.createElement('script');
+				script.onload = () => { requiredScripts.push(info.name); resolve(); };
+				script.onerror = reject;
+				script.src = info.src;
+				document.head.appendChild(script);
+			});
 		}
 		$(function() {
 			canvas.fill();
