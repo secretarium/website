@@ -1472,7 +1472,7 @@
 									.fail((j, t, e) => { this.loaderMsg = "Unable to load: " + e });
 							}
 							if(this.dcapp.ui.require) {
-								let p = this.dcapp.ui.require.map(info => { return loadScript(info); });
+								let p = this.dcapp.ui.require.map(x => { return loadScript(x.name, x.src); });
 								Promise.all(p)
 									.then(loadViews)
 									.catch(e => { this.loaderMsg = "Unable to load the app or one of its dependency"; })
@@ -1679,13 +1679,13 @@
 		function unsubscribeOnScroll(id) {
 			delete scrollSpies[id];
 		}
-		function loadScript(info) {
+		function loadScript(name, src) {
 			return new Promise((resolve, reject) => {
-				if(requiredScripts.includes(info.name)) { resolve(); return; }
+				if(requiredScripts.includes(name)) { resolve(); return; }
 				let script = document.createElement('script');
-				script.onload = () => { requiredScripts.push(info.name); resolve(); };
+				script.onload = () => { requiredScripts.push(name); resolve(); };
 				script.onerror = reject;
-				script.src = info.src;
+				script.src = src;
 				document.head.appendChild(script);
 			});
 		}
