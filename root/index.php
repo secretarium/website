@@ -122,14 +122,14 @@
 		<footer v-if="!store.isPresentationPages" class="bg-light">
 			<div class="container">
 				<div class="row no-gutters">
-					<div class="col text-muted">
+					<div class="col-sm-4 col-6 text-muted">
 						<small>
 							<i class="fas fa-circle" :class="[state.color]" style="font-size: 60%; vertical-align: 20%;"></i>
 							<span>{{state.text}}</span>
 						</small>
 					</div>
-					<div class="col-4 text-muted text-center">© <?=date("Y")?> - Secretarium</div>
-					<div class="col-4 text-muted text-right"><small>{{connectedAs}}</small></div>
+					<div class="col-sm-4 col-12 order-sm-0 order-1 text-muted text-center">© <?=date("Y")?> - Secretarium</div>
+					<div class="col-sm-4 col-6 text-muted text-right"><small>{{connectedAs}}</small></div>
 				</div>
 			</div>
 		</footer>
@@ -1535,7 +1535,7 @@
 					var k = store.user.ECDSAPubHex, x = store.user.dcapps.identity.data,
 						z = x.firstname && x.firstname.length > 0;
 					return z ? "Connected as " + x.firstname + " " + x.lastname :
-						   k ? "Public key is " + k.substring(0, 18).replace(/\s/g, "") + "..." : "";
+						   k ? "Key is " + k.substring(0, 18).replace(/\s/g, "") : "";
 				},
 				isConnected() {
 					return !!this.connections[identityNetwork];
