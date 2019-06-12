@@ -862,7 +862,7 @@
 		</div>
 	</script>
 	<script type="text/x-template" id="sec-demo-loader">
-		<div class="container fixed-center mw-md">
+		<div class="container fixed-center mw-md" v-if="msg.length">
 			<div class="card card-sec mw-md border-0">
 				<div class="card-header">
 					<h4>Entrust your secrets with Secretarium</h4>
@@ -870,11 +870,8 @@
 				</div>
 				<div class="card-body">
 					<p class="card-text">
-						Loading "{{name}}" and its dependencies...
+						{{msg}}
 					</p>
-					<div v-if="loaderMsg.length">
-						{{loaderMsg}}
-					</div>
 				</div>
 			</div>
 		</div>
@@ -1448,9 +1445,9 @@
 			}
 		});
 		const DemoLoader = Vue.component('sec-demo-loader', {
-			template: '<div></div>',
+			template: '#sec-demo-loader',
 			props: ["name"],
-			data: () => { return { loaderMsg: "" }},
+			data: () => { return { msg: "" }},
 			computed: {
 				dcapp() { return store.dcapps[this.name]; }
 			},
@@ -1461,6 +1458,7 @@
 					router.push("/connect/" + this.name); // not connected yet
 				else {
 					if(!this.dcapp.loaded) { // we need to load the app code
+						this.msg = "Loading " + this.name + " and its dependencies..."
 						if(this.dcapp.ui) {
 							let loadViews = () => {
 								$.get(this.dcapp.ui.src)
@@ -1469,13 +1467,13 @@
 										this.dcapp.loaded = true;
 										router.push("/" + this.name);
 									})
-									.fail((j, t, e) => { this.loaderMsg = "Unable to load: " + e });
+									.fail((j, t, e) => { this.msg = "Error: unable to load " + this.name + ": " + e });
 							}
 							if(this.dcapp.ui.require) {
 								let p = this.dcapp.ui.require.map(x => { return loadScript(x.name, x.src); });
 								Promise.all(p)
 									.then(loadViews)
-									.catch(e => { this.loaderMsg = "Unable to load the app or one of its dependency"; })
+									.catch(e => { this.msg = "Error: unable to load " + this.name + " or one of its dependency"; })
 							} else {
 								loadViews();
 							}
@@ -1683,10 +1681,12 @@
 			return new Promise((resolve, reject) => {
 				if(requiredScripts.includes(name)) { resolve(); return; }
 				let script = document.createElement('script');
+				script.type = "text/javascript";
+				script.defer = true;
 				script.onload = () => { requiredScripts.push(name); resolve(); };
-				script.onerror = reject;
+				script.onerror = () => { reject(); };
 				script.src = src;
-				document.head.appendChild(script);
+				try { document.head.appendChild(script); } catch (e) { reject(e); }
 			});
 		}
 		$(function() {
