@@ -14,6 +14,7 @@
 		"key": "rliD_CISqPEeYKbWYdwa-L-8oytAPvdGmbLC0KdvsH-OVMraarm1eo-q4fte0cWJ7-kmsq8wekFIJK0a83_yCg==",
 		"network" : "sec-demo-1",
 		"gateways": [
+			{ "endpoint": "wss://127.0.0.1:443/", "name": "TEST LOCAL" },
 			{ "endpoint": "wss://ovh1.node.secretarium.org:443/", "name": "DEMO (OVH UK)" },
 			{ "endpoint": "wss://ovh2.node.secretarium.org:443/", "name": "DEMO (OVH DE)" },
 			{ "endpoint": "wss://ovh3.node.secretarium.org:443/", "name": "DEMO (OVH FR-1)" },

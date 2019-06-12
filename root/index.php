@@ -16,7 +16,7 @@
 	<script src="/scripts/jquery-3.3.1.min.js"></script>
 	<script src="/scripts/popper-1.14.7.min.js"></script>
 	<script src="/scripts/bootstrap-4.3.1.min.js"></script>
-	<script src="/scripts/vue-2.6.10.min.js"></script>
+	<script src="/scripts/vue-2.6.10.js"></script>
 	<script src="/scripts/vue-router-3.0.2.min.js"></script>
 	<script src="/scripts/secretarium-0.1.7.js"></script>
 </head>
@@ -1089,7 +1089,6 @@
 			template: "#sec-notif-state",
 			props: ['state']
 		});
-
 		const Alerts = Vue.component('sec-alerts', {
 			template: '#sec-alerts',
 			data: () => {
@@ -1581,6 +1580,8 @@
 						return; // already connected or connecting
 
 					let connection = this.connections[dcapp.network];
+					if(!connection)
+						return; // connection never succeeded
 					connection.retrying = true;
 
 					let countDowner = (t) => {
@@ -1640,10 +1641,7 @@
 								Vue.set(this.connections, dcapp.network, connection);
 								resolve();
 							})
-							.catch(e => {
-								this.retryConnection(dcapp);
-								reject(e);
-							});
+							.catch(e => { reject(e); });
 					});
 				},
 				disconnect(dcapp) {
