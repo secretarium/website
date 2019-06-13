@@ -235,11 +235,11 @@ var sec, secretarium = sec = {
                     s.on("message", self._onMessage.bind(self));
                     resolve();
                 })
-                .catch(err => {
-                    console.error("secure connection failed", err);
+                .catch(e => {
+                    console.error("secure connection failed", e);
                     self._updateState(2);
                     s.close();
-                    reject(err);
+                    reject(e.message || "unable to create the secure connection");
                 });
             });
         }

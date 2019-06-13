@@ -1493,9 +1493,10 @@
 				}
 			},
 			beforeRouteEnter(to, from, next) { next(self => { self.referrer = {...from}; }); },
+			created() { if(!store.dcapps[this.name]) router.push("/demos"); },
 			mounted() { $('#id-btn-connect').focus(); },
 			computed: {
-				dcapp() { return store.dcapps[this.name]; }
+				dcapp() { return store.dcapps[this.name] || {}; }
 			},
 			methods: {
 				connect() {
