@@ -517,7 +517,7 @@
             return json;
         }
     };
-    const MADRecNetwork = store.dcapps["madrec"].network;
+    const MADRecCluster = store.dcapps["madrec"].cluster;
 
     Vue.set(store.user.dcapps, "madrec", {});
     Vue.set(store.user.dcapps.madrec, "data", { accessStatus: "denied", grants: 0 });
@@ -529,7 +529,7 @@
             }
         },
         beforeMount: function() {
-            store.SCPs[MADRecNetwork]
+            store.SCPs[MADRecCluster]
                 .sendQuery("madrec", "get-status", "madrec-get-status")
                 .onResult(x => {
                     Vue.set(store.user.dcapps.madrec.data, "accessStatus", x.status);
@@ -563,7 +563,7 @@
                 if($("#madrec_ra_phone").is(":checked")) args.items.push("phone");
                 if($("#madrec_ra_email").is(":checked")) args.items.push("email");
                 this.nsRequest.start();
-                store.SCPs[MADRecNetwork]
+                store.SCPs[MADRecCluster]
                     .sendTx("identity", "share-with", "identity-share-with", args)
                     .onError(x => { this.nsRequest.failed(x, true); })
                     .onAcknowledged(x => { this.nsRequest.acknowledged(); })
@@ -571,7 +571,7 @@
                     .onCommitted(x => { this.nsRequest.committed(); })
                     .onExecuted(x => {
                         this.nsRequest.executed();
-                        store.SCPs[MADRecNetwork]
+                        store.SCPs[MADRecCluster]
                             .sendTx("madrec", "request-access", "madrec-request-access", { role: "participant" })
                             .onError(x => { this.nsRequest.failed(x, true); })
                             .onAcknowledged(x => { this.nsRequest.acknowledged(); })
@@ -596,7 +596,7 @@
         methods: {
             getMembers() {
                 this.ns.start("Updating members list", true);
-                store.SCPs[MADRecNetwork]
+                store.SCPs[MADRecCluster]
                     .sendQuery("madrec", "get-members", "madrec-get-members")
                     .onError(x => { this.ns.failed(x, true); })
                     .onResult(x => {
@@ -624,7 +624,7 @@
             vote(status, cooptionId) {
                 let args = { status: status, cooptionId: cooptionId };
                 this.ns.start("Registering your vote", true);
-                store.SCPs[MADRecNetwork]
+                store.SCPs[MADRecCluster]
                     .sendTx("madrec", "coopt", "madrec-coopt", args)
                     .onError(x => { this.ns.failed(x, true); })
                     .onAcknowledged(x => { this.ns.acknowledged(); })
@@ -694,7 +694,7 @@
                 }
 
                 this.nsPut.start();
-                store.SCPs[MADRecNetwork]
+                store.SCPs[MADRecCluster]
                     .sendTx("madrec", "put", "madrec-single-put", args)
                     .onError(x => { this.nsPut.failed(x, true); })
                     .onAcknowledged(x => { this.nsPut.acknowledged(); })
@@ -719,7 +719,7 @@
                     }
                 }
                 this.nsGet.start(warning, warning != "");
-                store.SCPs[MADRecNetwork]
+                store.SCPs[MADRecCluster]
                     .sendQuery("madrec", "get", "madrec-single-get", { [MADRec.lei.name]: lei, subscribe: true })
                     .onError(x => { this.nsGet.failed(x, true); })
                     .onResult(x => {
@@ -912,7 +912,7 @@
                     if(hashOpt < 3) MADRecUtils.verifyData(leiBuff[i][MADRec.lei.name], leiBuff[i]); // verify does transform
                     args.push(await MADRecUtils.rowToJson(leiBuff[i], hashOpt));
                 }
-                store.SCPs[MADRecNetwork]
+                store.SCPs[MADRecCluster]
                     .sendTx("madrec", "put-many", "madrec-multi-put-" + blockId, args)
                     .onError(x => {
                         this.updateUploadBlockState(blockId, "failed", x);
@@ -1069,7 +1069,7 @@
         },
         beforeMount: function() {
             this.nsUserReport.start("Loading ...", true);
-            store.SCPs[MADRecNetwork]
+            store.SCPs[MADRecCluster]
                 .sendQuery("madrec", "get-report", "madrec-get-report-user")
                 .onError(x => {
                     this.nsUserReport.failed(x, true);
@@ -1085,7 +1085,7 @@
                 });
 
             this.nsConsortiumReport.start("Loading ...", true);
-            store.SCPs[MADRecNetwork]
+            store.SCPs[MADRecCluster]
                 .sendQuery("madrec", "get-report-consortium", "madrec-get-report-consortium")
                 .onError(x => {
                     this.nsConsortiumReport.failed(x, true);
@@ -1221,7 +1221,7 @@
             },
             downloadNextBlock() {
                 this.download.msg = "Streaming ... " + this.download.cursor + "/" + (this.download.cursor + this.download.step);
-                store.SCPs[MADRecNetwork]
+                store.SCPs[MADRecCluster]
                     .sendQuery("madrec", "get-leis", "madrec-get-leis", { cursor: this.download.cursor, maxLEIs: this.download.step })
                     .onError(x => {
                         if(this.download.stopped) return;

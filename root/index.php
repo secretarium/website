@@ -738,7 +738,7 @@
 	</script>
 
 	<script type="text/x-template" id="sec-identity">
-		<div class="container fixed-center mw-md">
+		<div class="container fixed-center mw-md" v-if="ready">
 			<div class="card card-sec mw-md border-0">
 				<div class="card-header">
 					<h4>Entrust your secrets with Secretarium</h4>
@@ -753,6 +753,12 @@
 						<button class="btn btn-sec" @click.prevent="start">Start</button>
 					</div>
 					<div v-else>
+						<div class="alert alert-warning alert-dismissible fade show mb-4" role="alert" v-if="errorMsg.length">
+							<strong>Error:</strong> unable to refresh data below.
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
 						<div class="py-2">
 							<h6 class="card-title" :class="{'mb-0':identityInfo.updated}"
 								data-toggle="collapse" data-target="#sec-identity-me-collapse"
@@ -862,15 +868,24 @@
 		</div>
 	</script>
 	<script type="text/x-template" id="sec-demo-loader">
-		<div class="container fixed-center mw-md" v-if="msg.length">
+		<div class="container fixed-center mw-md" v-if="state.length">
 			<div class="card card-sec mw-md border-0">
 				<div class="card-header">
 					<h4>Entrust your secrets with Secretarium</h4>
 					<p class="mb-0">Access to the most privacy-respecting apps in the industry</p>
 				</div>
 				<div class="card-body">
-					<p class="card-text">
-						{{msg}}
+					<p v-if="state=='loading'" class="card-text">
+                    	<i class="fas fa-hourglass-start text-warning fa-fw mr-2"></i>
+						Loading {{dcapp.display}} and its dependencies...
+					</p>
+					<p v-else-if="state=='loaded'" class="card-text">
+						<i class="fas fa-check text-success fa-fw mr-2"></i>
+						{{dcapp.display}} and its dependencies have been loaded.
+					</p>
+					<p v-else-if="state=='error'" class="card-text">
+                    	<i class="fas fa-exclamation-circle text-primary fa-fw mr-2"></i>
+						Error: unable to load {{dcapp.display}} or one of its dependencies.
 					</p>
 				</div>
 			</div>
@@ -884,7 +899,7 @@
 					<p class="mb-0">Access to the most privacy-respecting apps in the industry</p>
 				</div>
 				<div class="card-body">
-					<div class="py-2">
+					<div class="py-2" v-if="dcapp">
 						<h6 class="card-title mb-3">Connect to "{{dcapp.display}}"</h6>
 						<p class="card-text">
 							Please choose the node you would like to connect to
@@ -893,7 +908,7 @@
 							<div class="form-row">
 								<div class="col-sm">
 									<select id="id-connect" class="form-control">
-										<option v-for="(g, i) in dcapp.gateways" :value="i">{{g.name}}</option>
+										<option v-for="(g, i) in gateways" :value="i">{{g.name}}</option>
 									</select>
 								</div>
 								<div class="col-sm-auto mt-3 mt-sm-0">
@@ -903,6 +918,12 @@
 							</div>
 							<sec-notif-state :state="connectionNs.data" class="mt-2 d-none d-sm-block"></sec-notif-state>
 						</form>
+					</div>
+					<div class="py-2" v-else>
+						<h6 class="card-title mb-3">Unknown App "{{name}}"</h6>
+						<p class="card-text">
+							Please choose an App from <router-link class="btn-link text-sec" to="/demos" tag="a">the menu</router-link>.
+						</p>
 					</div>
 				</div>
 			</div>
@@ -931,6 +952,7 @@
 				isPresentationPages: window.location.pathname == "/",
 				isLogoPage: window.location.pathname == "/" && (window.location.hash.length == 0 || window.location.hash == "#welcome"),
 				SCPs: {},
+				clusters: {},
 				dcapps: {}
 			},
 			alerts = [],
@@ -1335,9 +1357,23 @@
 			template: '#sec-identity',
 			data: () => {
 				return {
+					ready: false,
 					started: false,
+					errorMsg: "",
 					identityInfo: { updated: false, ns: new notifState() },
 					personalrecord: { updated: false },
+				}
+			},
+			created() {
+				if(store.user.ECDSA == null)
+					router.push("/key"); // key not loaded yet
+				else if(!store.SCPs[identityNetwork])
+					router.push("/connect/me"); // not connected yet
+				else {
+					this.ready = true;
+					store.SCPs[identityNetwork].sendQuery("identity", "get", "identity-get")
+						.onError(x => { this.errorMsg = x; })
+						.onResult(x => { Vue.set(store.user.dcapps.identity, "data", x); })
 				}
 			},
 			computed: {
@@ -1412,7 +1448,6 @@
 						.onExecuted(x => {
 							this.verifyNs.executed();
 							store.SCPs[identityNetwork].sendQuery("identity", "get", "identity-get")
-								.onResult(x => { Vue.set(store.user.dcapps.identity, "data", x); })
 								.onError(x => { this.verifyNs.failed(x, true); })
 								.onResult(x => {
 									if(x.personalRecords[name].verified)
@@ -1433,46 +1468,41 @@
 				}
 			},
 			created() {
-				if(Object.keys(store.dcapps).length == 0) {
-					return $.getJSON("/dcapps-demo/")
-						.done(async x => {
-							for (var name in x) { x[name].id = await sec.utils.hashBase64(name); }
-							Vue.set(store, "dcapps", x);
-						})
-						.fail((j, t, e) => { this.loaderMsg = "Could not load the demo applications list: " + e; });
-				}
+				loadDcappsList()
+					.catch(e => { this.loaderMsg = "Could not load the demo applications list: " + e; });
 			}
 		});
 		const DemoLoader = Vue.component('sec-demo-loader', {
 			template: '#sec-demo-loader',
 			props: ["name"],
-			data: () => { return { msg: "" }},
+			data: () => { return { state: "" }},
 			computed: {
 				dcapp() { return store.dcapps[this.name]; }
 			},
 			created() {
 				if(store.user.ECDSA == null)
 					router.push("/key"); // key not loaded yet
-				else if(!this.dcapp || !store.SCPs[this.dcapp.network])
+				else if(!this.dcapp || !store.SCPs[this.dcapp.cluster])
 					router.push("/connect/" + this.name); // not connected yet
 				else {
 					if(!this.dcapp.loaded) { // we need to load the app code
-						this.msg = "Loading " + this.name + " and its dependencies..."
+						this.state = "loading";
 						if(this.dcapp.ui) {
 							let loadViews = () => {
 								$.get(this.dcapp.ui.src)
 									.done(data => {
 										$("body").append(data);
 										this.dcapp.loaded = true;
-										router.push("/" + this.name);
+										this.state = "loaded";
+										setTimeout(() => { router.push("/" + this.name); }, 1500);
 									})
-									.fail((j, t, e) => { this.msg = "Error: unable to load " + this.name + ": " + e });
+									.fail((j, t, e) => { this.state = "error"; });
 							}
 							if(this.dcapp.ui.require) {
 								let p = this.dcapp.ui.require.map(x => { return loadScript(x.name, x.src); });
 								Promise.all(p)
 									.then(loadViews)
-									.catch(e => { this.msg = "Error: unable to load " + this.name + " or one of its dependency"; })
+									.catch(e => { this.state = "error"; })
 							} else {
 								loadViews();
 							}
@@ -1492,18 +1522,21 @@
 					connectionNs: new notifState()
 				}
 			},
-			beforeRouteEnter(to, from, next) { next(self => { self.referrer = {...from}; }); },
-			created() { if(!store.dcapps[this.name]) router.push("/demos"); },
+			beforeRouteEnter(to, from, next) {
+				loadDcappsList()
+					.then(() => { next(self => { self.referrer = {...from}; }); })
+					.catch(e => { router.push("/"); /* unknown app */ });
+			},
 			mounted() { $('#id-btn-connect').focus(); },
 			computed: {
-				dcapp() { return store.dcapps[this.name] || {}; }
+				dcapp() { return store.dcapps[this.name]; },
+				gateways() { let a = this.dcapp, x = a && store.clusters[a.cluster]; return x ? x.gateways : []; }
 			},
 			methods: {
 				connect() {
-					let x = $("#id-connect").val(),
-						gateway = this.dcapp.gateways[x];
+					let x = $("#id-connect").val();
 					this.connectionNs.processing("Connecting...", true);
-					this.$root.connect(this.dcapp, gateway.endpoint)
+					this.$root.connect(this.dcapp, this.gateways[x].endpoint)
 						.then(() => { router.push(this.referrer); })
 						.catch((e) => { this.connectionNs.failed(e, true); });
 				}
@@ -1526,6 +1559,7 @@
 				{ path: '/demos', component: DemoApps },
 				{ path: '/demo/:name', component: DemoLoader, name: 'demo-loader', props: true },
 				{ path: '/connect/:name', component: Connect, name: 'connect', props: true },
+				{ path: '*', redirect: '/' },
 			]
 		});
 		router.beforeEach((to, from, next) => {
@@ -1576,11 +1610,11 @@
 					store.user.ECDSAPubHex = this.$root.keysManager.getPublicKeyHex(key, " ").toUpperCase();
 				},
 				retryConnection(dcapp) {
-					let scp = store.SCPs[dcapp.network];
+					let scp = store.SCPs[dcapp.cluster];
 					if(scp.securityState < 2)
 						return; // already connected or connecting
 
-					let connection = this.connections[dcapp.network];
+					let connection = this.connections[dcapp.cluster];
 					if(!connection)
 						return; // connection never succeeded
 					connection.retrying = true;
@@ -1602,9 +1636,9 @@
 					if(store.user.ECDSA == null)
 						throw "User key not loaded";
 					if(endpoint == "")
-						endpoint = dcapp.gateways[0].endpoint;
+						endpoint = store.clusters[dcapp.cluster].gateways[0].endpoint;
 
-					let connection = this.connections[dcapp.network];
+					let connection = this.connections[dcapp.cluster];
 					if(!connection) {
 						connection = {
 							endpoint: endpoint, lastState: 0, timer: null,
@@ -1612,9 +1646,9 @@
 						};
 					}
 
-					let scp = store.SCPs[dcapp.network];
+					let scp = store.SCPs[dcapp.cluster];
 					if(!scp) {
-						scp = Vue.set(store.SCPs, dcapp.network, new secretarium.scp());
+						scp = Vue.set(store.SCPs, dcapp.cluster, new secretarium.scp());
 					} else {
 						if (scp.socket.state < 2 && scp.securityState < 3)
 							return true;
@@ -1639,20 +1673,20 @@
 								connection.retrying = false;
 								connection.retryingMsg = "";
 								connection.retryFailures = 0;
-								Vue.set(this.connections, dcapp.network, connection);
+								Vue.set(this.connections, dcapp.cluster, connection);
 								resolve();
 							})
 							.catch(e => { reject(e); });
 					});
 				},
 				disconnect(dcapp) {
-					if(store.SCPs[dcapp.network]) {
-						store.SCPs[dcapp.network].close();
-						Vue.delete(store.SCPs, dcapp.network);
+					if(store.SCPs[dcapp.cluster]) {
+						store.SCPs[dcapp.cluster].close();
+						Vue.delete(store.SCPs, dcapp.cluster);
 					}
-					if(this.connections[dcapp.network]) {
-						clearTimeout(this.connections[dcapp.network].timer);
-						Vue.delete(this.connections, dcapp.network);
+					if(this.connections[dcapp.cluster]) {
+						clearTimeout(this.connections[dcapp.cluster].timer);
+						Vue.delete(this.connections, dcapp.cluster);
 					}
 				},
 				disconnectAll() {
@@ -1686,6 +1720,22 @@
 				script.onerror = () => { reject(); };
 				script.src = src;
 				try { document.head.appendChild(script); } catch (e) { reject(e); }
+			});
+		}
+		function loadDcappsList() {
+			return new Promise((resolve, reject) => {
+				if(Object.keys(store.dcapps).length) {
+					resolve();
+					return;
+				}
+				return $.getJSON("/dcapps-demo/")
+					.done(async x => {
+						for (var name in x.dcapps) { x.dcapps[name].id = await sec.utils.hashBase64(name); }
+						Vue.set(store, "dcapps", x.dcapps);
+						Vue.set(store, "clusters", x.clusters);
+						resolve();
+					})
+					.fail((j, t, e) => { reject(e) });
 			});
 		}
 		$(function() {
