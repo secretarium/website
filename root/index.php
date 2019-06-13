@@ -809,33 +809,37 @@
 			<label :for="'id-pr-'+name">Your {{name}}</label>
 			<div class="form-row">
 				<div class="col-sm">
-					<input type="text" class="form-control" :class="{'border-right-0':record.verified}" :id="'id-pr-'+name"
-						:aria-describedby="'id-pr-help-'+name" :placeholder="placeholder" :value="record.value" required>
-					<div v-if="record.verified" class="input-group-append">
-						<span class="input-group-text bg-white">
-							<i  class="fas fa-check-circle text-primary"></i>
-						</span>
+					<div class="input-group">
+						<input type="text" class="form-control" :class="{'border-right-0':record.verified}" :id="'id-pr-'+name"
+							:aria-describedby="'id-pr-help-'+name" :placeholder="placeholder" :value="record.value" required>
+						<div v-if="record.verified" class="input-group-append">
+							<span class="input-group-text bg-white">
+								<i  class="fas fa-check-circle text-primary"></i>
+							</span>
+						</div>
 					</div>
 					<small v-if="help" :id="'id-pr-help-'+name" class="form-text text-muted">{{help}}</small>
 				</div>
 				<div class="col-sm-auto mt-3 mt-sm-0">
-					<button type="button" class="btn btn-sec" @click.prevent="send">Send {{newCode?'new':''}} security code</button>
+					<button type="button" class="btn btn-sec" @click.prevent="send">Send {{updated?'new':''}} security code</button>
 					<sec-notif-state :state="sendCodeNs.data" class="pl-3 d-sm-none"></sec-notif-state>
 				</div>
 			</div>
 			<sec-notif-state :state="sendCodeNs.data" class="mt-2 d-none d-sm-block"></sec-notif-state>
-			<div v-if="newCode" class="form-row mt-3">
-				<div class="col-sm-4">
-					<label :for="'id-pr-code-'+name" class="sr-only">Security code</label>
-					<input type="text" class="form-control" :id="'id-pr-code-'+name" placeholder="security code" required>
+			<div v-if="updated">
+				<div v-if="!record.verified" class="form-row mt-2 mb-4">
+					<div class="col-sm-4">
+						<label :for="'id-pr-code-'+name" class="sr-only">Security code</label>
+						<input type="text" class="form-control" :id="'id-pr-code-'+name" placeholder="security code" required>
+					</div>
+					<div class="col-sm-8">
+						<button type="button" class="btn btn-sec mr-3" @click.prevent="verify">Verify</button>
+						<sec-notif-state :state="verifyNs.data"></sec-notif-state>
+					</div>
 				</div>
-				<div class="col-sm-8">
-					<button type="button" class="btn btn-sec mr-3" @click.prevent="verify">Verify</button>
-					<sec-notif-state :state="verifyNs.data"></sec-notif-state>
+				<div v-else class="mt-2 mb-4">
+					<p class="card-text pt-2">Your {{name}} was successfully verified</p>
 				</div>
-			</div>
-			<div v-else-if="record.verified" class="mt-3">
-				<p class="card-text pt-2">Your {{name}} was successfully verified</p>
 			</div>
 		</form>
 	</script>
@@ -1379,7 +1383,7 @@
 			computed: {
 				firstname() { return store.user.dcapps.identity.data.firstname || ""; },
 				lastname() { return store.user.dcapps.identity.data.lastname || ""; },
-				isBlankProfile() { return !this.started && this.firstname != "" && this.lastname != ""; }
+				isBlankProfile() { return !this.started && this.firstname == ""; }
 			},
 			methods: {
 				start() { this.started = true; },
@@ -1405,18 +1409,19 @@
 			props: ["name", "placeholder", "help"],
 			data: () => {
 				return {
+					updated: false,
 					sendCodeNs: new notifState(2),
 					verifyNs: new notifState(2)
 				}
 			},
 			computed: {
-				record() { return store.user.dcapps.identity.data.personalRecords[this.name] || {}; },
-				newCode() { let x = this.record; return x.value && x.value.length > 0 && x.verified !== true; }
+				prs() { return store.user.dcapps.identity.data.personalRecords; },
+				record() { return this.prs[this.name] || {}; }
 			},
 			methods: {
 				send() {
 					let name = this.name, value = $('#id-pr-' + name).val(), args = { name: name, value: value };
-					this.sendCodeNs.start();
+					this.sendCodeNs.start("Registering...", true);
 					store.SCPs[identityNetwork]
 						.sendTx("identity", "set-personal-record", "identity-set-personal-record-" + name, args)
 						.onError(x => { this.sendCodeNs.failed(x, true); })
@@ -1424,21 +1429,22 @@
 						.onProposed(x => { this.sendCodeNs.proposed(); })
 						.onCommitted(x => { this.sendCodeNs.committed(); })
 						.onExecuted(x => {
-							this.sendCodeNs.executed();
+							this.updated = true;
+							Vue.set(this.prs, name, { value: value, verified: false });
+							this.sendCodeNs.executed("Sending security challenge...", true);
 							let cmd = "send-personal-record-challenge";
 							store.SCPs[identityNetwork]
 								.sendQuery("identity", cmd, "identity-" + cmd + "-" + name, { name: name })
 								.onError(x => { this.sendCodeNs.failed(x, true); })
 								.onResult(x => {
-									this.sendCodeNs.executed().hide();
-									Vue.set(store.user.dcapps.identity.data.personalRecords, name, { value: value, verified: false });
+									this.sendCodeNs.executed("Success", true).hide();
 								});
 						});
 				},
 				verify() {
 					let name = this.name, code = $('#id-pr-code-' + name).val().toUpperCase(),
 						args = { name: name, code: code };
-					this.verifyNs.start();
+					this.verifyNs.start("Verifying...", true);
 					store.SCPs[identityNetwork]
 						.sendTx("identity", "verify-personal-record", "identity-verify-personal-record-" + name, args)
 						.onError(x => { this.verifyNs.failed(x, true); })
@@ -1446,12 +1452,14 @@
 						.onProposed(x => { this.verifyNs.proposed(); })
 						.onCommitted(x => { this.verifyNs.committed(); })
 						.onExecuted(x => {
-							this.verifyNs.executed();
+							this.verifyNs.executed("Updating record...");
 							store.SCPs[identityNetwork].sendQuery("identity", "get", "identity-get")
 								.onError(x => { this.verifyNs.failed(x, true); })
 								.onResult(x => {
-									if(x.personalRecords[name].verified)
-										this.verifyNs.executed().hide();
+									if(x.personalRecords[name].verified) {
+										Vue.set(this.prs[this.name], "verified", true);
+										this.verifyNs.executed("Success", true).hide();
+									}
 									else
 										this.verifyNs.failed("invalid security code", true);
 								});
