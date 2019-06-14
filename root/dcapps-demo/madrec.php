@@ -1509,7 +1509,7 @@
     router.addRoutes([
         { path: '/madrec', component: MADRecApp,
             children: [
-                { path: '', redirect: 'single-lei' },
+                { path: '', redirect: 'members' },
                 { path: 'members', component: MADRecAppMembers },
                 { path: 'single-lei', component: MADRecAppSingleLEI, meta: { dcappName: "MADRec" } },
                 { path: 'multi-lei', component: MADRecAppMultiLEI },

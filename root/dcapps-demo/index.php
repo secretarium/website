@@ -9,7 +9,6 @@
 	"clusters": {
 		"sec-demo-1": {
 			"gateways": [
-				{ "endpoint": "wss://127.0.0.1:5428/", "name": "TEST LOCAL" },
 				{ "endpoint": "wss://ovh1.node.secretarium.org:443/", "name": "DEMO (OVH UK)" },
 				{ "endpoint": "wss://ovh2.node.secretarium.org:443/", "name": "DEMO (OVH DE)" },
 				{ "endpoint": "wss://ovh3.node.secretarium.org:443/", "name": "DEMO (OVH FR-1)" },
