@@ -30,7 +30,7 @@
 		<div id="drop-area"></div>
 		<header>
 			<nav class="navbar p-0" :class="{'logo-page':store.isLogoPage, 'fixed-top':store.isPresentationPages}">
-				<div id="menu" class="container-fluid py-2" :class="{container:!store.isLogoPage}">
+				<div id="menu" :class="{'container-fluid':store.isLogoPage, container:!store.isLogoPage}" class="py-2">
 					<router-link v-if="!store.isPresentationPages" to="/#welcome" class="navbar-brand logo"></router-link>
 					<a v-else class="navbar-brand logo" href="#welcome"></a>
 					<ul id="presentation-menu" class="navbar-nav flex-row d-none d-sm-flex">
@@ -821,24 +821,21 @@
 					<small v-if="help" :id="'id-pr-help-'+name" class="form-text text-muted">{{help}}</small>
 				</div>
 				<div class="col-sm-auto mt-3 mt-sm-0">
-					<button type="button" class="btn btn-sec" @click.prevent="send">Send {{updated?'new':''}} security code</button>
+					<button type="button" class="btn btn-sec" @click.prevent="send">
+						Send {{updated||record.verified?'new':''}} security code
+					</button>
 					<sec-notif-state :state="sendCodeNs.data" class="pl-3 d-sm-none"></sec-notif-state>
 				</div>
 			</div>
 			<sec-notif-state :state="sendCodeNs.data" class="mt-2 d-none d-sm-block"></sec-notif-state>
-			<div v-if="updated">
-				<div v-if="!record.verified" class="form-row mt-2 mb-4">
-					<div class="col-sm-4">
-						<label :for="'id-pr-code-'+name" class="sr-only">Security code</label>
-						<input type="text" class="form-control" :id="'id-pr-code-'+name" placeholder="security code" required>
-					</div>
-					<div class="col-sm-8">
-						<button type="button" class="btn btn-sec mr-3" @click.prevent="verify">Verify</button>
-						<sec-notif-state :state="verifyNs.data"></sec-notif-state>
-					</div>
+			<div v-if="updated&&!record.verified" class="form-row mt-2 mb-4">
+				<div class="col-sm-4">
+					<label :for="'id-pr-code-'+name" class="sr-only">Security code</label>
+					<input type="text" class="form-control" :id="'id-pr-code-'+name" placeholder="security code" required>
 				</div>
-				<div v-else class="mt-2 mb-4">
-					<p class="card-text pt-2">Your {{name}} was successfully verified</p>
+				<div class="col-sm-8">
+					<button type="button" class="btn btn-sec mr-3" @click.prevent="verify">Verify</button>
+					<sec-notif-state :state="verifyNs.data"></sec-notif-state>
 				</div>
 			</div>
 		</form>
@@ -1458,7 +1455,7 @@
 								.onResult(x => {
 									if(x.personalRecords[name].verified) {
 										Vue.set(this.prs[this.name], "verified", true);
-										this.verifyNs.executed("Success", true).hide();
+										this.verifyNs.executed("Security code is correct", true).hide();
 									}
 									else
 										this.verifyNs.failed("invalid security code", true);
@@ -1502,7 +1499,7 @@
 										$("body").append(data);
 										this.dcapp.loaded = true;
 										this.state = "loaded";
-										setTimeout(() => { router.push("/" + this.name); }, 1500);
+										setTimeout(() => { router.push("/" + this.name); }, 1000);
 									})
 									.fail((j, t, e) => { this.state = "error"; });
 							}

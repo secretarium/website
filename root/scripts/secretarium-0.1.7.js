@@ -151,11 +151,9 @@ var sec, secretarium = sec = {
                     .on("close", e => { self._updateState(2); });
                     let userPubExp = await window.crypto.subtle.exportKey("raw", userKey.publicKey);
                     self.security.client.ecdsaPubRaw = new Uint8Array(userPubExp).subarray(1);
-                    console.debug("client ECDSA pub key:" + Array.apply([], self.security.client.ecdsaPubRaw).join(","));
                     self.security.client.ecdh = await window.crypto.subtle.generateKey({ name: "ECDH", namedCurve: "P-256" }, true, ["deriveBits"]);
                     let ecdhPubExp = await window.crypto.subtle.exportKey("raw", self.security.client.ecdh.publicKey);
                     self.security.client.ecdhPubRaw = new Uint8Array(ecdhPubExp).subarray(1);
-                    console.debug("client ephemereal ECDH pub key:" + Array.apply([], self.security.client.ecdhPubRaw).join(","));
                     return new Promise((resolve, reject) => {
                         let clientHello = self.security.client.ecdhPubRaw;
                         s.on("message", x => { resolve(x); }).send(clientHello);
@@ -198,8 +196,6 @@ var sec, secretarium = sec = {
                         key: key, iv: symmetricKey.subarray(16),
                         cryptokey: await window.crypto.subtle.importKey("raw", key, { name: "AES-CTR" }, false, ["encrypt", "decrypt"])
                     }
-                    console.debug("aesctr.key:" + Array.apply([], self.aesctr.key).join(","));
-                    console.debug("aesctr.iv:" + Array.apply([], self.aesctr.iv).join(","));
 
                     let nonce = sec.utils.getRandomUint8Array(32),
                         signedNonce = new Uint8Array(await sec.utils.ecdsa.sign(nonce, userKey.privateKey)),
@@ -209,9 +205,6 @@ var sec, secretarium = sec = {
                         iv = self.aesctr.iv.secIncrementBy(ivOffset),
                         encryptedClientProofOfIdentity = await window.crypto.subtle.encrypt(
                             { name: "AES-CTR", counter: iv, length: 128 }, self.aesctr.cryptokey, clientProofOfIdentity)
-                    console.debug("ivOffset:" + Array.apply([], ivOffset).join(","));
-                    console.debug("ivIncremented:" + Array.apply([], iv).join(","));
-                    console.debug("clientProofOfIdentity:" + Array.apply([], clientProofOfIdentity).join(","));
                     return new Promise((resolve, reject) => {
                         let m = sec.utils.concatUint8Arrays([ivOffset, new Uint8Array(encryptedClientProofOfIdentity)]);
                         s.on("message", x => { resolve(x); }).send(m);

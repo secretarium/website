@@ -1,103 +1,129 @@
+<style>
+    #madrec-app .madrec-pie-report .card-header{padding:.5rem .25rem .5rem .25rem !important}
+    #madrec-app .madrec-pie-report .card-body>div{font-size:0.6em;display:inline-block;width:125px;vertical-align:top;white-space:nowrap;overflow:hidden}
+    #madrec-app .madrec-pie-report .card-body>div span.title{min-width:2.4rem;display:inline-block}
+    #madrec-app .form-inline{margin-bottom:0.25em}
+    #madrec-app .form-inline label{display:inline-block;text-align:left;min-width:15rem}
+    #madrec-app .form-inline .form-control{height:calc(1.5em + .3rem + 2px);padding:0 .75rem;min-width:15rem}
+    #madrec-app .form-inline select{width:auto}
+</style>
+
 <script type="text/x-template" id="sec-madrec">
-    <div class="container fixed-center">
-        <div class="card card-sec border-0" v-if="$root.store.user.dcapps.madrec.data.accessStatus=='denied'">
+    <div id="madrec-app" :class="{'container fixed-center':status!='granted'}">
+        <div v-if="status=='granted'">
+            <div class="app-header">
+                <div class="container">
+                    <nav class="nav nav-sec">
+                        <router-link to="/madrec/members" class="nav-link" active-class="active">
+                            <i class="fas fa-user-cog fa-fw mr-2"></i><span class="d-none d-sm-inline">Members</span>
+                            <span v-if="requestingMembers>0" class="badge badge-info ml-1 badge-top">{{requestingMembers}}</span>
+                        </router-link>
+                        <router-link to="/madrec/single-lei" class="nav-link" active-class="active">
+                            <i class="fas fa-chart-pie fa-fw mr-2"></i><span class="d-none d-sm-inline">Single LEI</span>
+                        </router-link>
+                        <router-link to="/madrec/multi-lei" class="nav-link" active-class="active">
+                            <i class="fas fa-file-upload fa-fw mr-2"></i><span class="d-none d-sm-inline">Multi LEI</span>
+                        </router-link>
+                        <router-link to="/madrec/reports" class="nav-link" active-class="active">
+                            <i class="fas fa-chart-bar fa-fw mr-2"></i><span class="d-none d-sm-inline">Reports</span>
+                        </router-link>
+                    </nav>
+                </div>
+            </div>
+            <div class="app-body container mt-4">
+                <router-view></router-view>
+            </div>
+        </div>
+        <div v-else class="card card-sec border-0">
             <div class="card-header">
                 <h4><i class="fas fa-chart-pie fa-fw mr-2 text-sec"></i>MADRec DCApp</h4>
                 <p class="mb-0">Collectively measure reference data quality</p>
             </div>
             <div class="card-body">
-                <div class="py-2">
-                    <h6 class="card-title">Restricted access</h6>
-                    <p class="card-text">This DCApp is private and requires new members to be co-opted.</p>
-                </div>
-                <hr class="my-3 sec" />
-                <div class="py-2">
-                    <h6 class="card-title">Identification required</h6>
-                    <p class="card-text">
-                        Current members of the MADRec app need minimal information about you to grant you access.<br/>
-                        Please grant MADRec access to the personal information listed below.
-                    </p>
-                </div>
-                <hr class="my-3 sec" />
-                <div class="py-2">
-                    <div v-if="!records.hasEnough">
-                        <p class="card-text">MADRec would like to access to some of your personal records that you haven't filled yet</p>
-                        <ul class="list-group" style="max-width: 400px;">
-                            <li class="list-group-item">
-                                <i v-if="!records.hasFirstname" class="fas fa-exclamation-triangle fa-fw mr-2 text-danger"></i>
-                                <i v-else class="fas fa-check fa-fw mr-2 text-primary"></i>
-                                Firstname
-                            </li>
-                            <li class="list-group-item">
-                                <i v-if="!records.hasLastname" class="fas fa-exclamation-triangle fa-fw mr-2 text-danger"></i>
-                                <i v-else class="fas fa-check fa-fw mr-2 text-primary"></i>
-                                Lastname
-                            </li>
-                            <li class="list-group-item">
-                                <i v-if="!records.hasPhoneVerified&&!records.hasEmailVerified" class="fas fa-exclamation-triangle fa-fw mr-2 text-danger"></i>
-                                <i v-else class="fas fa-check fa-fw mr-2 text-primary"></i>
-                                Verified phone and/or email
-                            </li>
-                        </ul>
-                        <router-link to="/me" class="btn btn-sec mt-4" tag="button">Update my profile</router-link>
-                    </div>
-                    <div v-else>
-                        <p class="card-text">MADRec would like to access to some of your personal records</p>
-                        <div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="firstname" id="madrec_ra_firstname" checked="checked" disabled>
-                                <label class="form-check-label" for="madrec_ra_firstname">First name</label>
-                            </div>
-                            <div class="form-check mt-1">
-                                <input class="form-check-input" type="checkbox" value="lastname" id="madrec_ra_lastname" checked="checked" disabled>
-                                <label class="form-check-label" for="madrec_ra_lastname">Last name</label>
-                            </div>
-                            <div class="form-check mt-1">
-                                <input class="form-check-input" type="checkbox" value="phone" id="madrec_ra_phone" :checked="records.hasPhoneVerified">
-                                <label class="form-check-label" for="madrec_ra_phone">
-                                    Phone <i v-if="records.hasPhoneVerified" class="fas fa-check-circle text-primary"></i>
-                                </label>
-                            </div>
-                            <div class="form-check mt-1">
-                                <input class="form-check-input" type="checkbox" value="email" id="madrec_ra_email" :checked="records.hasEmailVerified">
-                                <label class="form-check-label" for="madrec_ra_email">
-                                    Email <i v-if="records.hasEmailVerified" class="fas fa-check-circle text-primary"></i>
-                                </label>
-                            </div>
-                            <div class="mt-3">
-                                <button type="button" class="btn btn-sec" @click.prevent="requestAccess">Share personal records and request access</button>
-                                <sec-notif-state :state="nsRequest.data"></sec-notif-state>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card card-sec border-0 mb-4" v-else-if="$root.store.user.dcapps.madrec.data.accessStatus=='requested'">
-            <div class="card-header">
-                <h4><i class="fas fa-chart-pie fa-fw mr-2 text-sec"></i>Interract with MADRec</h4>
-                <p class="mb-0">Collectively measure reference data quality</p>
-            </div>
-            <div class="card-body">
-                <h6 class="card-title">Restricted access</h6>
-                <p class="card-text">Your request to join MADRec has been registered.</p>
-                <p class="card-text">Waiting for {{1-$root.store.user.dcapps.madrec.data.grants}} MADRec participant to grant you access.</p>
-            </div>
-        </div>
-        <div class="row" v-else-if="$root.store.user.dcapps.madrec.data.accessStatus=='granted'">
-            <div class="col-2">
-                <div class="list-group">
-                    <router-link :to="'/app/madrec/members'" class="list-group-item list-group-item-action" active-class="active"><i class="fas fa-user fa-fw mr-2"></i><span>Members</span><span v-if="requestingMembers > 0" class="badge badge-info ml-1 badge-top">{{requestingMembers}}</span></router-link>
-                    <router-link :to="'/app/madrec/single-lei'" class="list-group-item list-group-item-action" active-class="active"><i class="fas fa-chart-pie fa-fw mr-2"></i><span>Single LEI</span></router-link>
-                    <router-link :to="'/app/madrec/multi-lei'" class="list-group-item list-group-item-action" active-class="active"><i class="fas fa-file-upload fa-fw mr-2"></i><span>Multi LEI</span></router-link>
-                    <router-link :to="'/app/madrec/reports'" class="list-group-item list-group-item-action" active-class="active"><i class="fas fa-chart-bar fa-fw mr-2"></i><span>Reports</span></router-link>
-                </div>
-            </div>
-            <div class="col-10">
-                <router-view></router-view>
+                <sec-madrec-access-requested v-if="status=='requested'"></sec-madrec-access-requested>
+                <sec-madrec-access-denied v-else></sec-madrec-access-denied>
             </div>
         </div>
     </div>
+</script>
+
+<script type="text/x-template" id="sec-madrec-access-denied">
+    <div>
+        <div class="py-2">
+            <h6 class="card-title">Restricted access</h6>
+            <p class="card-text">This DCApp is private and requires new members to be co-opted.</p>
+        </div>
+        <hr class="my-3 sec" />
+        <div class="py-2">
+            <h6 class="card-title">Identification required</h6>
+            <p class="card-text">
+                Current members of the MADRec app need minimal information about you to grant you access.<br/>
+                Please grant MADRec access to the personal information listed below.
+            </p>
+        </div>
+        <hr class="my-3 sec" />
+        <div class="py-2">
+            <div v-if="!records.hasEnough">
+                <p class="card-text">MADRec would like to access to some of your personal records that you haven't filled yet</p>
+                <ul class="list-group" style="max-width: 400px;">
+                    <li class="list-group-item">
+                        <i v-if="!records.hasFirstname" class="fas fa-exclamation-triangle fa-fw mr-2 text-danger"></i>
+                        <i v-else class="fas fa-check fa-fw mr-2 text-primary"></i>
+                        Firstname
+                    </li>
+                    <li class="list-group-item">
+                        <i v-if="!records.hasLastname" class="fas fa-exclamation-triangle fa-fw mr-2 text-danger"></i>
+                        <i v-else class="fas fa-check fa-fw mr-2 text-primary"></i>
+                        Lastname
+                    </li>
+                    <li class="list-group-item">
+                        <i v-if="!records.hasPhoneVerified&&!records.hasEmailVerified" class="fas fa-exclamation-triangle fa-fw mr-2 text-danger"></i>
+                        <i v-else class="fas fa-check fa-fw mr-2 text-primary"></i>
+                        Verified phone and/or email
+                    </li>
+                </ul>
+                <router-link to="/me" class="btn btn-sec mt-4" tag="button">Update my profile</router-link>
+            </div>
+            <div v-else>
+                <p class="card-text">MADRec would like to access to some of your personal records</p>
+                <div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="firstname" id="madrec_ra_firstname" checked="checked" disabled>
+                        <label class="form-check-label" for="madrec_ra_firstname">First name</label>
+                    </div>
+                    <div class="form-check mt-1">
+                        <input class="form-check-input" type="checkbox" value="lastname" id="madrec_ra_lastname" checked="checked" disabled>
+                        <label class="form-check-label" for="madrec_ra_lastname">Last name</label>
+                    </div>
+                    <div class="form-check mt-1">
+                        <input class="form-check-input" type="checkbox" value="phone" id="madrec_ra_phone" :checked="records.hasPhoneVerified">
+                        <label class="form-check-label" for="madrec_ra_phone">
+                            Phone <i v-if="records.hasPhoneVerified" class="fas fa-check-circle text-primary"></i>
+                        </label>
+                    </div>
+                    <div class="form-check mt-1">
+                        <input class="form-check-input" type="checkbox" value="email" id="madrec_ra_email" :checked="records.hasEmailVerified">
+                        <label class="form-check-label" for="madrec_ra_email">
+                            Email <i v-if="records.hasEmailVerified" class="fas fa-check-circle text-primary"></i>
+                        </label>
+                    </div>
+                    <div class="mt-3">
+                        <button type="button" class="btn btn-sec" @click.prevent="requestAccess">Share personal records and request access</button>
+                        <sec-notif-state :state="nsRequest.data"></sec-notif-state>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/x-template" id="sec-madrec-access-requested">
+    <div class="py-2">
+        <h6 class="card-title">Restricted access</h6>
+        <p class="card-text">
+            Your request to join MADRec has been registered.<br />
+            Waiting for {{1-$root.store.user.dcapps.madrec.data.grants}} MADRec participant to grant you access.
+        </p>
     </div>
 </script>
 
@@ -107,46 +133,41 @@
             <h4><i class="fas fa-user fa-fw mr-2 text-sec"></i>MADRec members</h4>
         </div>
         <div class="card-body">
-            <h6 class="card-title">All MADRec members</h6>
-            <table class="table table-sm table-hover mt-3">
-                <thead>
-                    <tr>
-                        <th scope="col">Firstname</th>
-                        <th scope="col">Lastname</th>
-                        <th scope="col">Phone</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Status</th>
-                        <th scope="col"></th>
-                        <th scope="col"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="p in members">
-                        <td>
-                            {{p.firstname}}
-                        </td>
-                        <td>
-                            {{p.lastname}}
-                        </td>
-                        <td>
-                            {{p.phone}} <i v-if="p.phoneVerified" class="fas fa-check-circle text-primary"></i>
-                        </td>
-                        <td>
-                            {{p.email}} <i v-if="p.emailVerified" class="fas fa-check-circle text-primary"></i>
-                        </td>
-                        <td>
-                            {{p.status}} <span v-if="p.status=='requested'" class="badge badge-warning">{{p.grants}}</span>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-sec btn-sm" @click.prevent="vote('granted', p.cooptionId)" v-if="!p.isSelf&&p.vote!='granted'">Grant</button>
-                            <span v-if="p.isSelf">(you)</span>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-danger btn-sm" @click.prevent="vote('denied', p.cooptionId)" v-if="!p.isSelf&&p.vote!='denied'">Deny</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table table-sm table-hover table-sec mt-3">
+                    <thead>
+                        <tr>
+                            <th scope="col">Firstname</th>
+                            <th scope="col">Lastname</th>
+                            <th scope="col">Phone</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Role</th>
+                            <th scope="col">Status</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="p in members">
+                            <td>{{p.firstname}}</td>
+                            <td>{{p.lastname}}</td>
+                            <td>{{p.phone}} <i v-if="p.phoneVerified" class="fas fa-check-circle text-primary"></i></td>
+                            <td>{{p.email}} <i v-if="p.emailVerified" class="fas fa-check-circle text-primary"></i></td>
+                            <td>{{p.role}}</td>
+                            <td>{{p.status}} <span v-if="p.status=='requested'" class="badge badge-warning">{{p.grants}}</span></td>
+                            <td>
+                                <button type="button" class="btn btn-sec btn-sm"
+                                    @click.prevent="vote('granted', p.cooptionId)" v-if="!p.isSelf&&p.vote!='granted'">Grant</button>
+                                <span v-if="p.isSelf">(you)</span>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger btn-sm"
+                                    @click.prevent="vote('denied', p.cooptionId)" v-if="!p.isSelf&&p.vote!='denied'">Deny</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
             <sec-notif-state :state="ns.data"></sec-notif-state>
         </div>
     </div>
@@ -155,71 +176,86 @@
 <script type="text/x-template" id="sec-madrec-single-lei">
     <div class="card card-sec border-0">
         <div class="card-header">
-            <h4><i class="fas fa-chart-pie fa-fw mr-2 text-sec"></i>Single LEI report</h4>
+            <h4><i class="fas fa-chart-pie fa-fw mr-2 text-sec"></i>Single LEI</h4>
         </div>
         <div class="card-body">
-            <h6 class="card-title">Select an LEI</h6>
-            <div class="mt-2 form-inline form-madrec">
-                <label for="madrecSingleLei">{{lei.name}}</label>
-                <input type="text" class="form-control" id="madrecSingleLei" :placeholder="lei.name" :value="useSample?lei.sample:''">
-            </div>
-            <hr />
-            <h6 class="card-title">Fill fields values</h6>
-            <div v-for="(f, i) in fields" :key="f.name" class="form-inline form-madrec">
-                <label :for="'madrecSingle-'+i">{{f.name}}</label>
-                <input v-if="f.type=='text'" type="text" :id="'madrecSingle-'+i" :placeholder="f.name"
-                    :value="useSample?f.sample:''" class="form-control">
-                <select v-else-if="f.type=='list'" class="form-control" :id="'madrecSingle-'+i">
-                    <option value="-1"></option>
-                    <option v-for="(el, idx) in f.values" :value="idx" :selected="useSample&&f.sample==el">{{el}}</option>
-                </select>
-                <select v-else-if="f.type=='bool'" class="form-control" :id="'madrecSingle-'+i">
-                    <option value="-1"></option>
-                    <option v-for="(el, idx) in ['Y','N']" :value="idx" :selected="useSample&&f.sample==el">{{el}}</option>
-                </select>
-            </div>
-            <div class="mt-4 mb-2 form-inline form-madrec">
-                <label for="madrecSingleLei">Select one hashing options</label>
-                <select class="form-control" id="madrecSingleHashOpt">
-                    <option value="1">Do not hash</option>
-                    <option value="2" selected>Hash</option>
-                </select>
-            </div>
-            <div>
-                <div class="mt-3">
-                    <button type="button" class="btn btn-sec" @click.prevent="madrecPut">Contribute</button>
-                    <sec-notif-state :state="nsPut.data"></sec-notif-state>
-                </div>
-                <div class="mt-2 alert alert-warning alert-dismissible fade show" role="alert" v-if="warnings.length>0">
-                    <div v-for="warning in warnings" class="warning">{{warning}}</div>
-                    <button type="button" class="close" aria-label="Close" @click="warnings=[]">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+			<div class="py-2">
+                <div class="mt-2 form-inline form-sec">
+                    <label for="madrecSingleLei" style="font-weight: bold;">{{lei.name}}</label>
+                    <input type="text" class="form-control" id="madrecSingleLei" :placeholder="lei.name" :value="useSample?lei.sample:''">
                 </div>
             </div>
-            <div class="mt-4">
-                <hr />
-                <h6 class="card-title">LEI report</h6>
-                <div class="mt-2">
-                    <button type="button" class="btn btn-sec mr-3" @click.prevent="madrecGet">Get report</button>
-                    <sec-notif-state :state="nsGet.data"></sec-notif-state>
-                    <a v-if="exportableResults.length>0" class="btn btn-sec btn-sm float-right" :href="resultsExportUrl" download="single-LEI-report.json">Export</a>
-                </div>
-                <div class="madrec-pie-report card mt-3 mr-3" style="display: inline-block;" v-for="(item, name) in results" :key="name" >
-                    <div class="card-header text-center">{{name}}</div>
-                    <div class="card-body p-2" style="position:relative;">
-                        <pie-chart :data="item.groups" :colors="item.colors"></pie-chart>
-                        <div class="ml-1 mt-2">
-                            <div class="text-nowrap">Contrib: {{item.contribution}}</div>
-                            <div class="text-nowrap">Total: {{item.total}}</div>
-                            <div class="text-nowrap">
-                                <span :style="{ borderBottom: '4px solid ' + item.color }" style ="display: inline-block; line-height: 12px;">Group: {{item.groups[item.group]}}</span>
-                            </div>
-                            <div class="text-nowrap">Split: {{JSON.stringify(item.groups)}}</div>
+            <hr class="my-3 sec" />
+            <div class="py-2">
+				<h6 class="card-title" data-toggle="collapse" data-target="#sec-madrec-single-lei-put-collapse"
+					aria-expanded="true" aria-controls="sec-madrec-single-lei-put-collapse">
+					Update fields data
+					<i class="fas fa-chevron-down float-right"></i>
+				</h6>
+				<div class="mt-3 collapse" id="sec-madrec-single-lei-put-collapse">
+                    <div v-for="(f, i) in fields" :key="f.name" class="form-inline form-sec">
+                        <label :for="'madrecSingle-'+i">{{f.name}}</label>
+                        <input v-if="f.type=='text'" type="text" :id="'madrecSingle-'+i" :placeholder="f.name"
+                            :value="useSample?f.sample:''" class="form-control">
+                        <select v-else-if="f.type=='list'" class="form-control" :id="'madrecSingle-'+i">
+                            <option value="-1"></option>
+                            <option v-for="(el, idx) in f.values" :value="idx" :selected="useSample&&f.sample==el">{{el}}</option>
+                        </select>
+                        <select v-else-if="f.type=='bool'" class="form-control" :id="'madrecSingle-'+i">
+                            <option value="-1"></option>
+                            <option v-for="(el, idx) in ['Y','N']" :value="idx" :selected="useSample&&f.sample==el">{{el}}</option>
+                        </select>
+                    </div>
+                    <div class="mt-4 mb-2 form-inline form-sec">
+                        <label for="madrecSingleLei">Select one hashing options</label>
+                        <select class="form-control" id="madrecSingleHashOpt">
+                            <option value="1">Do not hash</option>
+                            <option value="2" selected>Hash</option>
+                        </select>
+                    </div>
+                    <div>
+                        <div class="mt-3">
+                            <button type="button" class="btn btn-sec mr-2" @click.prevent="madrecPut">Contribute</button>
+                            <sec-notif-state :state="nsPut.data"></sec-notif-state>
+                        </div>
+                        <div class="mt-2 alert alert-warning alert-dismissible fade show" role="alert" v-if="warnings.length>0">
+                            <div v-for="warning in warnings" class="warning">{{warning}}</div>
+                            <button type="button" class="close" aria-label="Close" @click="warnings=[]">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
                     </div>
-                    <div class="card-footer text-center p-1">
-                        {{item.report}}
+                </div>
+			</div>
+            <hr class="my-3 sec" />
+            <div class="py-2">
+				<h6 class="card-title" data-toggle="collapse" data-target="#sec-madrec-single-lei-get-collapse"
+					aria-expanded="true" aria-controls="sec-madrec-single-lei-get-collapse">
+					LEI quality benchmark
+					<i class="fas fa-chevron-down float-right"></i>
+				</h6>
+				<div class="mt-3 collapse" id="sec-madrec-single-lei-get-collapse">
+                    <div class="madrec-pie-report card mt-3 mr-3" style="display: inline-block;" v-for="(item, name) in results" :key="name" >
+                        <div class="card-header text-center">{{name}}</div>
+                        <div class="card-body p-2" style="position:relative;">
+                            <pie-chart :data="item.groups" :colors="item.colors"></pie-chart>
+                            <div class="ml-1 mt-2">
+                                <div class="text-nowrap">Contrib: {{item.contribution}}</div>
+                                <div class="text-nowrap">Total: {{item.total}}</div>
+                                <div class="text-nowrap">
+                                    <span :style="{ borderBottom: '4px solid ' + item.color }" style ="display: inline-block; line-height: 12px;">Group: {{item.groups[item.group]}}</span>
+                                </div>
+                                <div class="text-nowrap">Split: {{JSON.stringify(item.groups)}}</div>
+                            </div>
+                        </div>
+                        <div class="card-footer text-center p-1">
+                            {{item.report}}
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <a v-if="exportableResults.length>0" class="btn btn-sec btn-sm float-right" :href="resultsExportUrl" download="single-LEI-report.json">Export</a>
+                        <button type="button" class="btn btn-sec mr-3" @click.prevent="madrecGet">Refresh</button>
+                        <sec-notif-state :state="nsGet.data"></sec-notif-state>
                     </div>
                 </div>
             </div>
@@ -233,97 +269,106 @@
             <h4><i class="fas fa-file-upload fa-fw mr-2 text-sec"></i>Multi LEI report</h4>
         </div>
         <div class="card-body">
-            <h6 class="card-title">Push multiple LEIs to MADRec</h6>
-            <div class="alert alert-primary alert-dismissible fade show" role="alert" v-if="!hasFile">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <p>Please find the <a href="https://github.com/Secretarium/MADRec/wiki/Instructions#madrec" target="_blank">instructions</a> on Github.</P>
-                <?php if($is_test_env) { ?>
-                <p class="mb-0">Want to test ? Please use the samples:</p>
-                <a class="btn btn-sec btn-sm mt-1 mr-2" href="/downloads/sample.250.csv" download="sample.250.csv">250 LEIs</a>
-                <a class="btn btn-sec btn-sm mt-1 mr-2" href="/downloads/sample.20000.csv" download="sample.20000.csv">20k LEIs</a>
-                <a class="btn btn-sec btn-sm mt-1 mr-2" href="/downloads/sample.100000.csv" download="sample.100000.csv">100k LEIs</a>
-                <a class="btn btn-sec btn-sm mt-1 mr-2" href="/downloads/sample.500000.csv" download="sample.500000.csv">500k LEIs</a>
-                <a class="btn btn-sec btn-sm mt-1 mr-2" href="/downloads/sample.1325966.csv" download="sample.1325966.csv">1.3M+ LEIs</a>
-                <?php } ?>
+            <div v-if="!hasFile">
+                <div class="py-2">
+                    <h6 class="card-title">Instructions</h6>
+                    <p class="card-text">
+                        Please find the
+                        <a href="https://github.com/Secretarium/MADRec/wiki/Instructions#madrec"
+                            class="btn-link text-sec" target="_blank">instructions</a>
+                        on Github.
+                    </p>
+                </div>
+                <hr class="my-3 sec" />
+                <div class="py-2" v-if="$root.store.isTestEnv">
+                    <h6 class="card-title">Want to test ?</h6>
+                    <p class="card-text">Please use the samples:<br />
+                        <a class="btn btn-sec btn-sm mt-2 mr-2" href="/downloads/sample.250.csv" download="sample.250.csv">250 LEIs</a>
+                        <a class="btn btn-sec btn-sm mt-2 mr-2" href="/downloads/sample.20000.csv" download="sample.20000.csv">20k LEIs</a>
+                        <a class="btn btn-sec btn-sm mt-2 mr-2" href="/downloads/sample.100000.csv" download="sample.100000.csv">100k LEIs</a>
+                        <a class="btn btn-sec btn-sm mt-2 mr-2" href="/downloads/sample.234567.csv" download="sample.234567.csv">234k+ LEIs</a>
+                        <a class="btn btn-sec btn-sm mt-2 mr-2" href="/downloads/sample.500000.csv" download="sample.500000.csv">500k LEIs</a>
+                        <a class="btn btn-sec btn-sm mt-2 mr-2" href="/downloads/sample.1325966.csv" download="sample.1325966.csv">1.3M+ LEIs</a>
+                    </p>
+                </div>
+                <hr class="my-3 sec" v-if="$root.store.isTestEnv" />
+                <div class="py-2">
+                    <h6 class="card-title">Push multiple LEIs to MADRec</h6>
+                    <p class="card-text">
+                        Please
+                        <label for="madrecCsvFile" class="btn btn-link p-0 text-sec">browse from disk</label>
+                        <input type="file" id="madrecCsvFile" accept=".csv" class="d-none" @change="csvFileChange" />
+                        for your local MADRec csv file or drop it here.
+                    </p>
+                </div>
             </div>
-            <p class="card-text mt-3 mb-0" data-toggle="collapse" href="#madrec-multi-lei-load-file-wrap" role="button" aria-expanded="true" aria-controls="madrec-multi-lei-load-file-wrap">
-                <span v-if="hasFile">
+            <div v-else class="py-2">
+                <h6 class="card-title">Push multiple LEIs to MADRec</h6>
+                <p class="card-text">
                     <i class="fas fa-check text-success fa-fw mr-2"></i>
                     File "{{file.name}}" ({{humanFileSize(file.size)}}) successfully loaded
-                </span>
-                <span v-else>Please browse for your local MADRec csv file or drop it here</span>
-            </p>
-            <div class="collapse" :class="{show:!hasFile}" id="madrec-multi-lei-load-file-wrap">
-                <div class="custom-file mt-3">
-                    <input type="file" class="custom-file-input" id="madrecCsvFile" accept=".csv" @change="csvFileChange">
-                    <label class="custom-file-label" for="madrecCsvFile">Browse</label>
-                </div>
-                <p v-if="fileMsg.length>0" class="small text-muted">
-                    {{fileMsg}}
                 </p>
-            </div>
-            <div v-if="hasFile&&!verify.done" class="mt-3">
-                <p class="card-text" v-if="fileMsg.length>0">
-                    <i class="fas fa-exclamation-circle text-primary fa-fw mr-2"></i>
-                    {{fileMsg}}
-                </p>
-                <p class="card-text">
-                    <i class="fas fa-hourglass-start text-warning fa-fw mr-2"></i>
-                    Verifying "{{file.name}}" data formats
-                </p>
-                <p class="card-text" v-if="verify.msg.length>0">
-                    {{verify.msg}}
-                </p>
-                <div class="progress mt-3" style="height: 5px;">
-                    <div class="progress-bar no-transition bg-success" role="progressbar" :aria-valuenow="verifyBar.verified" aria-valuemin="0" aria-valuemax="100" :style="{'width': `${verifyBar.verified}%`}"></div>
-                    <div class="progress-bar no-transition bg-secondary" role="progressbar" :aria-valuenow="verifyBar.read" aria-valuemin="0" aria-valuemax="100" :style="{'width': `${verifyBar.read}%`}"></div>
-                </div>
-            </div>
-            <div v-else-if="verify.done" class="mt-3">
-                <p class="card-text">
-                    <i class="fas fa-check text-success fa-fw mr-2"></i>
-                    All {{rowsCount}} LEIs and associated fields have been successfully verified
-                </p>
-                <p class="card-text" v-if="upload.done">
-                    <i class="fas fa-check text-success fa-fw mr-2"></i>
-                    All {{rowsCount}} LEIs have been successfully uploaded
-                </p>
-                <div class="mt-2 alert alert-warning alert-dismissible fade show" role="alert" v-if="verify.warnings.length>0">
-                    <div v-for="warning in verify.warnings" class="warning">{{warning}}</div>
-                    <button type="button" class="close" aria-label="Close" @click="verify.warnings=[]">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div v-if="!upload.done" class="mt-4">
-                    <p class="card-text mt-2 mb-2">Please select one of the hashing options:</p>
-                    <select class="custom-select" style="width: 350px;" id="madrecMultiPutHash">
-                        <option value="1" v-if="!verify.isHashed">Do not hash</option>
-                        <option value="2" v-if="!verify.isHashed" selected>Hash</option>
-                        <option value="3" v-if="verify.isHashed===true">Already hashed</option>
-                    </select>
-                    <div class="mt-3">
-                        <button v-if="upload.verify.showRetry" type="button" class="btn btn-sec" @click.prevent="retryMissing">Retry the {{rowsCount - upload.executed}} missing LEIs</button>
-                        <button v-else type="button" class="btn btn-sec" @click.prevent="uploadFile" :disabled="upload.showProgress">Start upload</button>
-                        <span class="small text-muted ml-3">
-                            {{upload.msg}}
-                        </span>
+                <div v-if="!verify.done" class="mt-3">
+                    <p class="card-text" v-if="fileMsg.length>0">
+                        <i class="fas fa-exclamation-circle text-primary fa-fw mr-2"></i>
+                        {{fileMsg}}
+                    </p>
+                    <p class="card-text">
+                        <i class="fas fa-hourglass-start text-warning fa-fw mr-2"></i>
+                        Verifying "{{file.name}}" data formats
+                    </p>
+                    <p class="card-text" v-if="verify.msg.length>0">
+                        {{verify.msg}}
+                    </p>
+                    <div class="progress mt-3" style="height: 5px;">
+                        <div class="progress-bar no-transition bg-success" role="progressbar" :aria-valuenow="verifyBar.verified" aria-valuemin="0" aria-valuemax="100" :style="{'width': `${verifyBar.verified}%`}"></div>
+                        <div class="progress-bar no-transition bg-secondary" role="progressbar" :aria-valuenow="verifyBar.read" aria-valuemin="0" aria-valuemax="100" :style="{'width': `${verifyBar.read}%`}"></div>
                     </div>
                 </div>
-                <div class="progress mt-3 mb-3" v-if="upload.showProgress" style="height: 5px;">
-                    <div class="progress-bar no-transition" role="progressbar" aria-valuemin="0" aria-valuemax="100"
-                        v-for="b in upload.blocks"
-                        :class="[b.class]"
-                        :aria-valuenow="b.items*100.0/rowsCount"
-                        :style="{'width': `${b.items*100.0/rowsCount}%`}"
-                        :title="b.title">
+                <div v-else class="mt-3">
+                    <p class="card-text">
+                        <i class="fas fa-check text-success fa-fw mr-2"></i>
+                        All {{rowsCount}} LEIs and associated fields have been successfully verified
+                    </p>
+                    <p class="card-text" v-if="upload.done">
+                        <i class="fas fa-check text-success fa-fw mr-2"></i>
+                        All {{rowsCount}} LEIs have been successfully uploaded
+                    </p>
+                    <div class="mt-2 alert alert-warning alert-dismissible fade show" role="alert" v-if="verify.warnings.length>0">
+                        <div v-for="warning in verify.warnings" class="warning">{{warning}}</div>
+                        <button type="button" class="close" aria-label="Close" @click="verify.warnings=[]">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
+                    <div v-if="!upload.done" class="mt-4">
+                        <p class="card-text mt-2 mb-2">Please select one of the hashing options:</p>
+                        <select class="custom-select" style="width: 350px;" id="madrecMultiPutHash">
+                            <option value="1" v-if="!verify.isHashed">Do not hash</option>
+                            <option value="2" v-if="!verify.isHashed" selected>Hash</option>
+                            <option value="3" v-if="verify.isHashed===true">Already hashed</option>
+                        </select>
+                        <div class="mt-3">
+                            <button v-if="upload.verify.showRetry" type="button" class="btn btn-sec" @click.prevent="retryMissing">Retry the {{rowsCount - upload.executed}} missing LEIs</button>
+                            <button v-else type="button" class="btn btn-sec" @click.prevent="uploadFile" :disabled="upload.showProgress">Start upload</button>
+                            <span class="small text-muted ml-3">
+                                {{upload.msg}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="progress mt-3 mb-3" v-if="upload.showProgress" style="height: 5px;">
+                        <div class="progress-bar no-transition" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+                            v-for="b in upload.blocks"
+                            :class="[b.class]"
+                            :aria-valuenow="b.items*100.0/rowsCount"
+                            :style="{'width': `${b.items*100.0/rowsCount}%`}"
+                            :title="b.title">
+                        </div>
+                    </div>
+                    <p class="card-text" v-if="upload.verify.counter>0">
+                        {{upload.verify.issueMsg}}
+                    </p>
+                    <router-link v-if="upload.done" to="/madrec/reports" class="btn btn-success btn mt-3" tag="button">View reports</router-link>
                 </div>
-                <p class="card-text" v-if="upload.verify.counter>0">
-                    {{upload.verify.issueMsg}}
-                </p>
-                <router-link v-if="upload.done" to="/app/madrec/reports" class="btn btn-success btn mt-3" tag="button">View reports</router-link>
             </div>
         </div>
     </div>
@@ -335,59 +380,65 @@
             <h4><i class="fas fa-chart-bar fa-fw mr-2 text-sec"></i>Global report</h4>
         </div>
         <div class="card-body">
-            <h6 class="card-title">Personal report</h6>
-            <p class="card-text">Your MADRec personal report
-                <sec-notif-state :state="nsUserReport.data"></sec-notif-state>
-                <a v-show="personalReport.length>0" class="btn btn-sec btn-sm float-right" style="margin-top: -0.25em;" :href="personalReportExportUrl" download="personal-report.json">Export</a>
-            </p>
-            <div class="mt-2">
-                <div style="position: relative;">
-                    <canvas id="madrec-user-report"></canvas>
-                </div>
-            </div>
-            <hr />
-            <h6 class="card-title">Consortium report</h6>
-            <p class="card-text">The MADRec consortium report
-                <sec-notif-state :state="nsConsortiumReport.data"></sec-notif-state>
-                <a v-show="consortiumReport.length>0" class="btn btn-sec btn-sm float-right" style="margin-top: -0.25em;" :href="consortiumReportExportUrl" download="consortium-report.json">Export</a>
-            </p>
-            <div class="mt-2">
-                <div style="position: relative;">
-                    <canvas id="madrec-consortium-report"></canvas>
-                </div>
-            </div>
-            <hr />
-            <h6 class="card-title">LEIs report</h6>
-            <p class="card-text">Download a report with all your LEIs</p>
-            <div class="mt-4" v-if="!download.done">
-                <button v-if="download.showRetry" type="button" class="btn btn-sec" @click.prevent="retry">Retry</button>
-                <div v-else class="btn-group">
-                    <button type="button" class="btn btn-sec" @click.prevent="downloadAsCsv"
-                        :disabled="download.started">Download as Csv</button>
-                    <button type="button" class="btn btn-sec dropdown-toggle dropdown-toggle-split"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :disabled="download.started">
-                        <span class="sr-only">Toggle Dropdown</span>
-                    </button>
-                    <div class="dropdown-menu">
-                        <button type="button" class="dropdown-item" @click.prevent="downloadAsJson"
-                            :disabled="download.started">Download as Json</button>
+            <div class="py-2">
+                <h6 class="card-title">Personal report</h6>
+                <p class="card-text">Your MADRec personal report
+                    <sec-notif-state :state="nsUserReport.data"></sec-notif-state>
+                    <a v-show="personalReport.length>0" class="btn btn-sec btn-sm float-right" style="margin-top: -0.25em;" :href="personalReportExportUrl" download="personal-report.json">Export</a>
+                </p>
+                <div class="mt-2">
+                    <div style="position: relative;">
+                        <canvas id="madrec-user-report"></canvas>
                     </div>
                 </div>
-                <button v-if="download.started&&!download.stopped" type="button" class="btn btn-sec ml-3" @click.prevent="stop">Stop</button>
-                <div v-else-if="!download.started" class="ml-3" style="display:inline;">
-                    Start at
-                    <input type="number" id="madrec-leis-report-cursor" placeholder="Start at" value="0" class="form-control mr-3" style="display: inline-block; width: 7em;">
-                    Step
-                    <select id="madrec-leis-report-step" class="custom-select" style="width: auto;">
-                        <option value="25">25</option>
-                        <option value="50">50</option>
-                        <option value="100" selected>100</option>
-                    </select>
-                </div>
-                <span v-if="download.started" class="ml-3">{{download.msg}}</span>
             </div>
-            <div class="mt-2" v-else>
-                <p class="card-text"><i class="fas fa-check text-success fa-fw mr-2"></i> {{download.msg}}</p>
+            <hr class="my-3 sec" />
+            <div class="py-2">
+                <h6 class="card-title">Consortium report</h6>
+                <p class="card-text">The MADRec consortium report
+                    <sec-notif-state :state="nsConsortiumReport.data"></sec-notif-state>
+                    <a v-show="consortiumReport.length>0" class="btn btn-sec btn-sm float-right" style="margin-top: -0.25em;" :href="consortiumReportExportUrl" download="consortium-report.json">Export</a>
+                </p>
+                <div class="mt-2">
+                    <div style="position: relative;">
+                        <canvas id="madrec-consortium-report"></canvas>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-3 sec" />
+            <div class="py-2">
+                <h6 class="card-title">LEIs report</h6>
+                <p class="card-text">Download a report with all your LEIs</p>
+                <div class="mt-4" v-if="!download.done">
+                    <button v-if="download.showRetry" type="button" class="btn btn-sec" @click.prevent="retry">Retry</button>
+                    <div v-else class="btn-group">
+                        <button type="button" class="btn btn-sec" @click.prevent="downloadAsCsv"
+                            :disabled="download.started">Download as Csv</button>
+                        <button type="button" class="btn btn-sec dropdown-toggle dropdown-toggle-split"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :disabled="download.started">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu">
+                            <button type="button" class="dropdown-item" @click.prevent="downloadAsJson"
+                                :disabled="download.started">Download as Json</button>
+                        </div>
+                    </div>
+                    <button v-if="download.started&&!download.stopped" type="button" class="btn btn-sec ml-3" @click.prevent="stop">Stop</button>
+                    <div v-else-if="!download.started" class="ml-3" style="display:inline;">
+                        Start at
+                        <input type="number" id="madrec-leis-report-cursor" placeholder="Start at" value="0" class="form-control mr-3" style="display: inline-block; width: 7em;">
+                        Step
+                        <select id="madrec-leis-report-step" class="custom-select" style="width: auto;">
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100" selected>100</option>
+                        </select>
+                    </div>
+                    <span v-if="download.started" class="ml-3">{{download.msg}}</span>
+                </div>
+                <div class="mt-2" v-else>
+                    <p class="card-text"><i class="fas fa-check text-success fa-fw mr-2"></i> {{download.msg}}</p>
+                </div>
             </div>
         </div>
     </div>
@@ -537,6 +588,7 @@
                 });
         },
         computed: {
+            status() { return store.user.dcapps.madrec.data.accessStatus; },
             records() {
                 var user = store.user.dcapps.identity.data, pr = user && user.personalRecords,
                     phone = pr && pr.phone, email = pr && pr.email,
@@ -581,6 +633,70 @@
                     });
             }
         }
+    });
+    const MADRecAppAccessDenied = Vue.component('sec-madrec-access-denied', {
+        template: '#sec-madrec-access-denied',
+        data: function () {
+            return {
+                nsRequest: new notifState(2)
+            }
+        },
+        beforeMount: function() {
+            store.SCPs[MADRecCluster]
+                .sendQuery("madrec", "get-status", "madrec-get-status")
+                .onResult(x => {
+                    Vue.set(store.user.dcapps.madrec.data, "accessStatus", x.status);
+                    Vue.set(store.user.dcapps.madrec.data, "grants", x.grants || 0);
+                });
+        },
+        computed: {
+            records() {
+                var user = store.user.dcapps.identity.data, pr = user && user.personalRecords,
+                    phone = pr && pr.phone, email = pr && pr.email,
+                    hasFirstname = user && user.firstname && user.firstname.length > 0,
+                    hasLastname = user && user.lastname && user.lastname.length > 0,
+                    hasPhoneVerified = phone && phone.value && phone.verified,
+                    hasEmailVerified = email && email.value && email.verified;
+                return {
+                    hasEnough: hasFirstname && hasLastname && (hasPhoneVerified || hasEmailVerified),
+                    hasFirstname: hasFirstname,
+                    hasLastname: hasLastname,
+                    hasPhoneVerified: hasPhoneVerified,
+                    hasEmailVerified: hasEmailVerified
+                }
+            },
+            requestingMembers() {
+                return store.user.dcapps.madrec.data.requestingMembers || 0;
+            }
+        },
+        methods: {
+            requestAccess() {
+                let args = { id: store.dcapps.madrec.id, items: [ "firstname", "lastname" ] },
+                    dcapp = store.dcapps["madrec"];
+                if($("#madrec_ra_phone").is(":checked")) args.items.push("phone");
+                if($("#madrec_ra_email").is(":checked")) args.items.push("email");
+                this.nsRequest.start();
+                store.SCPs[MADRecCluster]
+                    .sendTx("identity", "share-with", "identity-share-with", args)
+                    .onError(x => { this.nsRequest.failed(x, true); })
+                    .onAcknowledged(x => { this.nsRequest.acknowledged(); })
+                    .onProposed(x => { this.nsRequest.proposed(); })
+                    .onCommitted(x => { this.nsRequest.committed(); })
+                    .onExecuted(x => {
+                        this.nsRequest.executed();
+                        store.SCPs[MADRecCluster]
+                            .sendTx("madrec", "request-access", "madrec-request-access", { role: "participant" })
+                            .onError(x => { this.nsRequest.failed(x, true); })
+                            .onAcknowledged(x => { this.nsRequest.acknowledged(); })
+                            .onProposed(x => { this.nsRequest.proposed(); })
+                            .onCommitted(x => { this.nsRequest.committed(); })
+                            .onExecuted(x => { this.nsRequest.executed().hide(); });
+                    });
+            }
+        }
+    });
+    const MADRecAppAccessRequested = Vue.component('sec-madrec-access-requested', {
+        template: '#sec-madrec-access-requested'
     });
     const MADRecAppMembers = Vue.component('sec-madrec-members', {
         template: '#sec-madrec-members',

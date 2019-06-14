@@ -26,7 +26,7 @@
 			"key": "rliD_CISqPEeYKbWYdwa-L-8oytAPvdGmbLC0KdvsH-OVMraarm1eo-q4fte0cWJ7-kmsq8wekFIJK0a83_yCg==",
 			"cluster" : "sec-demo-1",
 			"ui": {
-				"src": "/dcapps-demo/madrec.html",
+				"src": "/dcapps-demo/madrec.php",
 				"require": [
 					{ "name": "papaparse-4.6.0", "src": "/scripts/papaparse-4.6.0.min.js" },
 					{ "name": "chart-2.8.0", "src": "/scripts/chart-2.8.0.min.js"},
