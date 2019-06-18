@@ -1025,7 +1025,7 @@
 					fill: fill, draw: draw, start: start, stop: stop
 				}
 			})(),
-			identityNetwork = "sec-demo-1",
+			identityCluster = "sec-demo-1",
 			state = {
 				icons: ["fa-hourglass-start", "fa-check", "fa-exclamation-circle"],
 				colors: ["text-warning", "text-success", "text-danger"]
@@ -1368,11 +1368,11 @@
 			created() {
 				if(store.user.ECDSA == null)
 					router.push("/key"); // key not loaded yet
-				else if(!store.SCPs[identityNetwork])
+				else if(!store.SCPs[identityCluster])
 					router.push("/connect/me"); // not connected yet
 				else {
 					this.ready = true;
-					store.SCPs[identityNetwork].sendQuery("identity", "get", "identity-get")
+					store.SCPs[identityCluster].sendQuery("identity", "get", "identity-get")
 						.onError(x => { this.errorMsg = x; })
 						.onResult(x => { Vue.set(store.user.dcapps.identity, "data", x); })
 				}
@@ -1387,7 +1387,7 @@
 				save() {
 					let args = { firstname: $('#prFirstName').val(), lastname: $('#prLastName').val() };
 					this.identityInfo.ns.start();
-					store.SCPs[identityNetwork]
+					store.SCPs[identityCluster]
 						.sendTx("identity", "set", "identity-set", args)
 						.onError(x => { this.identityInfo.ns.failed(x, true); })
 						.onAcknowledged(x => { this.identityInfo.ns.acknowledged(); })
@@ -1419,7 +1419,7 @@
 				send() {
 					let name = this.name, value = $('#id-pr-' + name).val(), args = { name: name, value: value };
 					this.sendCodeNs.start("Registering...", true);
-					store.SCPs[identityNetwork]
+					store.SCPs[identityCluster]
 						.sendTx("identity", "set-personal-record", "identity-set-personal-record-" + name, args)
 						.onError(x => { this.sendCodeNs.failed(x, true); })
 						.onAcknowledged(x => { this.sendCodeNs.acknowledged(); })
@@ -1430,7 +1430,7 @@
 							Vue.set(this.prs, name, { value: value, verified: false });
 							this.sendCodeNs.executed("Sending security challenge...", true);
 							let cmd = "send-personal-record-challenge";
-							store.SCPs[identityNetwork]
+							store.SCPs[identityCluster]
 								.sendQuery("identity", cmd, "identity-" + cmd + "-" + name, { name: name })
 								.onError(x => { this.sendCodeNs.failed(x, true); })
 								.onResult(x => {
@@ -1442,7 +1442,7 @@
 					let name = this.name, code = $('#id-pr-code-' + name).val().toUpperCase(),
 						args = { name: name, code: code };
 					this.verifyNs.start("Verifying...", true);
-					store.SCPs[identityNetwork]
+					store.SCPs[identityCluster]
 						.sendTx("identity", "verify-personal-record", "identity-verify-personal-record-" + name, args)
 						.onError(x => { this.verifyNs.failed(x, true); })
 						.onAcknowledged(x => { this.verifyNs.acknowledged(); })
@@ -1450,7 +1450,7 @@
 						.onCommitted(x => { this.verifyNs.committed(); })
 						.onExecuted(x => {
 							this.verifyNs.executed("Updating record...");
-							store.SCPs[identityNetwork].sendQuery("identity", "get", "identity-get")
+							store.SCPs[identityCluster].sendQuery("identity", "get", "identity-get")
 								.onError(x => { this.verifyNs.failed(x, true); })
 								.onResult(x => {
 									if(x.personalRecords[name].verified) {
@@ -1640,8 +1640,12 @@
 				connect(dcapp, endpoint = "") {
 					if(store.user.ECDSA == null)
 						throw "User key not loaded";
+					let cluster = store.clusters[dcapp.cluster];
+					if(!cluster)
+						throw "Unknown cluster";
+
 					if(endpoint == "")
-						endpoint = store.clusters[dcapp.cluster].gateways[0].endpoint;
+						endpoint = cluster.gateways[0].endpoint;
 
 					let connection = this.connections[dcapp.cluster];
 					if(!connection) {
@@ -1673,7 +1677,7 @@
 									this.retryConnection(dcapp);
 								connection.lastState = x;
 							})
-							.connect(endpoint, store.user.ECDSA, sec.utils.base64ToUint8Array(dcapp.key), "pair1")
+							.connect(endpoint, store.user.ECDSA, sec.utils.base64ToUint8Array(cluster.key), "pair1")
 							.then(() => {
 								connection.retrying = false;
 								connection.retryingMsg = "";

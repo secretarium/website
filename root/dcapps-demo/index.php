@@ -3,18 +3,30 @@
     if(preg_match("/\.secretarium\.(com|dev|org)$/", $http_origin)) {
         header("Access-Control-Allow-Origin: $http_origin");
     }
-    header('Content-type:application/json;charset=utf-8');
+	header('Content-type:application/json;charset=utf-8');
+
+	$env = "prod";
+	if (substr($_SERVER['SERVER_NAME'], 0, 3) == "uat") $env = "uat";
+	else if (substr($_SERVER['SERVER_NAME'], -3) == "dev") $env = "dev";
 ?>
 {
 	"clusters": {
-		"sec-demo-1": {
+<?php if($env == "prod") { ?>		"sec-demo-1": {
+			"key": "xF2IUJnynRkkMvD+3RbYjPC/RgazPG3YY6GzVPTT8/WKRO6/1DuRzFFljtvESb/YdmOk7kudprH6L4z3tYPqPg==",
 			"gateways": [
-				{ "endpoint": "wss://ovh1.node.secretarium.org:443/", "name": "DEMO (OVH UK)" },
-				{ "endpoint": "wss://ovh2.node.secretarium.org:443/", "name": "DEMO (OVH DE)" },
-				{ "endpoint": "wss://ovh3.node.secretarium.org:443/", "name": "DEMO (OVH FR-1)" },
-				{ "endpoint": "wss://ovh4.node.secretarium.org:443/", "name": "DEMO (OVH FR-2)" }
+				{ "endpoint": "wss://ovh3.node.secretarium.org:443/", "name": "DEMO (OVH DE-1)" },
+				{ "endpoint": "wss://ovh4.node.secretarium.org:443/", "name": "DEMO (OVH UK-1)" },
+				{ "endpoint": "wss://ovh5.node.secretarium.org:443/", "name": "DEMO (OVH DE-2)" },
+				{ "endpoint": "wss://ovh6.node.secretarium.org:443/", "name": "DEMO (OVH UK-2)" }
 			]
 		}
+<?php } else if($env == "dev") { ?>		"sec-demo-1": {
+			"key": "rliD_CISqPEeYKbWYdwa-L-8oytAPvdGmbLC0KdvsH-OVMraarm1eo-q4fte0cWJ7-kmsq8wekFIJK0a83_yCg==",
+			"gateways": [
+				{ "endpoint": "wss://127.0.0.1:5428/", "name": "TEST LOCAL" }
+			]
+		}
+<?php } ?>
 	},
 	"dcapps": {
 		"madrec": {
@@ -22,7 +34,6 @@
 			"display": "MADRec",
 			"description": "Massive Anonymous Data Reconciliation. Collectively measure reference data quality.",
 			"icon": "fa-chart-pie",
-			"key": "rliD_CISqPEeYKbWYdwa-L-8oytAPvdGmbLC0KdvsH-OVMraarm1eo-q4fte0cWJ7-kmsq8wekFIJK0a83_yCg==",
 			"cluster" : "sec-demo-1",
 			"ui": {
 				"src": "/dcapps-demo/madrec.php",
@@ -39,7 +50,6 @@
 			"display": "Crypto Exchange",
 			"description": "Crypto currency order book to facilitate HTLCs (cross-chain atomic swaps)",
 			"icon": "fa-exchange-alt",
-			"key": "rliD_CISqPEeYKbWYdwa-L-8oytAPvdGmbLC0KdvsH-OVMraarm1eo-q4fte0cWJ7-kmsq8wekFIJK0a83_yCg==",
 			"cluster" : "sec-demo-1"
 		},
 		"cdnn": {
@@ -47,7 +57,6 @@
 			"display": "Machine Learning",
 			"description": "IA calibration on confidential samples",
 			"icon": "fa-brain",
-			"key": "rliD_CISqPEeYKbWYdwa-L-8oytAPvdGmbLC0KdvsH-OVMraarm1eo-q4fte0cWJ7-kmsq8wekFIJK0a83_yCg==",
 			"cluster" : "sec-demo-1"
 		},
 		"fcp": {
@@ -55,7 +64,6 @@
 			"display": "Fund Client Pooling",
 			"description": "A tool to perform confidential statistics on fund distribution",
 			"icon": "fa-grip-horizontal",
-			"key": "rliD_CISqPEeYKbWYdwa-L-8oytAPvdGmbLC0KdvsH-OVMraarm1eo-q4fte0cWJ7-kmsq8wekFIJK0a83_yCg==",
 			"cluster" : "sec-demo-1"
 		},
 		"inconel": {
@@ -63,7 +71,6 @@
 			"display": "Inconel",
 			"description": "Real time consensus analytics and pricing for OTC market",
 			"icon": "fa-chart-bar",
-			"key": "rliD_CISqPEeYKbWYdwa-L-8oytAPvdGmbLC0KdvsH-OVMraarm1eo-q4fte0cWJ7-kmsq8wekFIJK0a83_yCg==",
 			"cluster" : "sec-demo-1"
 		},
 		"frtb": {
@@ -71,7 +78,6 @@
 			"display": "FRTB Data Pooling",
 			"description": "Collectively prove liquidity under FRTB regulation",
 			"icon": "fa-compress",
-			"key": "rliD_CISqPEeYKbWYdwa-L-8oytAPvdGmbLC0KdvsH-OVMraarm1eo-q4fte0cWJ7-kmsq8wekFIJK0a83_yCg==",
 			"cluster" : "sec-demo-1"
 		},
 		"me": {
@@ -79,7 +85,6 @@
 			"display": "Personal Records",
 			"description": "Get your personal records verified and become identifiable",
 			"icon": "fa-id-card",
-			"key": "rliD_CISqPEeYKbWYdwa-L-8oytAPvdGmbLC0KdvsH-OVMraarm1eo-q4fte0cWJ7-kmsq8wekFIJK0a83_yCg==",
 			"cluster" : "sec-demo-1",
 			"loaded": true
 		},
@@ -88,7 +93,6 @@
 			"display": "Monitoring",
 			"description": "Health and state of Secretarium networks",
 			"icon": "fa-tasks",
-			"key": "rliD_CISqPEeYKbWYdwa-L-8oytAPvdGmbLC0KdvsH-OVMraarm1eo-q4fte0cWJ7-kmsq8wekFIJK0a83_yCg==",
 			"cluster" : "sec-demo-1"
 		}
 	}
