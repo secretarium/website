@@ -176,7 +176,7 @@ var sec, secretarium = sec = {
                     let knownTrustedKeyPath = new Uint8Array(serverIdentity.subarray(96));
                     if (knownTrustedKeyPath.length == 64) {
                         if(!knownTrustedKey.secSequenceEqual(knownTrustedKeyPath))
-                            throw "Invalid server proof of identity";
+                            throw { message: "Invalid server identity" };
                     }
                     else {
                         for (var i = 0; i < knownTrustedKeyPath.length - 64; i = i + 128) {
@@ -184,7 +184,7 @@ var sec, secretarium = sec = {
                                 keyChild = knownTrustedKeyPath.subarray(i + 128, 64),
                                 ecdsaKey = await sec.utils.ecdsa.importPub(sec.utils.concatUint8Array(/*uncompressed*/[4], key));
                             if (!await sec.utils.ecdsa.verify(keyChild, proof, ecdsaKey))
-                                throw "Invalid server proof of identity #" + i;
+                                throw { message: "Invalid server identity chain at #" + i };
                         }
                     }
 
@@ -220,7 +220,7 @@ var sec, secretarium = sec = {
                         serverSignedHash = new Uint8Array(serverProofOfIdentity).subarray(32, 96),
                         ok = await sec.utils.ecdsa.verify(toVerify, serverSignedHash, self.security.server.ecdsaPub);
                     if(!ok)
-                        throw "Invalid server proof of identity";
+                        throw { message: "Invalid server proof of identity" };
 
                     self._updateState(1);
                     if(self.handlers.onMessage == null)

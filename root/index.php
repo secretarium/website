@@ -16,7 +16,7 @@
 	<script src="/scripts/jquery-3.3.1.min.js"></script>
 	<script src="/scripts/popper-1.14.7.min.js"></script>
 	<script src="/scripts/bootstrap-4.3.1.min.js"></script>
-	<script src="/scripts/vue-2.6.10.min.js"></script>
+	<script src="/scripts/vue-2.6.10.js"></script>
 	<script src="/scripts/vue-router-3.0.2.min.js"></script>
 	<script src="/scripts/secretarium-0.1.8.js"></script>
 </head>
@@ -122,18 +122,33 @@
 		<footer v-if="!store.isPresentationPages" class="bg-light">
 			<div class="container">
 				<div class="row no-gutters">
-					<div class="col-sm-4 col-6 text-muted">
-						<small>
-							<i class="fas fa-circle" :class="[state.color]" style="font-size: 60%; vertical-align: 20%;"></i>
-							<span>{{state.text}}</span>
-						</small>
+					<div class="col-sm-4 col-6 dropdown dropup">
+						<button class="btn dropdown-toggle p-0 no-caret no-outline" id="connection-menu-btn"
+							data-toggle="dropdown" aria-expanded="false" data-offset="0,10">
+							<small>
+								<i class="fas fa-circle fa-small" :class="[state.color]"></i>
+								<span class="text-muted">{{state.text}}</span>
+							</small>
+						</button>
+						<div class="dropdown-menu" aria-labelledby="connection-menu-btn" id="connection-menu">
+							<h6 class="">Connections</h6>
+							<hr class="mt-2 mb-3 sec" />
+							<p v-if="states.length==0">No connections</p>
+							<div class="row states" v-for="s in states" :key="s.cluster">
+								<div class="col-3 cluster-name">{{s.cluster}}</div>
+								<div class="col-9">
+									<i class="fas fa-circle fa-small" :class="[s.color]"></i>
+									<span>{{s.text}}</span>
+								</div>
+							</div>
+						</div>
 					</div>
 					<div class="col-sm-4 col-12 order-sm-0 order-1 text-muted text-center">© <?=date("Y")?> - Secretarium</div>
 					<div class="col-sm-4 col-6 text-muted text-right"><small>{{connectedAs}}</small></div>
 				</div>
 			</div>
 		</footer>
-		<footer v-else>
+		<footer v-else class="presentation">
 			<div class="container py-4">
 				<div class="row">
 					<div class="col-sm">
@@ -1592,11 +1607,12 @@
 				}
 			},
 			computed: {
-				state() {
-					let scp = store.SCPs[identityNetwork],
-						msg = scp ? sec.states.security[scp.securityState] : "closed",
-						id = scp ? scp.securityState : 2;
-					return { text: msg, color: state.colors[id], icon: state.icons[id] };
+				state() { return this.getState(store.SCPs[identityCluster]); },
+				states() {
+					return Object.keys(this.connections).map(c => {
+						let s = this.getState(store.SCPs[c]);
+						return Object.assign(s, { cluster: c });
+					});
 				},
 				connectedAs() {
 					var k = store.user.ECDSAPubHex, x = store.user.dcapps.identity.data,
@@ -1604,11 +1620,16 @@
 					return z ? "Connected as " + x.firstname + " " + x.lastname :
 						   k ? "Key is " + k.substring(0, 18).replace(/\s/g, "") : "";
 				},
-				isConnected() {
-					return !!this.connections[identityNetwork];
-				}
+				isConnected() { return !!this.connections[identityCluster]; }
 			},
 			methods: {
+				getState(scp) {
+					return {
+						text: scp ? sec.states.security[scp.securityState] : "closed",
+						color: state.colors[scp ? scp.securityState : 2],
+						icon: state.icons[scp ? scp.securityState : 2]
+					};
+				},
 				setKey(key) {
 					this.disconnectAll();
 					store.user.ECDSA = key.cryptoKey;
