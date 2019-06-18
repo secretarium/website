@@ -133,12 +133,14 @@
 						<div class="dropdown-menu" aria-labelledby="connection-menu-btn" id="connection-menu">
 							<h6 class="">Connections</h6>
 							<hr class="mt-2 mb-3 sec" />
-							<p v-if="states.length==0">No connections</p>
-							<div class="row states" v-for="s in states" :key="s.cluster">
-								<div class="col-3 cluster-name">{{s.cluster}}</div>
-								<div class="col-9">
+							<p v-if="states.length==0" class="m-0">No connections</p>
+							<div class="states" v-for="s in states" :key="s.cluster">
+								<div class="cluster-name">{{s.cluster}}</div>
+								<div class="cluster-state">
 									<i class="fas fa-circle fa-small" :class="[s.color]"></i>
 									<span>{{s.text}}</span>
+									<button v-if="s.retrying" type="button" class="btn btn-link text-sec ml-3"
+										@click.prevent.stop="connect(s.cluster)">retry now</button>
 								</div>
 							</div>
 						</div>
@@ -1513,8 +1515,13 @@
 									.done(data => {
 										$("body").append(data);
 										this.dcapp.loaded = true;
-										this.state = "loaded";
-										setTimeout(() => { router.push("/" + this.name); }, 1000);
+										this.state = "initialising";
+										if(this.dcapp.onLoad) { // promise registered by app
+											this.dcapp.onLoad
+												.then(() => { router.push("/" + this.name); })
+												.catch(e => { this.state = "error"; })
+										}
+										else setTimeout(() => { router.push("/" + this.name); }, 1000);
 									})
 									.fail((j, t, e) => { this.state = "error"; });
 							}
@@ -1556,7 +1563,7 @@
 				connect() {
 					let x = $("#id-connect").val();
 					this.connectionNs.processing("Connecting...", true);
-					this.$root.connect(this.dcapp, this.gateways[x].endpoint)
+					this.$root.connect(this.dcapp.cluster, this.gateways[x].endpoint)
 						.then(() => { router.push(this.referrer); })
 						.catch((e) => { this.connectionNs.failed(e, true); });
 				}
@@ -1607,10 +1614,22 @@
 				}
 			},
 			computed: {
-				state() { return this.getState(store.SCPs[identityCluster]); },
+				state() {
+					let l = Object.keys(this.connections).length, i = 0;
+					if(l == 0)
+						return { text: "not connected", color: "text-secondary" };
+
+					for(let c in this.connections) {
+						if(!store.SCPs[c] || store.SCPs[c].security.state == 2) i++;
+					}
+					if(i == 0)
+						return { text: l + " connection" + (l > 1 ? "s": ""), color: state.colors[1] };
+					else
+						return { text: i + " connectivity issue" + (i > 1 ? "s": ""), color: state.colors[i == l ? 2 : 0] };
+				},
 				states() {
 					return Object.keys(this.connections).map(c => {
-						let s = this.getState(store.SCPs[c]);
+						let s = this.getState(c);
 						return Object.assign(s, { cluster: c });
 					});
 				},
@@ -1623,87 +1642,87 @@
 				isConnected() { return !!this.connections[identityCluster]; }
 			},
 			methods: {
-				getState(scp) {
-					return {
-						text: scp ? sec.states.security[scp.securityState] : "closed",
-						color: state.colors[scp ? scp.securityState : 2],
-						icon: state.icons[scp ? scp.securityState : 2]
-					};
-				},
 				setKey(key) {
 					this.disconnectAll();
 					store.user.ECDSA = key.cryptoKey;
 					store.user.ECDSAPubHex = this.$root.keysManager.getPublicKeyHex(key, " ").toUpperCase();
 				},
-				retryConnection(dcapp) {
-					let scp = store.SCPs[dcapp.cluster];
-					if(scp.securityState < 2)
+				getState(cluster) {
+					let scp = store.SCPs[cluster], con = this.connections[cluster];
+					return {
+						text: scp ? (con.retrying ? con.retryingMsg : sec.states.security[scp.security.state]) : "closed",
+						color: state.colors[con && con.retrying ? 0 : (scp ? scp.security.state : 2)],
+						retrying: con && con.retrying
+					};
+				},
+				retryConnection(cluster) {
+					let scp = store.SCPs[cluster];
+					if(scp.security.state < 2)
 						return; // already connected or connecting
-
-					let connection = this.connections[dcapp.cluster];
+					let connection = this.connections[cluster];
 					if(!connection)
 						return; // connection never succeeded
-					connection.retrying = true;
 
-					let countDowner = (t) => {
+					let timeout = 30 * Math.pow(2, Math.min(connection.retryFailures, 4)),
+						countDowner = (t) => {
 							if(--t > 0) {
 								connection.retryingMsg = "Connection dropped - retrying in " + t + " sec";
-								connection.retrier = setTimeout(() => countDowner(t), 1000);
+								connection.timer = setTimeout(() => countDowner(t), 1000);
 							}
 							else {
-								connection.retryingMsg = "Connection dropped - retrying now";
-								setTimeout(() => this.connect(dcapp, connection.endpoint), 0);
+								connection.timerElapsed = true;
+								setTimeout(() => { this.connect(cluster, connection.endpoint).catch(e => {}); }, 0);
 							}
-						},
-						timeout = 30 * 2^Math.min(connection.retryFailures++, 4);
+						};
+					connection.retrying = true;
+					connection.timerElapsed = false;
+					connection.retryFailures++;
 					connection.timer = setTimeout(() => countDowner(timeout), 0);
 				},
-				connect(dcapp, endpoint = "") {
+				connect(cluster, endpoint = "") {
 					if(store.user.ECDSA == null)
 						throw "User key not loaded";
-					let cluster = store.clusters[dcapp.cluster];
-					if(!cluster)
+					let clusterInfo = store.clusters[cluster];
+					if(!clusterInfo)
 						throw "Unknown cluster";
-
-					if(endpoint == "")
-						endpoint = cluster.gateways[0].endpoint;
-
-					let connection = this.connections[dcapp.cluster];
+					let connection = this.connections[cluster];
 					if(!connection) {
 						connection = {
-							endpoint: endpoint, lastState: 0, timer: null,
+							endpoint: endpoint == "" ? clusterInfo.gateways[0].endpoint : endpoint,
+							lastState: 0, timer: null, timerElapsed: false,
 							retrying: false, retryFailures: 0, retryingMsg: ""
 						};
 					}
+					else if(endpoint != "")
+						connection.endpoint = endpoint;
 
-					let scp = store.SCPs[dcapp.cluster];
-					if(!scp) {
-						scp = Vue.set(store.SCPs, dcapp.cluster, new secretarium.scp());
-					} else {
-						if (scp.socket.state < 2 && scp.securityState < 3)
-							return true;
-						else { // retrying
-							clearTimeout(connection.timer);
-							if(connection.retrying) {
-								connection.retryingMsg = "Connection dropped - retrying now";
-								connection.retryFailures = 0;
-							}
-						}
+					let scp = store.SCPs[cluster];
+					if(!scp)
+						scp = Vue.set(store.SCPs, cluster, new secretarium.scp());
+					else if(connection.retrying) { // retrying
+						clearTimeout(connection.timer);
+						connection.retryingMsg = "Connection dropped - retrying now";
+						if(!connection.timerElapsed) connection.retryFailures = 0;
 					}
 
 					return new Promise((resolve, reject) => {
+						if (scp.socket.state < 2 && scp.security.state < 2) {
+							resolve(); // already connected
+							return;
+						}
+
 						scp.reset()
 							.on("statechange", x => {
-								if(connection.lastState != 0 && x == 0) // connection dropped
-									this.retryConnection(dcapp);
+								if(x == 2) // connection dropped
+									this.retryConnection(cluster);
 								connection.lastState = x;
 							})
-							.connect(endpoint, store.user.ECDSA, sec.utils.base64ToUint8Array(cluster.key), "pair1")
+							.connect(connection.endpoint, store.user.ECDSA, sec.utils.base64ToUint8Array(clusterInfo.key), "pair1")
 							.then(() => {
 								connection.retrying = false;
 								connection.retryingMsg = "";
 								connection.retryFailures = 0;
-								Vue.set(this.connections, dcapp.cluster, connection);
+								Vue.set(this.connections, cluster, connection);
 								resolve();
 							})
 							.catch(e => { reject(e); });

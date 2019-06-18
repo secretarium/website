@@ -122,10 +122,6 @@ var sec, secretarium = sec = {
             return this;
         }
 
-        get securityState() {
-            return this.security.state;
-        }
-
         _updateState(id) {
             this.security.state = id;
             if(this.handlers.state.onChange != null)

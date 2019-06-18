@@ -130,12 +130,13 @@
 <script type="text/x-template" id="sec-madrec-welcome">
     <div class="card card-sec border-0">
         <div class="card-header">
-            <h4><i class="fas fa-chart-pie fa-fw mr-2 text-sec"></i>Welcome to MADRec</h4>
+            <h4><i class="fas fa-chart-pie fa-fw mr-2 text-sec"></i>MADRec DCApp</h4>
+            <p class="mb-0">Collectively measure reference data quality</p>
         </div>
         <div class="card-body">
 			<div class="py-2">
                 <h6 class="card-title">Presentation</h6>
-                <p class="card-text">
+                <p class="card-text text-justify">
                     MADRec, Massive Anonymous Data Reconciliation, is the newest initiative to bring data into line ahead of MiFID II.
                     Banks and data-vendors are cooperating on this joint initiative to improve the quality of counter-party reference data.
                     This data is particularly hard to harvest, costly to verify, and can’t be disclosed.
@@ -280,9 +281,9 @@
                         </div>
                     </div>
                     <div class="mt-3">
-                        <a v-if="exportableResults.length>0" class="btn btn-sec btn-sm float-right" :href="resultsExportUrl" download="single-LEI-report.json">Export</a>
                         <button type="button" class="btn btn-sec mr-3" @click.prevent="madrecGet">Refresh</button>
                         <sec-notif-state :state="nsGet.data"></sec-notif-state>
+                        <a v-if="exportableResults.length>0" class="btn btn-sec ml-3" :href="resultsExportUrl" download="single-LEI-report.json">Export</a>
                     </div>
                 </div>
             </div>
@@ -394,7 +395,7 @@
                     <p class="card-text" v-if="upload.verify.counter>0">
                         {{upload.verify.issueMsg}}
                     </p>
-                    <router-link v-if="upload.done" to="/madrec/reports" class="btn btn-success btn mt-3" tag="button">View reports</router-link>
+                    <router-link v-if="upload.done" to="/madrec/reports" class="btn btn-sec btn mt-3" tag="button">View reports</router-link>
                 </div>
             </div>
         </div>
@@ -521,7 +522,7 @@
         },
         verifyFieldNames(data) {
             for (var f in data) {
-                if(f != MADRec.lei.name && f != "Original " + MADRec.lei.name && fieldsIndex[f.name] != undefined)
+                if(f != MADRec.lei.name && f != "Original " + MADRec.lei.name && MADRecUtils.fieldsIndex[f.name] != undefined)
                     return { success: false, field: f };
             }
             return { success: true };
@@ -605,14 +606,6 @@
             return {
                 nsRequest: new notifState(2)
             }
-        },
-        beforeMount: function() {
-            store.SCPs[MADRecCluster]
-                .sendQuery("madrec", "get-status", "madrec-get-status")
-                .onResult(x => {
-                    Vue.set(store.user.dcapps.madrec.data, "accessStatus", x.status);
-                    Vue.set(store.user.dcapps.madrec.data, "grants", x.grants || 0);
-                });
         },
         computed: {
             status() { return store.user.dcapps.madrec.data.accessStatus; },
@@ -1547,4 +1540,14 @@
             ]
         }
     ]);
+    store.dcapps["madrec"].onLoad = new Promise((resolve, reject) => {
+        store.SCPs[MADRecCluster]
+            .sendQuery("madrec", "get-status", "madrec-get-status")
+            .onResult(x => {
+                Vue.set(store.user.dcapps.madrec.data, "accessStatus", x.status);
+                Vue.set(store.user.dcapps.madrec.data, "grants", x.grants || 0);
+                resolve();
+            })
+            .onError(x => { resolve(); })
+    });
 </script>
