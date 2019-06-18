@@ -127,6 +127,33 @@
     </div>
 </script>
 
+<script type="text/x-template" id="sec-madrec-welcome">
+    <div class="card card-sec border-0">
+        <div class="card-header">
+            <h4><i class="fas fa-chart-pie fa-fw mr-2 text-sec"></i>Welcome to MADRec</h4>
+        </div>
+        <div class="card-body">
+			<div class="py-2">
+                <h6 class="card-title">Presentation</h6>
+                <p class="card-text">
+                    MADRec, Massive Anonymous Data Reconciliation, is the newest initiative to bring data into line ahead of MiFID II.
+                    Banks and data-vendors are cooperating on this joint initiative to improve the quality of counter-party reference data.
+                    This data is particularly hard to harvest, costly to verify, and can’t be disclosed.
+                    By comparing - without disclosing - data with other members data, the MADRec application allows the creation of data
+                    quality benchmarks, and therefore reduces the scope of data to verify.
+                </p>
+            </div>
+			<div class="py-2">
+                <h6 class="card-title">Documentation</h6>
+                <p class="card-text">
+                    Please find the documentation regarding the Web client or the MADRec application API on
+                    <a href="https://madrec.readthedocs.io" class="btn-link text-sec" target="_blank">https://madrec.readthedocs.io</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+</script>
+
 <script type="text/x-template" id="sec-madrec-members">
     <div class="card card-sec border-0">
         <div class="card-header">
@@ -697,6 +724,9 @@
     });
     const MADRecAppAccessRequested = Vue.component('sec-madrec-access-requested', {
         template: '#sec-madrec-access-requested'
+    });
+    const MADRecAppWelcome = Vue.component('sec-madrec-welcome', {
+        template: '#sec-madrec-welcome'
     });
     const MADRecAppMembers = Vue.component('sec-madrec-members', {
         template: '#sec-madrec-members',
@@ -1509,7 +1539,7 @@
     router.addRoutes([
         { path: '/madrec', component: MADRecApp,
             children: [
-                { path: '', redirect: 'members' },
+                { path: '', component: MADRecAppWelcome },
                 { path: 'members', component: MADRecAppMembers },
                 { path: 'single-lei', component: MADRecAppSingleLEI, meta: { dcappName: "MADRec" } },
                 { path: 'multi-lei', component: MADRecAppMultiLEI },
