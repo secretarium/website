@@ -958,12 +958,12 @@
 							</div>
 							<sec-notif-state :state="connectionNs.data" class="mt-2 d-none d-sm-block"></sec-notif-state>
 						</form>
-						<button class="btn btn-link text-sec p-0 mt-3"
+						<button class="btn btn-link text-sec p-0 mt-3 fieldset"
 							data-toggle="collapse" data-target="#sec-connect-adv-collapse"
 							aria-expanded="false" aria-controls="sec-connect-adv-collapse">
 							advanced options
 						</button>
-						<form class="form-secmt-3 collapse sec-connect-adv-collapse p-3 border border-sec rounded-sm" id="sec-connect-adv-collapse" @submit.prevent>
+						<form class="form-sec collapse sec-connect-adv-collapse p-3 border border-sec rounded-sm" id="sec-connect-adv-collapse" @submit.prevent>
 							<label for="id-trusted-key">Trusted key (base 64 encoded)</label>
 							<input type="text" id="id-trusted-key" class="form-control" placeholder="trusted key (b64)">
 							<label for="id-connect-adv" class="mt-3">Endpoint</label>
