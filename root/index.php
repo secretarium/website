@@ -11,14 +11,14 @@
 
 	<link rel="stylesheet" href="/styles/bootstrap-4.3.1.min.css" />
 	<link rel="stylesheet" href="/styles/fontawesome-5.7.2.all.min.css" />
-	<link rel="stylesheet" href="/styles/secretarium-0.0.8.min.css" />
+	<link rel="stylesheet" href="/styles/secretarium-0.0.9.min.css" />
 
 	<script src="/scripts/jquery-3.3.1.min.js"></script>
 	<script src="/scripts/popper-1.14.7.min.js"></script>
 	<script src="/scripts/bootstrap-4.3.1.min.js"></script>
-	<script src="/scripts/vue-2.6.10.js"></script>
+	<script src="/scripts/vue-2.6.10.min.js"></script>
 	<script src="/scripts/vue-router-3.0.2.min.js"></script>
-	<script src="/scripts/secretarium-0.1.8.js"></script>
+	<script src="/scripts/secretarium-0.1.9.js"></script>
 </head>
 
 <body>
@@ -679,11 +679,11 @@
 			</div>
 			<hr class="my-3 sec" />
 			<div class="py-2" v-if="key.keys">
-				<h6 class="card-title" :class="{'mb-0':key.encrypted}"
+				<h6 class="card-title"
 					data-toggle="collapse" data-target="#sec-key-manage-encrypt-collapse"
 					:aria-expanded="!key.encrypted" aria-controls="sec-key-manage-encrypt-collapse">
 					Encrypt your key
-					<i class="fas fa-chevron-down float-right" v-if="key.encrypted"></i>
+					<i class="fas fa-chevron-down float-right"></i>
 				</h6>
 				<div class="mt-3 collapse" id="sec-key-manage-encrypt-collapse" :class="{'show':!key.encrypted}">
 					<p class="card-text">
@@ -777,11 +777,11 @@
 							</button>
 						</div>
 						<div class="py-2">
-							<h6 class="card-title" :class="{'mb-0':identityInfo.updated}"
+							<h6 class="card-title"
 								data-toggle="collapse" data-target="#sec-identity-me-collapse"
 								:aria-expanded="!identityInfo.updated" aria-controls="sec-identity-me-collapse">
 								Identity information
-								<i class="fas fa-chevron-down float-right" v-if="identityInfo.updated"></i>
+								<i class="fas fa-chevron-down float-right"></i>
 							</h6>
 							<div class="mt-3 collapse" id="sec-identity-me-collapse" :class="{'show':!identityInfo.updated}">
 								<form @submit.prevent>
@@ -802,11 +802,11 @@
 						</div>
 						<hr class="my-3 sec" />
 						<div class="py-2">
-							<h6 class="card-title" :class="{'mb-0':personalrecord.updated}"
+							<h6 class="card-title"
 								data-toggle="collapse" data-target="#sec-identity-pr-collapse"
 								:aria-expanded="!personalrecord.updated" aria-controls="sec-identity-pr-collapse">
 								Personal records
-								<i class="fas fa-chevron-down float-right" v-if="personalrecord.updated"></i>
+								<i class="fas fa-chevron-down float-right"></i>
 							</h6>
 							<div class="mt-3 collapse" id="sec-identity-pr-collapse" :class="{'show':!personalrecord.updated}">
 								<sec-identity-personal-record
@@ -816,6 +816,8 @@
 									:name="'email'" :placeholder="'you@example.com'"></sec-identity-personal-record>
 							</div>
 						</div>
+						<hr class="my-3 sec" />
+						<sec-organisation></sec-organisation>
 					</div>
 				</div>
 			</div>
@@ -857,6 +859,26 @@
 			</div>
 		</form>
 	</script>
+	<script type="text/x-template" id="sec-organisation">
+		<div class="py-2">
+			<h6 class="card-title"
+				data-toggle="collapse" data-target="#sec-organisation-collapse"
+				:aria-expanded="!updated" aria-controls="sec-organisation-collapse">
+				Organisations
+				<i class="fas fa-chevron-down float-right"></i>
+			</h6>
+			<div class="mt-3 collapse" id="sec-organisation-collapse" :class="{'show':!updated}">
+				<router-link class="list-item-sec" :to="'/organisation/'+org.name" tag="div"
+					v-for="org in $root.store.user.dcapps.identity.data.organisations" :key="org.name">
+					<div>
+						{{app.name}}
+					</div>
+					<p class="m-0 mt-2">{{app.description}}</p>
+				</router-link>
+				<sec-notif-state :state="organisationsNs.data"></sec-notif-state>
+			</div>
+		</div>
+	</script>
 
 	<script type="text/x-template" id="sec-demo-apps">
 		<div class="container fixed-center mw-md">
@@ -871,7 +893,7 @@
 						Please find below a list of Apps we have recently implemented.
 					</p>
 					<hr class="my-3 sec" />
-					<router-link class="dcapp-pres" v-for="app in $root.store.dcapps" :key="app.name" :to="'/demo/'+app.name" tag="div">
+					<router-link class="list-item-sec" v-for="app in $root.store.dcapps" :key="app.name" :to="'/demo/'+app.name" tag="div">
 						<div>
 							<i class="fas fa-fw mr-2 text-sec" :class="[app.icon]"></i>
 							{{app.display}}
@@ -925,7 +947,7 @@
 						<form class="form-sec" @submit.prevent>
 							<div class="form-row">
 								<div class="col-sm">
-									<select id="id-connect" class="form-control">
+									<select id="id-connect" class="form-control" @change="onEndpointChange">
 										<option v-for="(g, i) in gateways" :value="i">{{g.name}}</option>
 									</select>
 								</div>
@@ -935,6 +957,26 @@
 								</div>
 							</div>
 							<sec-notif-state :state="connectionNs.data" class="mt-2 d-none d-sm-block"></sec-notif-state>
+						</form>
+						<button class="btn btn-link text-sec p-0 mt-3"
+							data-toggle="collapse" data-target="#sec-connect-adv-collapse"
+							aria-expanded="false" aria-controls="sec-connect-adv-collapse">
+							advanced options
+						</button>
+						<form class="form-secmt-3 collapse sec-connect-adv-collapse p-3 border border-sec rounded-sm" id="sec-connect-adv-collapse" @submit.prevent>
+							<label for="id-trusted-key">Trusted key (base 64 encoded)</label>
+							<input type="text" id="id-trusted-key" class="form-control" placeholder="trusted key (b64)">
+							<label for="id-connect-adv" class="mt-3">Endpoint</label>
+							<div class="form-row">
+								<div class="col-sm">
+									<input type="text" id="id-connect-adv" class="form-control" placeholder="endpoint">
+								</div>
+								<div class="col-sm-auto mt-3 mt-sm-0">
+									<button type="submit" class="btn btn-sec" id="id-btn-connect-adv" @click.prevent="connectAdv">Connect</button>
+									<sec-notif-state :state="connectionAdvNs.data" class="pl-3 d-sm-none"></sec-notif-state>
+								</div>
+							</div>
+							<sec-notif-state :state="connectionAdvNs.data" class="mt-2 d-none d-sm-block"></sec-notif-state>
 						</form>
 					</div>
 					<div class="py-2" v-else>
@@ -965,7 +1007,7 @@
 				user: {
 					ECDSA: null,
 					ECDSAPubHex: null,
-					dcapps: { identity: { data: { personalRecords: {} } } }
+					dcapps: { identity: { data: { personalRecords: {}, organisations: {} } } }
 				},
 				isPresentationPages: window.location.pathname == "/",
 				isLogoPage: window.location.pathname == "/" && (window.location.hash.length == 0 || window.location.hash == "#welcome"),
@@ -1391,7 +1433,11 @@
 					this.ready = true;
 					store.SCPs[identityCluster].sendQuery("identity", "get", "identity-get")
 						.onError(x => { this.errorMsg = x; })
-						.onResult(x => { Vue.set(store.user.dcapps.identity, "data", x); })
+						.onResult(x => {
+							Vue.set(store.user.dcapps.identity.data, "firstname", x.firstname);
+							Vue.set(store.user.dcapps.identity.data, "lastname", x.lastname);
+							Vue.set(store.user.dcapps.identity.data, "personalRecords", x.personalRecords);
+						})
 				}
 			},
 			computed: {
@@ -1412,8 +1458,8 @@
 						.onCommitted(x => { this.identityInfo.ns.committed(); })
 						.onExecuted(x => {
 							this.identityInfo.ns.executed().hide();
-							Vue.set(store.user.dcapps.identity.data, "firstname", args.firstname);
-							Vue.set(store.user.dcapps.identity.data, "lastname", args.lastname);
+							Vue.set(store.user.dcapps.identity.data, "firstname", x.firstname);
+							Vue.set(store.user.dcapps.identity.data, "lastname", x.lastname);
 						});
 				}
 			}
@@ -1481,6 +1527,26 @@
 				}
 			}
 		});
+		const Organisation = Vue.component('sec-organisation', {
+			template: '#sec-organisation',
+			data: () => {
+				return {
+					updated: false,
+					organisationsNs: new notifState(),
+				}
+			},
+			mounted() {
+				this.organisationsNs.start("loading organisations...", true);
+				store.SCPs[identityCluster].sendQuery("organisation", "get-user-organisations", "organisation-get-user-organisations")
+					.onError(x => { this.organisationsNs.failed(x, true); })
+					.onResult(x => {
+						Vue.set(store.user.dcapps.identity.data, "organisations", x);
+						this.organisationsNs.executed("loaded", true).hide();
+					});
+			},
+			methods: {
+			}
+		});
 
 		const DemoApps = Vue.component('sec-demo-apps', {
 			template: '#sec-demo-apps',
@@ -1546,7 +1612,8 @@
 			data: () => {
 				return {
 					referrer: null,
-					connectionNs: new notifState()
+					connectionNs: new notifState(),
+					connectionAdvNs: new notifState()
 				}
 			},
 			beforeRouteEnter(to, from, next) {
@@ -1554,18 +1621,34 @@
 					.then(() => { next(self => { self.referrer = {...from}; }); })
 					.catch(e => { router.push("/"); /* unknown app */ });
 			},
-			mounted() { $('#id-btn-connect').focus(); },
+			mounted() {
+				$('#id-btn-connect').focus();
+				this.onEndpointChange();
+			},
 			computed: {
 				dcapp() { return store.dcapps[this.name]; },
 				gateways() { let a = this.dcapp, x = a && store.clusters[a.cluster]; return x ? x.gateways : []; }
 			},
 			methods: {
+				onEndpointChange() {
+					let x = $("#id-connect").val();
+					$("#id-connect-adv").val(this.gateways[x].endpoint);
+					$("#id-trusted-key").val(store.clusters[this.dcapp.cluster].key);
+				},
 				connect() {
 					let x = $("#id-connect").val();
 					this.connectionNs.processing("Connecting...", true);
 					this.$root.connect(this.dcapp.cluster, this.gateways[x].endpoint)
 						.then(() => { router.push(this.referrer); })
 						.catch((e) => { this.connectionNs.failed(e, true); });
+				},
+				connectAdv() {
+					let endpoint = $("#id-connect-adv").val(),
+						trustedKey = $("#id-trusted-key").val();
+					this.connectionAdvNs.processing("Connecting...", true);
+					this.$root.connect(this.dcapp.cluster, endpoint, trustedKey)
+						.then(() => { router.push(this.referrer); })
+						.catch((e) => { this.connectionAdvNs.failed(e, true); });
 				}
 			}
 		});
@@ -1679,7 +1762,7 @@
 					connection.retryFailures++;
 					connection.timer = setTimeout(() => countDowner(timeout), 0);
 				},
-				connect(cluster, endpoint = "") {
+				connect(cluster, endpoint = "", trustedKey = "") {
 					if(store.user.ECDSA == null)
 						throw "User key not loaded";
 					let clusterInfo = store.clusters[cluster];
@@ -1695,6 +1778,8 @@
 					}
 					else if(endpoint != "")
 						connection.endpoint = endpoint;
+					if(trustedKey == "")
+						trustedKey = clusterInfo.key;
 
 					let scp = store.SCPs[cluster];
 					if(!scp)
@@ -1717,7 +1802,7 @@
 									this.retryConnection(cluster);
 								connection.lastState = x;
 							})
-							.connect(connection.endpoint, store.user.ECDSA, sec.utils.base64ToUint8Array(clusterInfo.key), "pair1")
+							.connect(connection.endpoint, store.user.ECDSA, sec.utils.base64ToUint8Array(trustedKey), "pair1")
 							.then(() => {
 								connection.retrying = false;
 								connection.retryingMsg = "";
