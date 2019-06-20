@@ -146,7 +146,11 @@
 						</div>
 					</div>
 					<div class="col-sm-4 col-12 order-sm-0 order-1 text-muted text-center">© <?=date("Y")?> - Secretarium</div>
-					<div class="col-sm-4 col-6 text-muted text-right"><small>{{connectedAs}}</small></div>
+					<div class="col-sm-4 col-6 text-muted text-right">
+						<small>
+							<router-link to="/key" class="link-unstyled">{{connectedAs}}</router-link>
+						</small>
+					</div>
 				</div>
 			</div>
 		</footer>
@@ -681,7 +685,7 @@
 			<div class="py-2" v-if="key.keys">
 				<h6 class="card-title"
 					data-toggle="collapse" data-target="#sec-key-manage-encrypt-collapse"
-					:aria-expanded="!key.encrypted" aria-controls="sec-key-manage-encrypt-collapse">
+					:aria-expanded="!key.encrypted?'true':'false'" aria-controls="sec-key-manage-encrypt-collapse">
 					Encrypt your key
 					<i class="fas fa-chevron-down float-right"></i>
 				</h6>
@@ -779,7 +783,7 @@
 						<div class="py-2">
 							<h6 class="card-title"
 								data-toggle="collapse" data-target="#sec-identity-me-collapse"
-								:aria-expanded="!identityInfo.updated" aria-controls="sec-identity-me-collapse">
+								:aria-expanded="!identityInfo.updated?'true':'false'" aria-controls="sec-identity-me-collapse">
 								Identity information
 								<i class="fas fa-chevron-down float-right"></i>
 							</h6>
@@ -804,7 +808,7 @@
 						<div class="py-2">
 							<h6 class="card-title"
 								data-toggle="collapse" data-target="#sec-identity-pr-collapse"
-								:aria-expanded="!personalrecord.updated" aria-controls="sec-identity-pr-collapse">
+								:aria-expanded="!personalrecord.updated?'true':'false'" aria-controls="sec-identity-pr-collapse">
 								Personal records
 								<i class="fas fa-chevron-down float-right"></i>
 							</h6>
@@ -863,19 +867,26 @@
 		<div class="py-2">
 			<h6 class="card-title"
 				data-toggle="collapse" data-target="#sec-organisation-collapse"
-				:aria-expanded="!updated" aria-controls="sec-organisation-collapse">
+				:aria-expanded="!updated?'true':'false'" aria-controls="sec-organisation-collapse">
 				Organisations
 				<i class="fas fa-chevron-down float-right"></i>
 			</h6>
 			<div class="mt-3 collapse" id="sec-organisation-collapse" :class="{'show':!updated}">
-				<router-link class="list-item-sec" :to="'/organisation/'+org.name" tag="div"
-					v-for="org in $root.store.user.dcapps.identity.data.organisations" :key="org.name">
-					<div>
-						{{app.name}}
-					</div>
-					<p class="m-0 mt-2">{{app.description}}</p>
-				</router-link>
-				<sec-notif-state :state="organisationsNs.data"></sec-notif-state>
+				<div v-if="loaded&&Object.keys(organisations)">
+					<router-link class="list-item-sec" :to="'/organisation/'+org.name" tag="div"
+						v-for="org in organisations" :key="org.name">
+						<div>
+							{{app.name}}
+						</div>
+						<p class="m-0 mt-2">{{app.description}}</p>
+					</router-link>
+				</div>
+				<div v-else-if="loaded">
+					<p>You are not part of any organisation yet.</p>
+				</div>
+				<div v-else>
+					<sec-notif-state :state="organisationsNs.data"></sec-notif-state>
+				</div>
 			</div>
 		</div>
 	</script>
@@ -1532,6 +1543,7 @@
 			data: () => {
 				return {
 					updated: false,
+					loaded: false,
 					organisationsNs: new notifState(),
 				}
 			},
@@ -1541,8 +1553,12 @@
 					.onError(x => { this.organisationsNs.failed(x, true); })
 					.onResult(x => {
 						Vue.set(store.user.dcapps.identity.data, "organisations", x);
-						this.organisationsNs.executed("loaded", true).hide();
+						this.organisationsNs.executed().hide(0);
+						this.loaded = true;
 					});
+			},
+			computed: {
+				organisations() { return $root.store.user.dcapps.identity.data.organisations; }
 			},
 			methods: {
 			}
