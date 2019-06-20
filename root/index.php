@@ -41,7 +41,7 @@
 							<a class="nav-link" href="#why">Rationale</a>
 						</li>
 						<li class="nav-item py-0 px-2">
-							<a class="nav-link" href="#technology">Technology</a>
+							<a class="nav-link shift-right" href="#technology">Technology</a>
 						</li>
 					</ul>
 					<ul id="sec-menu" class="navbar-nav flex-row ml-auto" :style="{marginRight:(store.isLogoPage?'2vw':0)}">
@@ -893,7 +893,7 @@
 				<i class="fas fa-chevron-down float-right"></i>
 			</h6>
 			<div class="mt-3 collapse" id="sec-organisation-collapse" :class="{'show':!updated}">
-				<div v-if="loaded&&Object.keys(organisations)">
+				<div v-if="loaded&&Object.keys(organisations).length">
 					<router-link class="list-item-sec" :to="'/organisation/'+org.name" tag="div"
 						v-for="org in organisations" :key="org.name">
 						<div>
@@ -1654,6 +1654,8 @@
 				}
 			},
 			beforeRouteEnter(to, from, next) {
+				if(store.user.ECDSA == null)
+					router.push("/key"); // key not loaded yet
 				loadDcappsList()
 					.then(() => { next(self => { self.referrer = {...from}; }); })
 					.catch(e => { router.push("/"); /* unknown app */ });

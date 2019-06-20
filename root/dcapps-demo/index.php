@@ -12,12 +12,12 @@
 {
 	"clusters": {
 <?php if($env == "prod") { ?>		"sec-demo-1": {
-			"key": "xF2IUJnynRkkMvD+3RbYjPC/RgazPG3YY6GzVPTT8/WKRO6/1DuRzFFljtvESb/YdmOk7kudprH6L4z3tYPqPg==",
+			"key": "2Fg/WOoEEvJwQjEPy+SDZqPHKIlhB+h5wTAfk8PAFIqrL3aj5GOXx3QcSFvjc7JG7K+ShC2TPROtJqq6iuh57Q==",
 			"gateways": [
-				{ "endpoint": "wss://ovh3.node.secretarium.org:443/", "name": "DEMO (OVH DE-1)" },
-				{ "endpoint": "wss://ovh4.node.secretarium.org:443/", "name": "DEMO (OVH UK-1)" },
-				{ "endpoint": "wss://ovh5.node.secretarium.org:443/", "name": "DEMO (OVH DE-2)" },
-				{ "endpoint": "wss://ovh6.node.secretarium.org:443/", "name": "DEMO (OVH UK-2)" }
+				{ "endpoint": "wss://ovh4.node.secretarium.org:443/", "name": "DEMO (OVH DE-1)" },
+				{ "endpoint": "wss://ovh5.node.secretarium.org:443/", "name": "DEMO (OVH UK-1)" },
+				{ "endpoint": "wss://ovh6.node.secretarium.org:443/", "name": "DEMO (OVH DE-2)" },
+				{ "endpoint": "wss://ovh3.node.secretarium.org:443/", "name": "DEMO (OVH UK-2)" }
 			]
 		}
 <?php } else if($env == "dev") { ?>		"sec-demo-1": {
