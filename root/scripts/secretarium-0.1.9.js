@@ -450,7 +450,7 @@ var sec, secretarium = sec = {
                 publicKey = new Uint8Array(await sec.utils.ecdsa.exportPub(cryptoKey, "raw")),
                 privateKey = new Uint8Array(await sec.utils.ecdsa.exportPri(cryptoKey, "pkcs8")),
                 keys = sec.utils.concatUint8Array(publicKey, privateKey).secToBase64(),
-                key = { name: name, cryptoKey: cryptoKey, keys: keys };
+                key = { name: name, cryptoKey: cryptoKey, keys: keys, newKey: true };
 
             return await this._addKey(key);
         }

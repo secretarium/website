@@ -622,25 +622,34 @@
 		</div>
 	</script>
 	<script type="text/x-template" id="sec-key-decrypt">
-		<div class="py-2">
-			<h6 class="card-title mb-3">Decrypt "{{key.name}}"</h6>
-			<p class="card-text">
-				Please enter the password used for securing the key
-			</p>
-			<form class="form-sec" @submit.prevent>
-				<div class="form-row">
-					<div class="col-sm">
-						<input id="ckPwd" type="password" class="form-control" placeholder="Password" autocomplete="current-password">
+		<div>
+			<div>
+				<router-link to="/key" class="btn btn-link text-sec p-0">
+					<i class="fas fa-angle-left fw pr-1"></i>
+					back to key loader
+				</router-link>
+			</div>
+			<hr class="my-3 sec" />
+			<div class="py-2">
+				<h6 class="card-title mb-3">Decrypt "{{key.name}}"</h6>
+				<p class="card-text">
+					Please enter the password used for securing the key
+				</p>
+				<form class="form-sec" @submit.prevent>
+					<div class="form-row">
+						<div class="col-sm">
+							<input id="ckPwd" type="password" class="form-control" placeholder="Password" autocomplete="current-password">
+						</div>
+						<div class="col-sm-auto mt-3 mt-sm-0">
+							<button type="submit" class="btn btn-sec" @click.prevent="decryptKey">
+								<i class="fas fa-fw fa-lock pr-3"></i> Decrypt
+							</button>
+							<sec-notif-state :state="decryptionNs.data" class="pl-3 d-sm-none"></sec-notif-state>
+						</div>
 					</div>
-					<div class="col-sm-auto mt-3 mt-sm-0">
-						<button type="submit" class="btn btn-sec" @click.prevent="decryptKey">
-							<i class="fas fa-fw fa-lock pr-3"></i> Decrypt
-						</button>
-						<sec-notif-state :state="decryptionNs.data" class="pl-3 d-sm-none"></sec-notif-state>
-					</div>
-				</div>
-				<sec-notif-state :state="decryptionNs.data" class="mt-2 d-none d-sm-block"></sec-notif-state>
-			</form>
+					<sec-notif-state :state="decryptionNs.data" class="mt-2 d-none d-sm-block"></sec-notif-state>
+				</form>
+			</div>
 		</div>
 	</script>
 	<script type="text/x-template" id="sec-key-create">
@@ -675,13 +684,25 @@
 	</script>
 	<script type="text/x-template" id="sec-key-manage">
 		<div>
+			<div>
+				<router-link to="/key" class="btn btn-link text-sec p-0">
+					<i class="fas fa-angle-left fw pr-1"></i>
+					back to key loader
+				</router-link>
+			</div>
+			<hr class="my-3 sec" />
 			<div class="py-2">
+				<h6 v-if="key.newKey" class="card-title">New key</h6>
+				<p  v-if="key.newKey" class="card-text mt-3">
+					Your new key has been successfully generated.<br />
+					Please use the options below to export or save you key for future usages.
+				</p>
 				<p class="card-text border rounded-sm bg-light p-2 fs-85">
 					<strong>Key Name</strong>: "{{key.name}}"<br />
 					<strong>Public Key</strong>: {{publicKeyStr}}
 				</p>
 			</div>
-			<hr class="my-3 sec" />
+			<hr class="my-3 sec" v-if="key.keys" />
 			<div class="py-2" v-if="key.keys">
 				<h6 class="card-title"
 					data-toggle="collapse" data-target="#sec-key-manage-encrypt-collapse"
@@ -709,8 +730,8 @@
 					</form>
 				</div>
 			</div>
-			<hr class="my-3 sec" v-if="key.keys" />
-			<div class="py-2">
+			<hr class="my-3 sec" v-if="!key.missing" />
+			<div class="py-2" v-if="!key.missing">
 				<h6 class="card-title">Export your key</h6>
 				<p class="card-text mt-3">
 					Export your key to back it up locally, or on a secure hardware.
@@ -725,7 +746,7 @@
 					</a>
 				</form>
 			</div>
-			<div v-if="$root.canStore">
+			<div v-if="!key.missing&&$root.canStore">
 				<hr class="my-3 sec" />
 				<div class="py-2">
 					<h6 class="card-title">Save in this browser</h6>
@@ -742,7 +763,7 @@
 					</form>
 				</div>
 			</div>
-			<div v-if="key.saved">
+			<div v-if="!key.missing&&key.saved">
 				<hr class="my-3 sec" />
 				<div class="py-2">
 					<h6 class="card-title">Delete</h6>
@@ -1390,7 +1411,7 @@
 				}
 			},
 			computed: {
-				key() { return this.$root.keysManager.keys[this.id] || { name: '--deleted--' }; },
+				key() { return this.$root.keysManager.keys[this.id] || { name: '--deleted--', missing: true }; },
 				publicKeyStr() {
 					if(this.key.encrypted) return "(encrypted)";
 					if(this.key.name == "--deleted--") return "(deleted)";
@@ -1558,7 +1579,7 @@
 					});
 			},
 			computed: {
-				organisations() { return $root.store.user.dcapps.identity.data.organisations; }
+				organisations() { return this.$root.store.user.dcapps.identity.data.organisations; }
 			},
 			methods: {
 			}
