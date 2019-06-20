@@ -695,7 +695,7 @@
 				<h6 v-if="key.newKey" class="card-title">New key</h6>
 				<p  v-if="key.newKey" class="card-text mt-3">
 					Your new key has been successfully generated.<br />
-					Please use the options below to export or save you key for future usages.
+					Please use the options below to encrypt, export, save you key for future usages.
 				</p>
 				<p class="card-text border rounded-sm bg-light p-2 fs-85">
 					<strong>Key Name</strong>: "{{key.name}}"<br />
@@ -1468,7 +1468,7 @@
 						.onResult(x => {
 							Vue.set(store.user.dcapps.identity.data, "firstname", x.firstname);
 							Vue.set(store.user.dcapps.identity.data, "lastname", x.lastname);
-							Vue.set(store.user.dcapps.identity.data, "personalRecords", x.personalRecords);
+							Vue.set(store.user.dcapps.identity.data, "personalRecords", x.personalRecords || {});
 						})
 				}
 			},
@@ -1573,7 +1573,7 @@
 				store.SCPs[identityCluster].sendQuery("organisation", "get-user-organisations", "organisation-get-user-organisations")
 					.onError(x => { this.organisationsNs.failed(x, true); })
 					.onResult(x => {
-						Vue.set(store.user.dcapps.identity.data, "organisations", x);
+						Vue.set(store.user.dcapps.identity.data, "organisations", x || {});
 						this.organisationsNs.executed().hide(0);
 						this.loaded = true;
 					});
