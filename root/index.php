@@ -1485,13 +1485,13 @@
 					store.SCPs[identityCluster]
 						.sendTx("identity", "set", "identity-set", args)
 						.onError(x => { this.identityInfo.ns.failed(x, true); })
-						.onAcknowledged(x => { this.identityInfo.ns.acknowledged(); })
-						.onProposed(x => { this.identityInfo.ns.proposed(); })
-						.onCommitted(x => { this.identityInfo.ns.committed(); })
-						.onExecuted(x => {
+						.onAcknowledged(() => { this.identityInfo.ns.acknowledged(); })
+						.onProposed(() => { this.identityInfo.ns.proposed(); })
+						.onCommitted(() => { this.identityInfo.ns.committed(); })
+						.onExecuted(() => {
 							this.identityInfo.ns.executed().hide();
-							Vue.set(store.user.dcapps.identity.data, "firstname", x.firstname);
-							Vue.set(store.user.dcapps.identity.data, "lastname", x.lastname);
+							Vue.set(store.user.dcapps.identity.data, "firstname", args.firstname);
+							Vue.set(store.user.dcapps.identity.data, "lastname", args.lastname);
 						});
 				}
 			}
@@ -1517,10 +1517,10 @@
 					store.SCPs[identityCluster]
 						.sendTx("identity", "set-personal-record", "identity-set-personal-record-" + name, args)
 						.onError(x => { this.sendCodeNs.failed(x, true); })
-						.onAcknowledged(x => { this.sendCodeNs.acknowledged(); })
-						.onProposed(x => { this.sendCodeNs.proposed(); })
-						.onCommitted(x => { this.sendCodeNs.committed(); })
-						.onExecuted(x => {
+						.onAcknowledged(() => { this.sendCodeNs.acknowledged(); })
+						.onProposed(() => { this.sendCodeNs.proposed(); })
+						.onCommitted(() => { this.sendCodeNs.committed(); })
+						.onExecuted(() => {
 							this.updated = true;
 							Vue.set(this.prs, name, { value: value, verified: false });
 							this.sendCodeNs.executed("Sending security challenge...", true);
@@ -1540,10 +1540,10 @@
 					store.SCPs[identityCluster]
 						.sendTx("identity", "verify-personal-record", "identity-verify-personal-record-" + name, args)
 						.onError(x => { this.verifyNs.failed(x, true); })
-						.onAcknowledged(x => { this.verifyNs.acknowledged(); })
-						.onProposed(x => { this.verifyNs.proposed(); })
-						.onCommitted(x => { this.verifyNs.committed(); })
-						.onExecuted(x => {
+						.onAcknowledged(() => { this.verifyNs.acknowledged(); })
+						.onProposed(() => { this.verifyNs.proposed(); })
+						.onCommitted(() => { this.verifyNs.committed(); })
+						.onExecuted(() => {
 							this.verifyNs.executed("Updating record...");
 							store.SCPs[identityCluster].sendQuery("identity", "get", "identity-get")
 								.onError(x => { this.verifyNs.failed(x, true); })

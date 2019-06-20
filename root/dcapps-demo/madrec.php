@@ -638,18 +638,18 @@
                 store.SCPs[MADRecCluster]
                     .sendTx("identity", "share-with", "identity-share-with", args)
                     .onError(x => { this.nsRequest.failed(x, true); })
-                    .onAcknowledged(x => { this.nsRequest.acknowledged(); })
-                    .onProposed(x => { this.nsRequest.proposed(); })
-                    .onCommitted(x => { this.nsRequest.committed(); })
-                    .onExecuted(x => {
+                    .onAcknowledged(() => { this.nsRequest.acknowledged(); })
+                    .onProposed(() => { this.nsRequest.proposed(); })
+                    .onCommitted(() => { this.nsRequest.committed(); })
+                    .onExecuted(() => {
                         this.nsRequest.executed();
                         store.SCPs[MADRecCluster]
                             .sendTx("madrec", "request-access", "madrec-request-access", { role: "participant" })
                             .onError(x => { this.nsRequest.failed(x, true); })
-                            .onAcknowledged(x => { this.nsRequest.acknowledged(); })
-                            .onProposed(x => { this.nsRequest.proposed(); })
-                            .onCommitted(x => { this.nsRequest.committed(); })
-                            .onExecuted(x => { this.nsRequest.executed().hide(); });
+                            .onAcknowledged(() => { this.nsRequest.acknowledged(); })
+                            .onProposed(() => { this.nsRequest.proposed(); })
+                            .onCommitted(() => { this.nsRequest.committed(); })
+                            .onExecuted(() => { this.nsRequest.executed().hide(); });
                     });
             }
         }
@@ -699,18 +699,18 @@
                 store.SCPs[MADRecCluster]
                     .sendTx("identity", "share-with", "identity-share-with", args)
                     .onError(x => { this.nsRequest.failed(x, true); })
-                    .onAcknowledged(x => { this.nsRequest.acknowledged(); })
-                    .onProposed(x => { this.nsRequest.proposed(); })
-                    .onCommitted(x => { this.nsRequest.committed(); })
-                    .onExecuted(x => {
+                    .onAcknowledged(() => { this.nsRequest.acknowledged(); })
+                    .onProposed(() => { this.nsRequest.proposed(); })
+                    .onCommitted(() => { this.nsRequest.committed(); })
+                    .onExecuted(() => {
                         this.nsRequest.executed();
                         store.SCPs[MADRecCluster]
                             .sendTx("madrec", "request-access", "madrec-request-access", { role: "participant" })
                             .onError(x => { this.nsRequest.failed(x, true); })
-                            .onAcknowledged(x => { this.nsRequest.acknowledged(); })
-                            .onProposed(x => { this.nsRequest.proposed(); })
-                            .onCommitted(x => { this.nsRequest.committed(); })
-                            .onExecuted(x => { this.nsRequest.executed().hide(); });
+                            .onAcknowledged(() => { this.nsRequest.acknowledged(); })
+                            .onProposed(() => { this.nsRequest.proposed(); })
+                            .onCommitted(() => { this.nsRequest.committed(); })
+                            .onExecuted(() => { this.nsRequest.executed().hide(); });
                     });
             }
         }
@@ -766,10 +766,10 @@
                 store.SCPs[MADRecCluster]
                     .sendTx("madrec", "coopt", "madrec-coopt", args)
                     .onError(x => { this.ns.failed(x, true); })
-                    .onAcknowledged(x => { this.ns.acknowledged(); })
-                    .onProposed(x => { this.ns.proposed(); })
-                    .onCommitted(x => { this.ns.committed(); })
-                    .onExecuted(x => {
+                    .onAcknowledged(() => { this.ns.acknowledged(); })
+                    .onProposed(() => { this.ns.proposed(); })
+                    .onCommitted(() => { this.ns.committed(); })
+                    .onExecuted(() => {
                         this.ns.executed();
                         this.getMembers();
                     });
@@ -836,10 +836,10 @@
                 store.SCPs[MADRecCluster]
                     .sendTx("madrec", "put", "madrec-single-put", args)
                     .onError(x => { this.nsPut.failed(x, true); })
-                    .onAcknowledged(x => { this.nsPut.acknowledged(); })
-                    .onProposed(x => { this.nsPut.proposed(); })
-                    .onCommitted(x => { this.nsPut.committed(); })
-                    .onExecuted(x => {
+                    .onAcknowledged(() => { this.nsPut.acknowledged(); })
+                    .onProposed(() => { this.nsPut.proposed(); })
+                    .onCommitted(() => { this.nsPut.committed(); })
+                    .onExecuted(() => {
                         this.nsPut.executed().hide();
                         this.madrecGet();
                     });
@@ -1057,13 +1057,13 @@
                         this.updateUploadBlockState(blockId, "failed", x);
                         this.upload.failed += items;
                     })
-                    .onAcknowledged(x => {
+                    .onAcknowledged(() => {
                         if(this.upload.blocks[blockId].state != "failed") {
                             this.updateUploadBlockState(blockId, "acknowledged");
                             this.upload.acknowledged += items;
                         }
                     })
-                    .onExecuted(x => {
+                    .onExecuted(() => {
                         if(this.upload.blocks[blockId].state != "failed") {
                             this.updateUploadBlockState(blockId, "executed");
                             this.upload.executed += items;
