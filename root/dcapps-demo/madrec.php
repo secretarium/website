@@ -216,7 +216,7 @@
             <hr class="my-3 sec" />
             <div class="py-2">
 				<h6 class="card-title" data-toggle="collapse" data-target="#sec-madrec-single-lei-put-collapse"
-					aria-expanded="true" aria-controls="sec-madrec-single-lei-put-collapse">
+					aria-expanded="false" aria-controls="sec-madrec-single-lei-put-collapse">
 					Update fields data
 					<i class="fas fa-chevron-down float-right"></i>
 				</h6>
@@ -258,7 +258,7 @@
             <hr class="my-3 sec" />
             <div class="py-2">
 				<h6 class="card-title" data-toggle="collapse" data-target="#sec-madrec-single-lei-get-collapse"
-					aria-expanded="true" aria-controls="sec-madrec-single-lei-get-collapse">
+					aria-expanded="false" aria-controls="sec-madrec-single-lei-get-collapse">
 					LEI quality benchmark
 					<i class="fas fa-chevron-down float-right"></i>
 				</h6>
