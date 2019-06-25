@@ -612,7 +612,7 @@
 					To securely connect to an App, we need to run our Secure Connection Protocol (SCP).<br/>
 					The SCP requires mutual authentication: you are genuinely authenticated, and the
 					integrity of the remote Secretarium network is verified.<br/>
-					You therefore need a key to connect to an App on the Secretarium network.
+					These pages will help you creating a key so you connect to Apps.
 				</p>
 				<hr class="mt-4 mb-3 sec" />
 				<sec-key-create></sec-key-create>
@@ -730,22 +730,6 @@
 					</form>
 				</div>
 			</div>
-			<hr class="my-3 sec" v-if="!key.missing" />
-			<div class="py-2" v-if="!key.missing">
-				<h6 class="card-title">Export your key</h6>
-				<p class="card-text mt-3">
-					Export your key to back it up locally, or on a secure hardware.
-				</p>
-				<form class="form-sec" @submit.prevent>
-					<div v-show="key.encrypted&&key.keys" class="custom-control custom-checkbox checkbox-lg checkbox-sec mb-3">
-						<input type="checkbox" class="custom-control-input" id="ckExportEncrypted" :checked="key.encrypted">
-						<label class="custom-control-label" for="ckExportEncrypted">Export encrypted</label>
-					</div>
-					<a class="btn btn-sec" :href="key.exportUrl" :download="key.name+'.secretarium'">
-						<i class="fas fa-fw fa-download pr-3"></i> Export
-					</a>
-				</form>
-			</div>
 			<div v-if="!key.missing&&$root.canStore">
 				<hr class="my-3 sec" />
 				<div class="py-2">
@@ -762,6 +746,22 @@
 						<sec-notif-state :state="saveNs.data"></sec-notif-state>
 					</form>
 				</div>
+			</div>
+			<hr class="my-3 sec" v-if="!key.missing" />
+			<div class="py-2" v-if="!key.missing">
+				<h6 class="card-title">Export your key</h6>
+				<p class="card-text mt-3">
+					Export your key to back it up locally, or on a secure hardware.
+				</p>
+				<form class="form-sec" @submit.prevent>
+					<div v-show="key.encrypted&&key.keys" class="custom-control custom-checkbox checkbox-lg checkbox-sec mb-3">
+						<input type="checkbox" class="custom-control-input" id="ckExportEncrypted" :checked="key.encrypted">
+						<label class="custom-control-label" for="ckExportEncrypted">Export encrypted</label>
+					</div>
+					<a class="btn btn-sec" :href="key.exportUrl" :download="key.name+'.secretarium'">
+						<i class="fas fa-fw fa-download pr-3"></i> Export
+					</a>
+				</form>
 			</div>
 			<div v-if="!key.missing&&key.saved">
 				<hr class="my-3 sec" />
