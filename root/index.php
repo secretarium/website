@@ -1394,9 +1394,13 @@
 			methods: {
 				onKeyFile(evt) {
 					this.$root.keysManager.importKeyFile(evt)
-					.catch(err => {
-						alerts.push({ key: "invalid-key-file", isError: true, html: err });
-					})
+						.then((key) => {
+							let id = this.$root.keysManager.find(key.name);
+							router.push({ name: 'key-manage', params : { id: id }});
+						})
+						.catch(err => {
+							alerts.push({ key: "invalid-key-file", isError: true, html: err });
+						})
 				}
 			}
 		});
