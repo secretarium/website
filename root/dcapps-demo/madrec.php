@@ -181,12 +181,12 @@
                         <tr v-for="p in members">
                             <td>{{p.firstname}}</td>
                             <td>{{p.lastname}}</td>
-                            <td>{{p.phone}} <i v-if="p.phoneVerified" class="fas fa-check-circle text-primary"></i></td>
-                            <td>{{p.email}} <i v-if="p.emailVerified" class="fas fa-check-circle text-primary"></i></td>
+                            <td class="text-nowrap">{{p.phone}} <i v-if="p.phoneVerified" class="fas fa-check-circle text-primary"></i></td>
+                            <td class="text-nowrap">{{p.email}} <i v-if="p.emailVerified" class="fas fa-check-circle text-primary"></i></td>
                             <td>{{p.role}}</td>
                             <td>{{p.status}} <span v-if="p.status=='requested'" class="badge badge-warning">{{p.grants}}</span></td>
                             <td>
-                                <button type="button" class="btn btn-sec btn-sm"
+                                <button type="button" class="btn btn-primary btn-sm"
                                     @click.prevent="vote('granted', p.cooptionId)" v-if="!p.isSelf&&p.vote!='granted'">Grant</button>
                                 <span v-if="p.isSelf">(you)</span>
                             </td>

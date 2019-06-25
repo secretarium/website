@@ -215,7 +215,7 @@ const MADRecAppMembers = Vue.component('sec-madrec-members', {
                     this.members = x.map(p => {
                         let o = {
                             firstname: p.identity.firstname, lastname: p.identity.lastname, cooptionId: p.cooptionId,
-                            status: p.status, isSelf: p.isSelf, grants: p.grants || 0, vote: p.vote || ""
+                            role: p.role, status: p.status, isSelf: p.isSelf, grants: p.grants || 0, vote: p.vote || ""
                         };
                         if(p.identity.personalRecords.phone) {
                             o.phone = p.identity.personalRecords.phone.value;
