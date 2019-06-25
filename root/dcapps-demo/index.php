@@ -12,9 +12,9 @@
 {
 	"clusters": {
 <?php if($env == "prod") { ?>		"sec-demo-1": {
-			"key": "2Fg/WOoEEvJwQjEPy+SDZqPHKIlhB+h5wTAfk8PAFIqrL3aj5GOXx3QcSFvjc7JG7K+ShC2TPROtJqq6iuh57Q==",
+			"key": "YD2QmJFzcDJMNe5NqIG36uK7NO19Nfz7W44ewqnnLnoFW/mrId+83gBamODG0kLn2JWwXA4POzk/QmMk64OgWg==",
 			"gateways": [
-				{ "endpoint": "wss://ovh4.node.secretarium.org:443/", "name": "DEMO (OVH DE-1)" },
+				{ "endpoint": "wss://ovh4.node.secretarium.org:443/", "name": "DEMO (OVH FR-1)" },
 				{ "endpoint": "wss://ovh5.node.secretarium.org:443/", "name": "DEMO (OVH UK-1)" },
 				{ "endpoint": "wss://ovh6.node.secretarium.org:443/", "name": "DEMO (OVH DE-2)" },
 				{ "endpoint": "wss://ovh3.node.secretarium.org:443/", "name": "DEMO (OVH UK-2)" }
@@ -23,7 +23,9 @@
 <?php } else if($env == "dev") { ?>		"sec-demo-1": {
 			"key": "rliD_CISqPEeYKbWYdwa-L-8oytAPvdGmbLC0KdvsH-OVMraarm1eo-q4fte0cWJ7-kmsq8wekFIJK0a83_yCg==",
 			"gateways": [
-				{ "endpoint": "wss://127.0.0.1:5428/", "name": "TEST LOCAL" }
+				{ "endpoint": "wss://127.0.0.1:5428/", "name": "TEST LOCAL" },
+				{ "endpoint": "wss://192.168.1.232:443/", "name": "TEST GH" },
+				{ "endpoint": "wss://dev.node.secretarium.org:5557/", "name": "TEST DEV 5557 (via dyn dns)" }
 			]
 		}
 <?php } ?>
@@ -36,13 +38,14 @@
 			"icon": "fa-chart-pie",
 			"cluster" : "sec-demo-1",
 			"ui": {
-				"src": "/dcapps-demo/madrec.php",
 				"require": [
 					{ "name": "papaparse-4.6.0", "src": "/scripts/papaparse-4.6.0.min.js" },
 					{ "name": "chart-2.8.0", "src": "/scripts/chart-2.8.0.min.js"},
 					{ "name": "stream-saver-0.0.0", "src": "/scripts/stream-saver-0.0.0.js" },
-					{ "name": "madrec-formats-0.0.15", "src": "/scripts/madrec.formats-0.0.15.js" }
-				]
+					{ "name": "madrec-formats-0.0.15", "src": "/dcapps-demo/madrec.formats-0.0.15.js" }
+				],
+				"templates": "/dcapps-demo/madrec.php",
+				"scripts": "/dcapps-demo/madrec-0.0.1.js"
 			}
 		},
 		"sbx": {

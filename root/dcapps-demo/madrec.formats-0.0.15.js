@@ -266,25 +266,25 @@ var MADRec = (function() {
     };
 
     return {
-        lei: { name: "LEI Code", type: "text", verifier: verifiers.LEI, sample: "254900DIU0FZCNP9N347" },
+        lei: { name: "LEI Code", type: "text", verifier: verifiers.LEI, sample: "549300LRI77T5F28OH18" },
         fields: [
-            { name: "BIC Code", type: "text", verifier: verifiers.BIC, sample: "0000GB00XXX" },
-            { name: "EMIR Classification", type: "list", values: EMIR, verifier: verifiers.EMIR, sample: "FC" },
-            { name: "Investment Firm", type: "bool", verifier: verifiers.YN, sample: "Y" },
-            { name: "GK Code", type: "text", verifier: verifiers.GK, sample: "123456" },
-            { name: "PermID Code", type: "text", verifier: verifiers.PERMID, sample: "0123456789" },
+            { name: "BIC Code", type: "text", verifier: verifiers.BIC, sample: "BFOFNL2RXXX" },
+            { name: "EMIR Classification", type: "list", values: EMIR, verifier: verifiers.EMIR },
+            { name: "Investment Firm", type: "bool", verifier: verifiers.YN, sample: "N" },
+            { name: "GK Code", type: "text", verifier: verifiers.GK },
+            { name: "PermID Code", type: "text", verifier: verifiers.PERMID },
             { name: "NACE Class", type: "text", verifier: verifiers.NACE_CLASS, sample: "11.11" },
-            { name: "NACE Group", type: "text", verifier: verifiers.NACE_GRP, sample: "11.1" },
-            { name: "NACE Division", type: "text", verifier: verifiers.NACE_DIV, sample: "11" },
-            { name: "Immediate Parent", type: "text", verifier: verifiers.LEI, sample: "254900DIU0FZCNP9N347" },
-            { name: "Ultimate Parent", type: "text", verifier: verifiers.LEI, sample: "254900DIU0FZCNP9N347" },
-            { name: "Full Legal Name", type: "text", verifier: verifiers.CLEAN_STR, sample: "Full Legal Name" },
-            { name: "Legal Form", type: "list", values: ELF, verifier: verifiers.LEGAL_FORM, sample: "CDOV" },
-            { name: "Country of Operation", type: "list", values: ISO_3166_1_ALPHA_3, verifier: verifiers.COUNTRY, sample: "AND" },
-            { name: "Country of Incorporation", type: "list", values: ISO_3166_1_ALPHA_3, verifier: verifiers.COUNTRY, sample: "ARE" },
-            { name: "Country of Asset Location", type: "list", values: ISO_3166_1_ALPHA_3, verifier: verifiers.COUNTRY, sample: "AFG" },
+            { name: "NACE Group", type: "text", verifier: verifiers.NACE_GRP },
+            { name: "NACE Division", type: "text", verifier: verifiers.NACE_DIV },
+            { name: "Immediate Parent", type: "text", verifier: verifiers.LEI, sample: "549300TK7G7NZTVM1Z30" },
+            { name: "Ultimate Parent", type: "text", verifier: verifiers.LEI, sample: "549300TK7G7NZTVM1Z30" },
+            { name: "Full Legal Name", type: "text", verifier: verifiers.CLEAN_STR, sample: "Unilever Finance International B.V." },
+            { name: "Legal Form", type: "list", values: ELF, verifier: verifiers.LEGAL_FORM, sample: "54M6" },
+            { name: "Country of Operation", type: "list", values: ISO_3166_1_ALPHA_3, verifier: verifiers.COUNTRY, sample: "NER" },
+            { name: "Country of Incorporation", type: "list", values: ISO_3166_1_ALPHA_3, verifier: verifiers.COUNTRY, sample: "NER" },
+            { name: "Country of Asset Location", type: "list", values: ISO_3166_1_ALPHA_3, verifier: verifiers.COUNTRY, sample: "NER" },
             { name: "US Person", type: "bool", verifier: verifiers.YN, sample: "N" },
-            { name: "Company Registration Number", type: "text", verifier: verifiers.CLEAN_STR, sample: "123456789A" }
+            { name: "Company Registration Number", type: "text", verifier: verifiers.CLEAN_STR, sample: "24325815" }
         ]
     };
 })();

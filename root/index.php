@@ -16,7 +16,7 @@
 	<script src="/scripts/jquery-3.3.1.min.js"></script>
 	<script src="/scripts/popper-1.14.7.min.js"></script>
 	<script src="/scripts/bootstrap-4.3.1.min.js"></script>
-	<script src="/scripts/vue-2.6.10.min.js"></script>
+	<script src="/scripts/vue-2.6.10.js"></script>
 	<script src="/scripts/vue-router-3.0.2.min.js"></script>
 	<script src="/scripts/secretarium-0.1.9.js"></script>
 </head>
@@ -1613,29 +1613,35 @@
 					if(!this.dcapp.loaded) { // we need to load the app code
 						this.state = "loading";
 						if(this.dcapp.ui) {
-							let loadViews = () => {
-								$.get(this.dcapp.ui.src)
-									.done(data => {
-										$("body").append(data);
-										this.dcapp.loaded = true;
-										this.state = "initialising";
-										if(this.dcapp.onLoad) { // promise registered by app
-											this.dcapp.onLoad
-												.then(() => { router.push("/" + this.name); })
-												.catch(e => { this.state = "error"; })
-										}
-										else setTimeout(() => { router.push("/" + this.name); }, 1000);
-									})
-									.fail((j, t, e) => { this.state = "error"; });
-							}
+							let onUILoaded = () => {
+									if(this.dcapp.onLoad) { // promise registered by app
+										this.dcapp.onLoad
+											.then(() => { router.push("/" + this.name); })
+											.catch(e => { this.state = "error"; })
+									}
+									else setTimeout(() => { router.push("/" + this.name); }, 1000);
+								},
+								loadUI = () => {
+									$.get(this.dcapp.ui.templates)
+										.done(data => {
+											$("body").append(data);
+											this.dcapp.loaded = true;
+											this.state = "initialising";
+											if(this.dcapp.ui.scripts) {
+												loadScript(this.name, this.dcapp.ui.scripts)
+													.then(onUILoaded)
+													.catch(e => { this.state = "error"; })
+											}
+											else onUILoaded();
+										})
+										.fail((j, t, e) => { this.state = "error"; });
+								};
 							if(this.dcapp.ui.require) {
 								let p = this.dcapp.ui.require.map(x => { return loadScript(x.name, x.src); });
 								Promise.all(p)
-									.then(loadViews)
+									.then(loadUI)
 									.catch(e => { this.state = "error"; })
-							} else {
-								loadViews();
-							}
+							} else loadUI();
 						}
 					} else {
 						router.push("/" + this.name);
