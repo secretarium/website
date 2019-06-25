@@ -127,7 +127,7 @@
 							data-toggle="dropdown" aria-expanded="false" data-offset="0,10">
 							<small>
 								<i class="fas fa-circle fa-small" :class="[state.color]"></i>
-								<span class="text-muted">{{state.text}}</span>
+								<span class="text-muted first-letter-upper-case">{{state.text}}</span>
 							</small>
 						</button>
 						<div class="dropdown-menu" aria-labelledby="connection-menu-btn" id="connection-menu">
@@ -138,7 +138,7 @@
 								<div class="cluster-name">{{s.cluster}}</div>
 								<div class="cluster-state">
 									<i class="fas fa-circle fa-small" :class="[s.color]"></i>
-									<span>{{s.text}}</span>
+									<span class="first-letter-upper-case">{{s.text}}</span>
 									<button v-if="s.retrying" type="button" class="btn btn-link text-sec ml-3"
 										@click.prevent.stop="connect(s.cluster)">retry now</button>
 								</div>
@@ -805,7 +805,7 @@
 							<h6 class="card-title"
 								data-toggle="collapse" data-target="#sec-identity-me-collapse"
 								:aria-expanded="!identityInfo.updated?'true':'false'" aria-controls="sec-identity-me-collapse">
-								Identity information
+								Personal information
 								<i class="fas fa-chevron-down float-right"></i>
 							</h6>
 							<div class="mt-3 collapse" id="sec-identity-me-collapse" :class="{'show':!identityInfo.updated}">
@@ -818,27 +818,16 @@
 										<label for="prLastName">Last name</label>
 										<input type="text" class="form-control" id="prLastName" placeholder="your last name" :value="lastname">
 									</div>
-									<div>
+									<sec-identity-personal-record
+										:name="'phone'" :placeholder="'+44 7 111 222 333'"
+										:help="'Please enter your phone number with its international extension (+x).'"></sec-identity-personal-record>
+									<sec-identity-personal-record class="mt-3"
+										:name="'email'" :placeholder="'you@example.com'"></sec-identity-personal-record>
+									<div class="mt-4">
 										<button type="button" class="btn btn-sec mr-3" @click.prevent="save">Save</button>
 										<sec-notif-state :state="identityInfo.ns.data"></sec-notif-state>
 									</div>
 								</form>
-							</div>
-						</div>
-						<hr class="my-3 sec" />
-						<div class="py-2">
-							<h6 class="card-title"
-								data-toggle="collapse" data-target="#sec-identity-pr-collapse"
-								:aria-expanded="!personalrecord.updated?'true':'false'" aria-controls="sec-identity-pr-collapse">
-								Personal records
-								<i class="fas fa-chevron-down float-right"></i>
-							</h6>
-							<div class="mt-3 collapse" id="sec-identity-pr-collapse" :class="{'show':!personalrecord.updated}">
-								<sec-identity-personal-record
-									:name="'phone'" :placeholder="'+44 7 111 222 333'"
-									:help="'Please enter your phone number with its international extension (+x).'"></sec-identity-personal-record>
-								<sec-identity-personal-record class="mt-3"
-									:name="'email'" :placeholder="'you@example.com'"></sec-identity-personal-record>
 							</div>
 						</div>
 						<hr class="my-3 sec" />
@@ -849,8 +838,8 @@
 		</div>
 	</script>
 	<script type="text/x-template" id="sec-identity-personal-record">
-		<form class="form-sec" @submit.prevent>
-			<label :for="'id-pr-'+name">Your {{name}}</label>
+		<div class="form-group">
+			<label :for="'id-pr-'+name" class="first-letter-upper-case">{{name}}</label>
 			<div class="form-row">
 				<div class="col-sm">
 					<div class="input-group">
@@ -882,7 +871,7 @@
 					<sec-notif-state :state="verifyNs.data"></sec-notif-state>
 				</div>
 			</div>
-		</form>
+		</div>
 	</script>
 	<script type="text/x-template" id="sec-organisation">
 		<div class="py-2">
