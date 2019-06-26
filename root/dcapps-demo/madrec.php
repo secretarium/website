@@ -173,8 +173,7 @@
                             <th scope="col">Email</th>
                             <th scope="col">Role</th>
                             <th scope="col">Status</th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
+                            <th scope="col">Cooption</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -186,13 +185,11 @@
                             <td>{{p.role}}</td>
                             <td>{{p.status}} <span v-if="p.status=='requested'" class="badge badge-warning">{{p.grants}}</span></td>
                             <td>
-                                <button type="button" class="btn btn-primary btn-sm"
-                                    @click.prevent="vote('granted', p.cooptionId)" v-if="!p.isSelf&&p.vote!='granted'">Grant</button>
                                 <span v-if="p.isSelf">(you)</span>
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-danger btn-sm"
-                                    @click.prevent="vote('denied', p.cooptionId)" v-if="!p.isSelf&&p.vote!='denied'">Deny</button>
+                                <button v-else-if="p.vote!='granted'" @click.prevent="vote('granted', p.cooptionId)"
+                                    type="button" class="btn btn-primary btn-sm">Grant</button>
+                                <button v-else @click.prevent="vote('denied', p.cooptionId)"
+                                    type="button" class="btn btn-danger btn-sm">Deny</button>
                             </td>
                         </tr>
                     </tbody>
