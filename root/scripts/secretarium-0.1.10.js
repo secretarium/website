@@ -250,11 +250,11 @@ var sec, secretarium = sec = {
                         if(o.error) {
                             this.requests[o.requestId].failed = true;
                             if(this.requests[o.requestId]["onError"])
-                                this.requests[o.requestId]["onError"](o.error);
+                                this.requests[o.requestId]["onError"].forEach(cb => cb(o.error));
                         }
                         else if(o.result) {
                             if(this.requests[o.requestId]["onResult"])
-                                this.requests[o.requestId]["onResult"](o.result);
+                                this.requests[o.requestId]["onResult"].forEach(cb => cb(o.result));
                         }
                         else if(o.state) {
                             if(this.requests[o.requestId].failed === true)
@@ -262,30 +262,25 @@ var sec, secretarium = sec = {
                             o.state = o.state.toLowerCase();
                             if(o.state == "acknowledged") {
                                 if(this.requests[o.requestId]["onAcknowledged"])
-                                    this.requests[o.requestId]["onAcknowledged"]();
+                                    this.requests[o.requestId]["onAcknowledged"].forEach(cb => cb());
                             }
                             else if(o.state == "proposed") {
                                 if(this.requests[o.requestId]["onProposed"])
-                                    this.requests[o.requestId]["onProposed"]();
+                                    this.requests[o.requestId]["onProposed"].forEach(cb => cb());
                             }
                             else if(o.state == "committed") {
                                 if(this.requests[o.requestId]["onCommitted"])
-                                    this.requests[o.requestId]["onCommitted"]();
+                                    this.requests[o.requestId]["onCommitted"].forEach(cb => cb());
                             }
                             else if(o.state == "executed") {
                                 if(this.requests[o.requestId]["onExecuted"])
-                                    this.requests[o.requestId]["onExecuted"]();
+                                    this.requests[o.requestId]["onExecuted"].forEach(cb => cb());
                             }
                             else if(o.state == "failed") {
                                 this.requests[o.requestId].failed = true;
                                 if(this.requests[o.requestId]["onError"])
-                                    this.requests[o.requestId]["onError"]("failed");
+                                    this.requests[o.requestId]["onError"].forEach(cb => cb("failed"));
                             }
-                        }
-                        else {
-                            if(this.requests[o.requestId]["onResult"])
-                                if(this.requests[o.requestId]["onResult"](o) !== false)
-                                    delete this.requests[o.requestId];
                         }
                     }
                 }
@@ -320,11 +315,9 @@ var sec, secretarium = sec = {
             console.debug("sending:" + query);
             this.send(sec.utils.encode(query));
             if(requestId) {
-                let cbs = this.requests[requestId] = {}, p = { resolve: null, reject: null },
-                    res = {
-                        onError: x => { cbs["onError"] = x; if(p.reject != null) p.reject(); return res; },
-                        onResult: x => { cbs["onResult"] = x; if(p.resolve != null) p.resolve(); return res; },
-                        promise: () => { return new Promise((resolve, reject) => { p.resolve = resolve; p.reject = reject; })}
+                let cbs = this.requests[requestId] = {}, res = {
+                        onError: x => { (cbs["onError"] = cbs["onError"] || []).push(x); return res; },
+                        onResult: x => { (cbs["onResult"] = cbs["onResult"] || []).push(x); return res; }
                     };
                 return res;
             }
@@ -336,14 +329,12 @@ var sec, secretarium = sec = {
             console.debug("sending:" + query);
             this.send(sec.utils.encode(query));
             if(requestId) {
-                let cbs = this.requests[requestId] = {}, p = { resolve: null, reject: null },
-                    res = {
-                        onError: x => { cbs["onError"] = x; if(p.reject != null) p.reject(); return res; },
-                        onAcknowledged: x => { cbs["onAcknowledged"] = x; return res; },
-                        onProposed: x => { cbs["onProposed"] = x; return res; },
-                        onCommitted: x => { cbs["onCommitted"] = x; return res; },
-                        onExecuted: x => { cbs["onExecuted"] = x; if(p.resolve != null) p.resolve(); return res; },
-                        promise: () => { return new Promise((resolve, reject) => { p.resolve = resolve; p.reject = reject; })}
+                let cbs = this.requests[requestId] = {}, res = {
+                        onError: x => { (cbs["onError"] = cbs["onError"] || []).push(x); return res; },
+                        onAcknowledged: x => { (cbs["onAcknowledged"] = cbs["onAcknowledged"] || []).push(x); return res; },
+                        onProposed: x => { (cbs["onProposed"] = cbs["onProposed"] || []).push(x); return res; },
+                        onCommitted: x => { (cbs["onCommitted"] = cbs["onCommitted"] || []).push(x); return res; },
+                        onExecuted: x => { (cbs["onExecuted"] = cbs["onExecuted"] || []).push(x); return res; }
                     };
                 return res;
             }
