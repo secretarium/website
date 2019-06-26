@@ -218,7 +218,7 @@
                 </div>
                 <div class="col-lg-6 mt-2 mt-lg-0">
                     <a v-if="leiState==2&&exportUrl.length>0" class="btn btn-sec ml-1 mr-3" :href="exportUrl" download="single-LEI-report.json">Export</a>
-                    <button v-else-if="leiState==1||modified" type="button" class="btn btn-sec ml-1 mr-3" @click.prevent="loadLEI">
+                    <button v-else-if="leiState==1||modified" type="button" class="btn btn-sec ml-1 mr-3" @click.prevent="onLoadLEI">
                         {{modified?'Reload':'Load'}}
                     </button>
                     <sec-notif-state :state="nsGet.data"></sec-notif-state>

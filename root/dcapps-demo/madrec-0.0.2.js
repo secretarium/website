@@ -265,7 +265,7 @@ const MADRecAppSingleLEI = Vue.component('sec-madrec-single-lei', {
     },
     mounted: function() {
         let lei = this.values.lei = MADRec.lei.sample;
-        this.loadLEI(lei).onError(x => {
+        this.loadLEI(lei, true).onError(x => {
             this.nsGet.failed().hide(0);
             MADRec.fields.forEach(e => {
                 if(e.sample) {
@@ -290,9 +290,11 @@ const MADRecAppSingleLEI = Vue.component('sec-madrec-single-lei', {
                 blob = new Blob([json], { type: 'application/json;charset=utf-8;' });
             return URL.createObjectURL(blob);
         },
-        loadLEI(lei = "", subscribe = true) {
+        onLoadLEI() {
+            this.loadLEI($("#madrecSingleLei").val(), true);
+        },
+        loadLEI(lei, subscribe) {
             this.nsGet.start();
-            lei = lei || $("#madrecSingleLei").val();
             return store.SCPs[MADRecCluster]
                 .sendQuery("madrec", "get", "madrec-single-get", { [MADRec.lei.name]: lei, subscribe: subscribe })
                 .onError(x => { this.nsGet.failed(x, true); })
@@ -383,7 +385,7 @@ const MADRecAppSingleLEI = Vue.component('sec-madrec-single-lei', {
                 .onCommitted(() => { this.nsPut.committed(); })
                 .onExecuted(() => {
                     this.nsPut.executed().hide();
-                    this.loadLEI(lei);
+                    this.loadLEI(lei, true);
                 });
         }
     }

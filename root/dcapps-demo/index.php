@@ -45,7 +45,7 @@
 					{ "name": "madrec-formats-0.0.15", "src": "/dcapps-demo/madrec.formats-0.0.15.js" }
 				],
 				"templates": "/dcapps-demo/madrec.php",
-				"scripts": "/dcapps-demo/madrec-0.0.1.js"
+				"scripts": "/dcapps-demo/madrec-0.0.2.js"
 			}
 		},
 		"sbx": {
