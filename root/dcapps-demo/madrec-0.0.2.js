@@ -266,7 +266,7 @@ const MADRecAppSingleLEI = Vue.component('sec-madrec-single-lei', {
     mounted: function() {
         let lei = this.values.lei = MADRec.lei.sample;
         this.loadLEI(lei, true).onError(x => {
-            this.nsGet.failed().hide(0);
+            this.nsGet.hide(0);
             MADRec.fields.forEach(e => {
                 if(e.sample) {
                     Vue.set(this.values, e.name, e.sample);
