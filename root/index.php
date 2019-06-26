@@ -1166,7 +1166,6 @@
 			show() { this.data.visible = true; return this; }
 			showChain() { this.data.showChain = true; return this; }
 			hide(waitMs = 5000) {
-				if(this.state == "failed") return;
 				if(waitMs > 0) this.timeout = setTimeout(() => { this.data.visible = false; }, waitMs);
 				else this.data.visible = false;
 				return this;
