@@ -12,12 +12,12 @@
 {
 	"clusters": {
 <?php if($env == "prod") { ?>		"sec-demo-1": {
-			"key": "YD2QmJFzcDJMNe5NqIG36uK7NO19Nfz7W44ewqnnLnoFW/mrId+83gBamODG0kLn2JWwXA4POzk/QmMk64OgWg==",
+			"key": "uFKHJBQTnwlO8iF5SD2+M9M+Z+XK+6XG/6EF8tNs6YhDlBeMo4+3zMRxYLmBCTS7k68rurxnrTCvyYFPnHLTpA==",
 			"gateways": [
-				{ "endpoint": "wss://ovh4.node.secretarium.org:443/", "name": "DEMO (OVH FR-1)" },
+				{ "endpoint": "wss://ovh2.node.secretarium.org:443/", "name": "DEMO (OVH FR-1)" }<?php /*,
 				{ "endpoint": "wss://ovh5.node.secretarium.org:443/", "name": "DEMO (OVH UK-1)" },
 				{ "endpoint": "wss://ovh6.node.secretarium.org:443/", "name": "DEMO (OVH DE-2)" },
-				{ "endpoint": "wss://ovh3.node.secretarium.org:443/", "name": "DEMO (OVH UK-2)" }
+				{ "endpoint": "wss://ovh3.node.secretarium.org:443/", "name": "DEMO (OVH UK-2)" }*/ echo "\n"; ?>
 			]
 		}
 <?php } else if($env == "dev") { ?>		"sec-demo-1": {

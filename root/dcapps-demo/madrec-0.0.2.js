@@ -140,7 +140,7 @@ const MADRecAppAccessDenied = Vue.component('sec-madrec-access-denied', {
     template: '#sec-madrec-access-denied',
     data: function () {
         return {
-            nsRequest: new notifState(2)
+            nsRequest: new sec.notifState(2)
         }
     },
     computed: {
@@ -161,9 +161,9 @@ const MADRecAppAccessDenied = Vue.component('sec-madrec-access-denied', {
         }
     },
     methods: {
-        requestAccess() {
-            let args = { id: store.dcapps.madrec.id, items: [ "firstname", "lastname" ] },
-                dcapp = store.dcapps["madrec"];
+        async requestAccess() {
+            let id = await sec.utils.hashBase64("madrec"),
+                args = { id: id, items: [ "firstname", "lastname" ] };
             if($("#madrec_ra_phone").is(":checked")) args.items.push("phone");
             if($("#madrec_ra_email").is(":checked")) args.items.push("email");
             this.nsRequest.start();
@@ -196,7 +196,7 @@ const MADRecAppMembers = Vue.component('sec-madrec-members', {
     template: '#sec-madrec-members',
     data: function () {
         return {
-            ns: new notifState(),
+            ns: new sec.notifState(),
             members: []
         }
     },
@@ -251,8 +251,8 @@ const MADRecAppSingleLEI = Vue.component('sec-madrec-single-lei', {
     template: '#sec-madrec-single-lei',
     data: function () {
         return {
-            nsPut: new notifState(),
-            nsGet: new notifState(),
+            nsPut: new sec.notifState(),
+            nsGet: new sec.notifState(),
             values: {},
             results: {},
             exportUrl: "",
@@ -716,8 +716,8 @@ const MADRecAppReports = Vue.component('sec-madrec-report', {
             consortiumReport: [],
             consortiumReportChart: null,
             consortiumReportObjUrl: "",
-            nsUserReport: new notifState(),
-            nsConsortiumReport: new notifState(),
+            nsUserReport: new sec.notifState(),
+            nsConsortiumReport: new sec.notifState(),
             download: {
                 started: false, done: false, start: 0, step: 100, cursor: 0, stopped: false,
                 msg: "", retries: 0, showRetry: false,
@@ -1068,4 +1068,8 @@ store.dcapps["madrec"].onLoad = new Promise((resolve, reject) => {
             resolve();
         })
         .onError(x => { resolve(); })
+});
+store.dcapps["madrec"].reset = new Promise((resolve, reject) => {
+    Vue.set(store.user.dcapps, "madrec", { data: { accessStatus: "denied", grants: 0 }});
+    resolve();
 });

@@ -14,11 +14,13 @@
 	<link rel="stylesheet" href="/styles/secretarium-0.0.10.min.css" />
 
 	<script src="/scripts/jquery-3.3.1.min.js"></script>
+	<script src="/scripts/jquery.autocomplete.min-1.4.10.js"></script>
 	<script src="/scripts/popper-1.14.7.min.js"></script>
 	<script src="/scripts/bootstrap-4.3.1.min.js"></script>
-	<script src="/scripts/vue-2.6.10.min.js"></script>
+	<script src="/scripts/vue-2.6.10.js"></script>
 	<script src="/scripts/vue-router-3.0.2.min.js"></script>
 	<script src="/scripts/secretarium-0.1.10.js"></script>
+	<script src="/scripts/secretarium.iu-0.0.1.js"></script>
 </head>
 
 <body>
@@ -61,8 +63,8 @@
 							</a>
 							<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 								<router-link to="/key" class="dropdown-item">Keys manager</router-link>
-								<div class="dropdown-divider"></div>
 								<router-link to="/me" class="dropdown-item">Personal records</router-link>
+								<div class="dropdown-divider"></div>
 								<button type="button" class="dropdown-item" @click.prevent="disconnectAll">Disconnect</button>
 							</div>
 						</li>
@@ -186,19 +188,6 @@
 
 		<sec-alerts></sec-alerts>
 	</div>
-
-	<script type="text/x-template" id="sec-notif-state">
-		<span v-if="state.visible" class="notif-state">
-			<span class="notif-state-icon notif-state-chain" v-for="s in state.chained" :key="s.id" v-show="state.showChain"
-					:title="s.title" :style="{ opacity: s.opacity||1, 'margin-right': '0.2em' }">
-				<i v-for="(i, k) in s.icons" :key="s.id+'_'+k" class="fas fa" :class="[i.icon, i.color]" :style="i.styles"></i>
-			</span>
-			<span :title="state.global.title" :style="{ opacity: state.global.opacity||1 }" @click.prevent="state.showChain=!state.showChain">
-				<i v-for="(i, k) in state.global.icons" :key="'g_'+k" class="fas fa" :class="[i.icon, i.color]" :style="i.styles"></i>
-			</span>
-			<span v-show="state.msg" class="small text-muted" style="vertical-align: 10%;">{{state.msg}}</span>
-		</span>
-	</script>
 
 	<script type="text/x-template" id="sec-alerts">
 		<div v-if="alerts.length>0" id="sec-alert-wrap">
@@ -515,7 +504,7 @@
     							<textarea name="interest" class="form-control form-control-sm my-2" rows="4"
 									v-model="message" placeholder="Please detail who you are and a summary of your interest"></textarea>
 								<span class="float-right text-black-50 small" style="margin-top: -.4rem;">{{message.length==0||message.length>=50?'':'at least 50 chars'}}</span>
-								<div class="custom-control custom-checkbox checkbox-sec"
+								<div class="custom-control custom-checkbox"
 									v-for="(f) in documents" :key="f.name">
 									<input type="checkbox" name="documents" class="custom-control-input form-control-sm" :id="'ckbx-'+f.id" :value="f.id">
 									<label class="custom-control-label form-control-sm" :for="'ckbx-'+f.id">{{f.name}}</label>
@@ -624,7 +613,7 @@
 	<script type="text/x-template" id="sec-key-decrypt">
 		<div>
 			<div>
-				<router-link to="/key" class="btn btn-link text-sec p-0">
+				<router-link to="/key" class="btn btn-link text-sec">
 					<i class="fas fa-angle-left fw pr-1"></i>
 					back to key loader
 				</router-link>
@@ -685,7 +674,7 @@
 	<script type="text/x-template" id="sec-key-manage">
 		<div>
 			<div>
-				<router-link to="/key" class="btn btn-link text-sec p-0">
+				<router-link to="/key" class="btn btn-link text-sec">
 					<i class="fas fa-angle-left fw pr-1"></i>
 					back to key loader
 				</router-link>
@@ -736,7 +725,7 @@
 					<h6 class="card-title">Save in this browser</h6>
 					<p class="card-text mt-3">If you trust this machine, save your key in this browser to ease future connections.</p>
 					<form class="form-sec" @submit.prevent>
-						<div v-show="key.encrypted&&key.keys" class="custom-control custom-checkbox checkbox-lg checkbox-sec mb-3">
+						<div v-show="key.encrypted&&key.keys" class="custom-control custom-checkbox checkbox-lg mb-3">
 							<input type="checkbox" class="custom-control-input" id="ckSaveEncrypted" :checked="key.encrypted">
 							<label class="custom-control-label" for="ckSaveEncrypted">Save encrypted</label>
 						</div>
@@ -754,7 +743,7 @@
 					Export your key to back it up locally, or on a secure hardware.
 				</p>
 				<form class="form-sec" @submit.prevent>
-					<div v-show="key.encrypted&&key.keys" class="custom-control custom-checkbox checkbox-lg checkbox-sec mb-3">
+					<div v-show="key.encrypted&&key.keys" class="custom-control custom-checkbox checkbox-lg mb-3">
 						<input type="checkbox" class="custom-control-input" id="ckExportEncrypted" :checked="key.encrypted">
 						<label class="custom-control-label" for="ckExportEncrypted">Export encrypted</label>
 					</div>
@@ -847,7 +836,7 @@
 							:aria-describedby="'id-pr-help-'+name" :placeholder="placeholder" :value="record.value" required>
 						<div v-if="record.verified" class="input-group-append">
 							<span class="input-group-text bg-white">
-								<i  class="fas fa-check-circle text-primary"></i>
+								<i class="fas fa-check-circle text-primary"></i>
 							</span>
 						</div>
 					</div>
@@ -884,18 +873,117 @@
 			<div class="mt-3 collapse" id="sec-organisation-collapse" :class="{'show':!updated}">
 				<div v-if="loaded&&Object.keys(organisations).length">
 					<router-link class="list-item-sec" :to="'/organisation/'+org.name" tag="div"
-						v-for="org in organisations" :key="org.name">
-						<div>
-							{{app.name}}
-						</div>
-						<p class="m-0 mt-2">{{app.description}}</p>
+						v-for="(org, id) in organisations" :key="org.name">
+						<p class="m-0"><b style="color: #444;">{{org.name}}</b> - {{org.description}}</p>
 					</router-link>
 				</div>
 				<div v-else-if="loaded">
-					<p>You are not part of any organisation yet.</p>
+					<p class="mb-2">You are not part of any organisation yet.</p>
 				</div>
 				<div v-else>
 					<sec-notif-state :state="organisationsNs.data"></sec-notif-state>
+				</div>
+				<p class="card-text mt-3">
+					<router-link to="/organisations" class="btn btn-link text-sec">Manage your organisations</router-link>
+				</p>
+			</div>
+		</div>
+	</script>
+	<script type="text/x-template" id="sec-organisations">
+		<div class="container fixed-center mw-md">
+			<div class="card card-sec mw-md border-0">
+				<div class="card-header">
+					<h4>Entrust your secrets with Secretarium</h4>
+					<p class="mb-0">Manage your organisations</p>
+				</div>
+				<div class="card-body">
+					<div>
+						<router-link to="/me" class="btn btn-link text-sec">
+							<i class="fas fa-angle-left fw pr-1"></i>
+							back to my profile
+						</router-link>
+					</div>
+					<hr class="my-3 sec" />
+					<div class="py-2">
+						<h6 class="card-title mb-3">Join an organisation</h6>
+						<form @submit.prevent>
+							<div class="form-group mb-0">
+								<label for="id-org-name">Lookup for an organisation</label>
+								<input type="text" class="form-control" id="id-org-name" placeholder="Organisation name" v-model="name">
+							</div>
+							<div v-if="organisation" class="mt-3 p-3 border border-sec rounded-sm">
+								<p class="card-text"><b>{{organisation.name}}</b> - {{organisation.description}}</p>
+								<button v-if="organisation.status=='empty'" type="button" class="btn btn-sec mr-3" @click.prevent="join">Join</button>
+								<button v-else-if="organisation.status!=''" type="button" class="btn btn-sec mr-3" @click.prevent="leave">Leave</button>
+								<sec-notif-state :state="joinLeaveNs.data"></sec-notif-state>
+							</div>
+						</form>
+						<p class="mb-0" v-if="!loaded">
+							<sec-notif-state :state="organisationsNs.data"></sec-notif-state>
+						</p>
+					</div>
+					<hr class="my-3 sec" />
+					<div class="py-2">
+						<p class="card-text">
+							Or alternatively
+							<router-link to="/organisation/create" class="btn btn-link text-sec">create a new organisation</router-link>.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</script>
+	<script type="text/x-template" id="sec-organisation-create">
+		<div class="container fixed-center mw-md">
+			<div class="card card-sec mw-md border-0">
+				<div class="card-header">
+					<h4>Entrust your secrets with Secretarium</h4>
+					<p class="mb-0">Reference your organisation</p>
+				</div>
+				<div class="card-body">
+					<div>
+						<router-link to="/me" class="btn btn-link text-sec">
+							<i class="fas fa-angle-left fw pr-1"></i>
+							back to my profile
+						</router-link>
+					</div>
+					<hr class="my-3 sec" />
+					<form @submit.prevent class="form-sec py-2">
+						<div class="form-group">
+							<label for="id-org-name">Name</label>
+							<input type="text" class="form-control" id="id-org-name" placeholder="Organisation name"
+								v-model="organisation.name">
+						</div>
+						<div class="form-group">
+							<label for="id-org-desc">Description</label>
+							<textarea class="form-control" id="id-org-desc" rows="6" placeholder="Organisation description"
+								v-model="organisation.description"></textarea>
+						</div>
+						<div class="form-group">
+							<label>Required sharings</label>
+							<div class="clearfix">
+								<div class="custom-control custom-checkbox float-left" style="width: 15rem;"
+									v-for="uf in userFields" :key="uf.name">
+									<input type="checkbox" class="custom-control-input" :value="uf.name"
+										:id="'ckbx-'+uf.name" v-model="organisation.requiredSharings">
+									<label class="custom-control-label" :for="'ckbx-'+uf.name">
+										{{uf.display}}
+										<i v-if="uf.verifiable" class="fas fa-check-circle text-sec small"></i>
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="custom-control custom-checkbox mb-1">
+								<input type="checkbox" class="custom-control-input" id="ckbx-terms" v-model="terms">
+								<label class="custom-control-label" for="ckbx-terms">
+									I am an authorised representative of this organisation
+								</label>
+							</div>
+							<button type="button" class="btn btn-sec mr-3" @click.prevent="create" :disabled="!terms">Create</button>
+							<sec-notif-state :state="createNs.data"></sec-notif-state>
+						</div>
+					</form>
 				</div>
 			</div>
 		</div>
@@ -1020,15 +1108,15 @@
 				// only interested in 0.5 but sections can be taller than viewport
 			}, { threshold: [0.2, 0.3, 0.4, 0.5] });
 		const requiredScripts = [
-				"jquery-3.3.1", "popper-1.14.7", "bootstrap-4.3.1",
-				"vue-2.6.10", "vue-router-3.0.2", "secretarium-0.1.7"
+				"jquery-3.3.1", "jquery.autocomplete-1.4.10", "popper-1.14.7", "bootstrap-4.3.1",
+				"vue-2.6.10", "vue-router-3.0.2", "secretarium-0.1.10", "secretarium.ui-0.0.1"
 			],
 			onResize = {},
 			store = {
 				user: {
 					ECDSA: null,
 					ECDSAPubHex: null,
-					dcapps: { identity: { data: { personalRecords: {}, organisations: {} } } }
+					dcapps: {}
 				},
 				isPresentationPages: window.location.pathname == "/",
 				isLogoPage: window.location.pathname == "/" && (window.location.hash.length == 0 || window.location.hash == "#welcome"),
@@ -1109,88 +1197,8 @@
 			state = {
 				icons: ["fa-hourglass-start", "fa-check", "fa-exclamation-circle"],
 				colors: ["text-warning", "text-success", "text-danger"]
-			},
-			notifStates = {
-				processing: [
-					{ icon: "fa-cogs", color: "text-secondary" }
-				],
-				sent: [
-					{ icon: "fa-clock", color: "text-secondary" }
-				],
-				acknowledged: [
-					{ icon: "fa-check", color: "text-secondary" }
-				],
-				proposed: [
-					{ icon: "fa-check", color: "text-secondary" },
-					{ icon: "fa-check", color: "text-secondary", styles: { "margin-left": "-.5em" } }
-				],
-				committed: [
-					{ icon: "fa-check", color: "text-secondary" },
-					{ icon: "fa-check", color: "text-secondary", styles: { "margin-left": "-.5em" } },
-					{ icon: "fa-check", color: "text-secondary", styles: { "margin-left": "-.5em" } }
-				],
-				executed: [
-					{ icon: "fa-check", color: "text-success" }
-				],
-				failed: [
-					{ icon: "fa-times", color: "text-danger" }
-				]
 			};
 
-		class notifState {
-			constructor(chained = 1, states = notifStates) {
-				this.notifStates = states;
-				this.data = {
-					msg: "", visible: false, showChain: chained > 1,
-					chained: [], global: { title: "", opacity: chained > 1 ? 0.4 : 1, icons: states['sent'] }
-				};
-				for(let i = 0; i < chained - 1; i++) {
-					this.data.chained.push({ title: "", opacity: i == 0 ? 1 : 0.4, icons: states['sent'] });
-				}
-				this.state = "";
-				this.reset();
-			}
-			_current() {
-				return this.chainId < this.data.chained.length ? this.data.chained[this.chainId] : this.data.global;
-			}
-			_setState(state, msg = "", showMsg = false) {
-				clearTimeout(this.timeout);
-				this.data.msg = showMsg ? (msg != "" ? msg : state) : "";
-				if(this.state == "failed" && state != "sent" && state != "processing") return this;
-				this.state = state;
-				let target = this._current();
-				target.icons = this.notifStates[state];
-				target.title = msg != "" ? msg : (state +  " @" + (new Date()).toTimeString().substr(0, 5));
-				return this.show();
-			}
-			show() { this.data.visible = true; return this; }
-			showChain() { this.data.showChain = true; return this; }
-			hide(waitMs = 5000) {
-				if(waitMs > 0) this.timeout = setTimeout(() => { this.data.visible = false; }, waitMs);
-				else this.data.visible = false;
-				return this;
-			}
-			hideChain() { this.data.showChain = false; return this; }
-			reset() { this.chainId = 0; return this; }
-			processing(msg = "", showMsg = false) { return this.reset()._setState("processing", msg, showMsg).show(); }
-			start(msg = "", showMsg = false) { return this.reset()._setState("sent", msg, showMsg).show(); }
-			acknowledged(msg = "", showMsg = false) { return this._setState("acknowledged", msg, showMsg); }
-			proposed(msg = "", showMsg = false) { return this._setState("proposed", msg, showMsg); }
-			committed(msg = "", showMsg = false) { return this._setState("committed", msg, showMsg); }
-			executed(msg = "", showMsg = false) {
-				this._setState("executed", msg, showMsg);
-				if(this.chainId < this.data.chained.length) { this.chainId++; }
-				else { this.data.showChain = false; }
-				this._current().opacity = 1;
-				return this;
-			}
-			failed(msg = "", showMsg = false) { return this._setState("failed", msg, showMsg); }
-		};
-
-		const SecNotifState = Vue.component('sec-notif-state', {
-			template: "#sec-notif-state",
-			props: ['state']
-		});
 		const Alerts = Vue.component('sec-alerts', {
 			template: '#sec-alerts',
 			data: () => {
@@ -1223,7 +1231,7 @@
 					],
 					scrolledIn: '',
 					message: "",
-					docsNs: new notifState(),
+					docsNs: new sec.notifState(),
 				}
 			},
 			mounted() {
@@ -1239,7 +1247,8 @@
 					scrollObserver.observe(target);
 				});
 				setTimeout(() => { $("a.go-to-next").css("opacity", 1); }, 3000);
-
+				canvas.fill();
+				canvas.start(1500);
 			},
 			beforeDestroy() {
 				unsubscribeOnScroll("presentation");
@@ -1302,7 +1311,7 @@
 		const KeyLoader = Vue.component('sec-key-loader', {
 			template: '#sec-key-loader',
 			data: function () { return { referrer: null } },
-			beforeRouteEnter(to, from, next) { next(self => { self.referrer = {...from}; }); }
+			beforeRouteEnter(to, from, next) { next(self => { self.referrer = Object.assign({}, from); }); }
 		});
 		const KeyPicker = Vue.component('sec-key-picker', {
 			template: '#sec-key-picker',
@@ -1321,7 +1330,7 @@
 			props: ['id'],
 			data: () => {
 				return {
-					decryptionNs: new notifState(),
+					decryptionNs: new sec.notifState(),
 				}
 			},
 			mounted() { $('#ckPwd').focus(); },
@@ -1348,7 +1357,7 @@
 			template: '#sec-key-create',
 			data: () => {
 				return {
-					generationNs: new notifState()
+					generationNs: new sec.notifState()
 				}
 			},
 			methods: {
@@ -1397,9 +1406,9 @@
 			props: ['id'],
 			data: () => {
 				return {
-					encryptionNs: new notifState(),
-					saveNs: new notifState(),
-					deleteNs: new notifState()
+					encryptionNs: new sec.notifState(),
+					saveNs: new sec.notifState(),
+					deleteNs: new sec.notifState()
 				}
 			},
 			computed: {
@@ -1437,6 +1446,11 @@
 			}
 		});
 
+		store.dcapps["identity"] = { data: { personalRecords: {}, organisations: {} } }
+		store.dcapps["identity"].reset = new Promise((resolve, reject) => {
+    		Vue.set(store.user.dcapps, "identity", { data: { personalRecords: {}, organisations: {} } });
+			resolve();
+		});
 		const Identity = Vue.component('sec-identity', {
 			template: '#sec-identity',
 			data: () => {
@@ -1444,7 +1458,7 @@
 					ready: false,
 					started: false,
 					errorMsg: "",
-					identityInfo: { updated: false, ns: new notifState() },
+					identityInfo: { updated: false, ns: new sec.notifState() },
 					personalrecord: { updated: false },
 				}
 			},
@@ -1494,8 +1508,8 @@
 			data: () => {
 				return {
 					updated: false,
-					sendCodeNs: new notifState(2),
-					verifyNs: new notifState(2)
+					sendCodeNs: new sec.notifState(2),
+					verifyNs: new sec.notifState(2)
 				}
 			},
 			computed: {
@@ -1557,7 +1571,7 @@
 				return {
 					updated: false,
 					loaded: false,
-					organisationsNs: new notifState(),
+					organisationsNs: new sec.notifState(),
 				}
 			},
 			mounted() {
@@ -1571,9 +1585,133 @@
 					});
 			},
 			computed: {
-				organisations() { return this.$root.store.user.dcapps.identity.data.organisations; }
+				organisations() { return store.user.dcapps.identity.data.organisations; }
 			},
 			methods: {
+			}
+		});
+		const Organisations = Vue.component('sec-organisations', {
+			template: '#sec-organisations',
+			data: () => {
+				return {
+					name: "",
+					organisation: null,
+					loaded: false,
+					organisationsNs: new sec.notifState(),
+					joinLeaveNs: new sec.notifState()
+				}
+			},
+			mounted() {
+				this.organisationsNs.start("loading organisations...", true);
+				store.SCPs[identityCluster].sendQuery("organisation", "get-organisations", "organisation-get-organisations")
+					.onError(x => { this.organisationsNs.failed(x, true); })
+					.onResult(x => {
+						if(x.length == 0) {
+							this.organisationsNs.executed("No organisations found", true);
+							return;
+						}
+						this.organisationsNs.executed().hide(0);
+						this.loaded = true;
+						let orgs = Object.keys(x.organisations).map(id => ({ value: x.organisations[id].name, id: id })),
+							input = $("#id-org-name")
+								.on("focusout", () => {
+									input.removeClass("autocomplete-active");
+									if(!this.organisation || this.name != this.organisation.name)
+										Vue.set(this, "organisation", null);
+								})
+								.autocomplete({
+									lookup: orgs,
+									beforeRender() {
+										input.addClass("autocomplete-active");
+									},
+									onSelect: (e) => {
+										let org = x.organisations[e.id];
+										org.id = e.id;
+										org.status = org.status || "empty";
+										Vue.set(this, "organisation", org);
+										this.name = org.name;
+									}
+								});
+					});
+			},
+			methods: {
+				join() {
+					let org = this.organisation;
+					if(!org) return;
+
+					sec.requestConsent(org.name, org.id, org.requiredSharings, store.user.dcapps.identity.data, store.SCPs[identityCluster])
+						.then(() => {
+							this.joinLeaveNs.start();
+							store.SCPs[identityCluster]
+								.sendTx("organisation", "request-access", "organisation-request-access", { id: this.organisation.id })
+								.onError(x => { this.joinLeaveNs.failed(x, true); })
+								.onAcknowledged(() => { this.joinLeaveNs.acknowledged(); })
+								.onProposed(() => { this.joinLeaveNs.proposed(); })
+								.onCommitted(() => { this.joinLeaveNs.committed(); })
+								.onExecuted(() => {
+									this.joinLeaveNs.executed("your request has been successfully registered", true);
+									this.organisation.status = "requested";
+								});
+						})
+						.catch(() => { this.joinLeaveNs.failed("consent was denied", true); })
+				},
+				leave() {
+					this.joinLeaveNs.start();
+					store.SCPs[identityCluster]
+						.sendTx("organisation", "leave", "organisation-leave", { id: this.organisation.id })
+						.onError(x => { this.joinLeaveNs.failed(x, true); })
+						.onAcknowledged(() => { this.joinLeaveNs.acknowledged(); })
+						.onProposed(() => { this.joinLeaveNs.proposed(); })
+						.onCommitted(() => { this.joinLeaveNs.committed(); })
+						.onExecuted(() => {
+							this.joinLeaveNs.executed();
+							this.organisation.status = "empty";
+						});
+				}
+			}
+		});
+		const OrganisationCreate = Vue.component('sec-organisation-create', {
+			template: '#sec-organisation-create',
+			data: () => {
+				return {
+					organisation: { name: "", description: "", requiredSharings: [], status: "" },
+					createNs: new sec.notifState(),
+					terms: false
+				}
+			},
+			computed: {
+				userFields() {
+					let x = [], flattener = (name, o, verifiable) => {
+							let k = Object.keys(o);
+							if(k.includes("display") && k.includes("type"))
+								x.push({ name: name, display: o.display, description: o.description, verifiable: verifiable });
+							else
+								k.forEach(e => flattener(e, o[e], verifiable || e == "personalRecords"));
+						};
+					flattener("root", sec.userFields, false);
+					return x;
+				}
+			},
+			methods: {
+				create() {
+					if(!this.terms) return;
+					let args = {
+						name: this.organisation.name,
+						description: this.organisation.description,
+						requiredSharings: this.organisation.requiredSharings
+					};
+					this.createNs.start("Registering...", true);
+					store.SCPs[identityCluster]
+						.sendTx("organisation", "create", "organisation-create", args)
+						.onError(x => { this.createNs.failed(x, true); })
+						.onAcknowledged(() => { this.createNs.acknowledged(); })
+						.onProposed(() => { this.createNs.proposed(); })
+						.onCommitted(() => { this.createNs.committed(); })
+						.onExecuted(() => {
+							this.createNs.executed();
+							setTimeout(() => { router.push("/organisations"); }, 1000);
+						});
+				}
 			}
 		});
 
@@ -1585,6 +1723,12 @@
 				}
 			},
 			created() {
+				if(!sec.utils.compatible) {
+					this.loaderMsg =
+						"Unfortunately your internet browser does not support the modern cryptographic primitives we need. "+
+						"Please try again with a recent version of Safari or Chrome.";
+					return;
+				}
 				loadDcappsList()
 					.catch(e => { this.loaderMsg = "Could not load the demo applications list: " + e; });
 			}
@@ -1647,15 +1791,15 @@
 			data: () => {
 				return {
 					referrer: null,
-					connectionNs: new notifState(),
-					connectionAdvNs: new notifState()
+					connectionNs: new sec.notifState(),
+					connectionAdvNs: new sec.notifState()
 				}
 			},
 			beforeRouteEnter(to, from, next) {
 				if(store.user.ECDSA == null)
 					router.push("/key"); // key not loaded yet
 				loadDcappsList()
-					.then(() => { next(self => { self.referrer = {...from}; }); })
+					.then(() => { next(self => { self.referrer = Object.assign({}, from); }); })
 					.catch(e => { router.push("/"); /* unknown app */ });
 			},
 			mounted() {
@@ -1703,6 +1847,8 @@
 					]
 				},
 				{ path: '/me', component: Identity },
+				{ path: '/organisations', component: Organisations },
+				{ path: '/organisation/create', component: OrganisationCreate },
 				{ path: '/demos', component: DemoApps },
 				{ path: '/demo/:name', component: DemoLoader, name: 'demo-loader', props: true },
 				{ path: '/connect/:name', component: Connect, name: 'connect', props: true },
@@ -1850,19 +1996,20 @@
 							.catch(e => { reject(e); });
 					});
 				},
-				disconnect(dcapp) {
-					if(store.SCPs[dcapp.cluster]) {
-						store.SCPs[dcapp.cluster].close();
-						Vue.delete(store.SCPs, dcapp.cluster);
-					}
-					if(this.connections[dcapp.cluster]) {
-						clearTimeout(this.connections[dcapp.cluster].timer);
-						Vue.delete(this.connections, dcapp.cluster);
-					}
-				},
 				disconnectAll() {
-					for (var dcapp in store.dcapps) {
-						this.disconnect(store.dcapps[dcapp]);
+					for (var name in store.dcapps) {
+						let dcapp = store.dcapps[name];
+						if(store.SCPs[dcapp.cluster]) {
+							store.SCPs[dcapp.cluster].close();
+							Vue.delete(store.SCPs, dcapp.cluster);
+						}
+						if(this.connections[dcapp.cluster]) {
+							clearTimeout(this.connections[dcapp.cluster].timer);
+							Vue.delete(this.connections, dcapp.cluster);
+						}
+						if(store.user.dcapps[name] && store.user.dcapps[name].reset) {
+							store.user.dcapps[name].reset();
+						}
 					}
 				}
 			}
@@ -1895,13 +2042,12 @@
 		}
 		function loadDcappsList() {
 			return new Promise((resolve, reject) => {
-				if(Object.keys(store.dcapps).length) {
+				if(Object.keys(store.dcapps).length > 1) {
 					resolve();
 					return;
 				}
 				return $.getJSON("/dcapps-demo/")
-					.done(async x => {
-						for (var name in x.dcapps) { x.dcapps[name].id = await sec.utils.hashBase64(name); }
+					.done(x => {
 						Vue.set(store, "dcapps", x.dcapps);
 						Vue.set(store, "clusters", x.clusters);
 						resolve();
@@ -1910,9 +2056,6 @@
 			});
 		}
 		$(function() {
-			canvas.fill();
-			canvas.start(1500);
-
 			$('body').on("dragover dragenter", function(e) {
 				$('body').addClass('dragging');
 			}).on("dragleave", function(e) {

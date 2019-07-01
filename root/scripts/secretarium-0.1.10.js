@@ -1,8 +1,17 @@
 "use strict"
 
-var nng = {
+var sec, secretarium = sec = {
 
-	WebSocket: class {
+    states: {
+        socket: ["connecting", "open", "closing", "closed"],
+        security:[
+            "Secure Connection in Progress",
+            "Secure Connection Established",
+            "Secure Connection Failed"
+        ]
+    },
+
+	nngWebSocket: class {
 
 		constructor() {
 			this._socket = {
@@ -74,27 +83,6 @@ var nng = {
 		}
 	},
 
-	utils: (function(){
-		Uint8Array.prototype.nngAddHop = function() {
-			let c = new Uint8Array(4 + this.length);
-			c.set([0, 0, 0, 1], 0);
-			c.set(this, 4);
-			return c;
-		}
-	})()
-};
-
-var sec, secretarium = sec = {
-
-    states: {
-        socket: ["connecting", "open", "closing", "closed"],
-        security:[
-            "Secure Connection in Progress",
-            "Secure Connection Established",
-            "Secure Connection Failed"
-        ]
-    },
-
     scp: class {
 
         constructor() {
@@ -103,7 +91,7 @@ var sec, secretarium = sec = {
         }
 
         reset() {
-            this.socket = new nng.WebSocket();
+            this.socket = new sec.nngWebSocket();
             this.handlers = {
                 socket: {
                     onMessage: null
@@ -129,7 +117,7 @@ var sec, secretarium = sec = {
         }
 
         connect(url, userKey, knownTrustedKey, protocol = "pair1") {
-            let s = new nng.WebSocket(), self = this;
+            let s = new sec.nngWebSocket(), self = this;
 
             this.socket = s;
             this._updateState(0);
@@ -496,7 +484,8 @@ var sec, secretarium = sec = {
                 strongPwd = await sec.utils.hash(sec.utils.concatUint8Array(salt, weakpwd)),
                 aesgcmKey = await sec.utils.aesgcm.import(strongPwd);
             try {
-                let keys = new Uint8Array(await sec.utils.aesgcm.decrypt(aesgcmKey, iv, encryptedKeys));
+                let keys = await sec.utils.aesgcm.decrypt(aesgcmKey, iv, encryptedKeys);
+                keys = new Uint8Array(keys);
                 key.keys = keys.secToBase64();
                 await this._setCryptoKey(key, keys);
                 return key;
@@ -530,7 +519,12 @@ var sec, secretarium = sec = {
         }
     },
 
-    utils: (function(){
+    utils: (function() {
+        let compatible = typeof(TextDecoder) != "undefined";
+
+        if(!compatible)
+            return { compatible: false, localStorage: { canUse: false }};
+
         var decoder = new TextDecoder("utf-8"),
             encoder = new TextEncoder("utf-8");
 
@@ -583,6 +577,13 @@ var sec, secretarium = sec = {
             return Array.prototype.map.call(this, x => ('00' + x.toString(16)).slice(-2)).join(delimiter);
         }
 
+		Uint8Array.prototype.nngAddHop = function() {
+			let c = new Uint8Array(4 + this.length);
+			c.set([0, 0, 0, 1], 0);
+			c.set(this, 4);
+			return c;
+		}
+
         Uint8Array.secFromString = function(str) {
             var buf = new Uint8Array(str.length);
             for (var i = 0, strLen = str.length; i < strLen; i++) {
@@ -612,6 +613,7 @@ var sec, secretarium = sec = {
         })();
 
         return {
+            compatible: true,
             getRandomUint8Array: getRandomUint8Array,
             getRandomString: function(size = 32) {
                 let a = getRandomUint8Array(size);

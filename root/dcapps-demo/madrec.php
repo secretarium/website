@@ -184,7 +184,7 @@
                             <td class="text-nowrap">{{p.email}} <i v-if="p.emailVerified" class="fas fa-check-circle text-primary"></i></td>
                             <td>{{p.role}}</td>
                             <td>{{p.status}} <span v-if="p.status=='requested'" class="badge badge-warning">{{p.grants}}</span></td>
-                            <td>
+                            <td style="text-align: center;">
                                 <span v-if="p.isSelf">(you)</span>
                                 <button v-else-if="p.vote!='granted'" @click.prevent="vote('granted', p.cooptionId)"
                                     type="button" class="btn btn-primary btn-sm">Grant</button>
