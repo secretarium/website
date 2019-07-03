@@ -11,7 +11,7 @@
 
 	<link rel="stylesheet" href="/styles/bootstrap-4.3.1.min.css" />
 	<link rel="stylesheet" href="/styles/fontawesome-5.7.2.all.min.css" />
-	<link rel="stylesheet" href="/styles/secretarium-0.0.10.min.css" />
+	<link rel="stylesheet" href="/styles/secretarium-0.0.11.min.css" />
 
 	<script src="/scripts/jquery-3.3.1.min.js"></script>
 	<script src="/scripts/jquery.autocomplete.min-1.4.10.js"></script>
@@ -19,7 +19,7 @@
 	<script src="/scripts/bootstrap-4.3.1.min.js"></script>
 	<script src="/scripts/vue-2.6.10.js"></script>
 	<script src="/scripts/vue-router-3.0.2.min.js"></script>
-	<script src="/scripts/secretarium-0.1.10.js"></script>
+	<script src="/scripts/secretarium-0.1.11.js"></script>
 	<script src="/scripts/secretarium.iu-0.0.1.js"></script>
 </head>
 
@@ -820,7 +820,7 @@
 							</div>
 						</div>
 						<hr class="my-3 sec" />
-						<sec-organisation></sec-organisation>
+						<sec-organisations-user></sec-organisations-user>
 					</div>
 				</div>
 			</div>
@@ -862,20 +862,20 @@
 			</div>
 		</div>
 	</script>
-	<script type="text/x-template" id="sec-organisation">
+	<script type="text/x-template" id="sec-organisations-user">
 		<div class="py-2">
 			<h6 class="card-title"
-				data-toggle="collapse" data-target="#sec-organisation-collapse"
-				:aria-expanded="!updated?'true':'false'" aria-controls="sec-organisation-collapse">
+				data-toggle="collapse" data-target="#sec-organisations-user-collapse"
+				:aria-expanded="!updated?'true':'false'" aria-controls="sec-organisations-user-collapse">
 				Organisations
 				<i class="fas fa-chevron-down float-right"></i>
 			</h6>
-			<div class="mt-3 collapse" id="sec-organisation-collapse" :class="{'show':!updated}">
+			<div class="mt-3 collapse" id="sec-organisations-user-collapse" :class="{'show':!updated}">
 				<div v-if="loaded&&Object.keys(organisations).length">
-					<router-link class="list-item-sec" :to="'/organisation/'+org.name" tag="div"
-						v-for="(org, id) in organisations" :key="org.name">
+					<div class="list-item-sec" style="cursor: pointer;"
+						v-for="(org, id) in organisations" :key="org.name" @click="viewOrg(id)">
 						<p class="m-0"><b style="color: #444;">{{org.name}}</b> - {{org.description}}</p>
-					</router-link>
+					</div>
 				</div>
 				<div v-else-if="loaded">
 					<p class="mb-2">You are not part of any organisation yet.</p>
@@ -984,6 +984,29 @@
 							<sec-notif-state :state="createNs.data"></sec-notif-state>
 						</div>
 					</form>
+				</div>
+			</div>
+		</div>
+	</script>
+	<script type="text/x-template" id="sec-organisation">
+		<div class="container fixed-center mw-md">
+			<div class="card card-sec mw-md border-0">
+				<div class="card-header">
+					<h4>Entrust your secrets with Secretarium</h4>
+					<p class="mb-0">Organisation view</p>
+				</div>
+				<div class="card-body">
+					<div>
+						<router-link to="/me" class="btn btn-link text-sec">
+							<i class="fas fa-angle-left fw pr-1"></i>
+							back to my profile
+						</router-link>
+					</div>
+					<hr class="my-3 sec" />
+					<div class="py-2">
+						<h6 class="card-title mb-3">{{organisation.name}}</h6>
+						<p class="card-text">{{organisation.description}}</p>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -1109,7 +1132,7 @@
 			}, { threshold: [0.2, 0.3, 0.4, 0.5] });
 		const requiredScripts = [
 				"jquery-3.3.1", "jquery.autocomplete-1.4.10", "popper-1.14.7", "bootstrap-4.3.1",
-				"vue-2.6.10", "vue-router-3.0.2", "secretarium-0.1.10", "secretarium.ui-0.0.1"
+				"vue-2.6.10", "vue-router-3.0.2", "secretarium-0.1.11", "secretarium.ui-0.0.1"
 			],
 			onResize = {},
 			store = {
@@ -1565,8 +1588,8 @@
 				}
 			}
 		});
-		const Organisation = Vue.component('sec-organisation', {
-			template: '#sec-organisation',
+		const OrganisationsUser = Vue.component('sec-organisations-user', {
+			template: '#sec-organisations-user',
 			data: () => {
 				return {
 					updated: false,
@@ -1588,6 +1611,7 @@
 				organisations() { return store.user.dcapps.identity.data.organisations; }
 			},
 			methods: {
+				viewOrg(id) { router.push({ name: 'organisation', params : { id: id }}); }
 			}
 		});
 		const Organisations = Vue.component('sec-organisations', {
@@ -1712,6 +1736,13 @@
 							setTimeout(() => { router.push("/organisations"); }, 1000);
 						});
 				}
+			}
+		});
+		const Organisation = Vue.component('sec-organisation', {
+			template: '#sec-organisation',
+			props: ["id"],
+			computed: {
+				organisation() { return store.user.dcapps.identity.data.organisations[this.id]; }
 			}
 		});
 
@@ -1849,6 +1880,7 @@
 				{ path: '/me', component: Identity },
 				{ path: '/organisations', component: Organisations },
 				{ path: '/organisation/create', component: OrganisationCreate },
+				{ path: '/organisation/:id', component: Organisation, name: 'organisation', props: true },
 				{ path: '/demos', component: DemoApps },
 				{ path: '/demo/:name', component: DemoLoader, name: 'demo-loader', props: true },
 				{ path: '/connect/:name', component: Connect, name: 'connect', props: true },

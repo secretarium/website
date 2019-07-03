@@ -12,12 +12,11 @@
 {
 	"clusters": {
 <?php if($env == "prod") { ?>		"sec-demo-1": {
-			"key": "uFKHJBQTnwlO8iF5SD2+M9M+Z+XK+6XG/6EF8tNs6YhDlBeMo4+3zMRxYLmBCTS7k68rurxnrTCvyYFPnHLTpA==",
+			"key": "QUKJq9qc68fCsBnc4Tz2NBqF54uyy55R7IW2otRPzmRXCOoXs9dXwGST2UVgAHd5Rn+dEyIjfVXnRd36dvE3Gw==",
 			"gateways": [
-				{ "endpoint": "wss://ovh2.node.secretarium.org:443/", "name": "DEMO (OVH FR-1)" }<?php /*,
-				{ "endpoint": "wss://ovh5.node.secretarium.org:443/", "name": "DEMO (OVH UK-1)" },
-				{ "endpoint": "wss://ovh6.node.secretarium.org:443/", "name": "DEMO (OVH DE-2)" },
-				{ "endpoint": "wss://ovh3.node.secretarium.org:443/", "name": "DEMO (OVH UK-2)" }*/ echo "\n"; ?>
+				{ "endpoint": "wss://ovh4.node.secretarium.org:443/", "name": "DEMO (OVH UK-1)" },
+				{ "endpoint": "wss://ovh5.node.secretarium.org:443/", "name": "DEMO (OVH DE-1)" },
+				{ "endpoint": "wss://ovh6.node.secretarium.org:443/", "name": "DEMO (OVH DE-2)" }
 			]
 		}
 <?php } else if($env == "dev") { ?>		"sec-demo-1": {
@@ -45,7 +44,7 @@
 					{ "name": "madrec-formats-0.0.15", "src": "/dcapps-demo/madrec.formats-0.0.15.js" }
 				],
 				"templates": "/dcapps-demo/madrec.php",
-				"scripts": "/dcapps-demo/madrec-0.0.2.js"
+				"scripts": "/dcapps-demo/madrec-0.0.3.js"
 			}
 		},
 		"sbx": {
