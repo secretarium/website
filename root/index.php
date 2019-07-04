@@ -17,7 +17,7 @@
 	<script src="/scripts/jquery.autocomplete.min-1.4.10.js"></script>
 	<script src="/scripts/popper-1.14.7.min.js"></script>
 	<script src="/scripts/bootstrap-4.3.1.min.js"></script>
-	<script src="/scripts/vue-2.6.10.js"></script>
+	<script src="/scripts/vue-2.6.10.min.js"></script>
 	<script src="/scripts/vue-router-3.0.2.min.js"></script>
 	<script src="/scripts/secretarium-0.1.11.js"></script>
 	<script src="/scripts/secretarium.iu-0.0.1.js"></script>
@@ -1136,11 +1136,7 @@
 			],
 			onResize = {},
 			store = {
-				user: {
-					ECDSA: null,
-					ECDSAPubHex: null,
-					dcapps: {}
-				},
+				user: { ECDSA: null, ECDSAPubHex: null, dcapps: {} },
 				isPresentationPages: window.location.pathname == "/",
 				isLogoPage: window.location.pathname == "/" && (window.location.hash.length == 0 || window.location.hash == "#welcome"),
 				SCPs: {},
@@ -1955,8 +1951,8 @@
 				},
 				retryConnection(cluster) {
 					let scp = store.SCPs[cluster];
-					if(scp.security.state < 2)
-						return; // already connected or connecting
+					if(!scp || scp.security.state < 2)
+						return; // disconnecting, or already connected or connecting
 					let connection = this.connections[cluster];
 					if(!connection)
 						return; // connection never succeeded
@@ -2043,6 +2039,9 @@
 							store.user.dcapps[name].reset();
 						}
 					}
+					store.user.ECDSA = null;
+					store.user.ECDSAPubHex = null;
+					router.push("/key");
 				}
 			}
 		}).$mount('#app');
