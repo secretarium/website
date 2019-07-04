@@ -11,7 +11,7 @@
 
 	<link rel="stylesheet" href="/styles/bootstrap-4.3.1.min.css" />
 	<link rel="stylesheet" href="/styles/fontawesome-5.7.2.all.min.css" />
-	<link rel="stylesheet" href="/styles/secretarium-0.0.11.min.css" />
+	<link rel="stylesheet" href="/styles/secretarium-0.0.12.min.css" />
 
 	<script src="/scripts/jquery-3.3.1.min.js"></script>
 	<script src="/scripts/jquery.autocomplete.min-1.4.10.js"></script>
@@ -798,7 +798,7 @@
 								<i class="fas fa-chevron-down float-right"></i>
 							</h6>
 							<div class="mt-3 collapse" id="sec-identity-me-collapse" :class="{'show':!identityInfo.updated}">
-								<form @submit.prevent>
+								<form class="form-sec" @submit.prevent>
 									<div class="form-group">
 										<label for="prFirstName">First name</label>
 										<input type="text" class="form-control" id="prFirstName" placeholder="your first name" :value="firstname">
@@ -906,7 +906,7 @@
 					<hr class="my-3 sec" />
 					<div class="py-2">
 						<h6 class="card-title mb-3">Join an organisation</h6>
-						<form @submit.prevent>
+						<form class="form-sec" @submit.prevent>
 							<div class="form-group mb-0">
 								<label for="id-org-name">Lookup for an organisation</label>
 								<input type="text" class="form-control" id="id-org-name" placeholder="Organisation name" v-model="name">
@@ -948,7 +948,7 @@
 						</router-link>
 					</div>
 					<hr class="my-3 sec" />
-					<form @submit.prevent class="form-sec py-2">
+					<form class="form-sec py-2" @submit.prevent>
 						<div class="form-group">
 							<label for="id-org-name">Name</label>
 							<input type="text" class="form-control" id="id-org-name" placeholder="Organisation name"

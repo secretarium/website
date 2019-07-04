@@ -253,6 +253,7 @@ const MADRecAppSingleLEI = Vue.component('sec-madrec-single-lei', {
         return {
             nsPut: new sec.notifState(),
             nsGet: new sec.notifState(),
+            lei: "",
             values: {},
             results: {},
             exportUrl: "",
@@ -264,17 +265,19 @@ const MADRecAppSingleLEI = Vue.component('sec-madrec-single-lei', {
         }
     },
     mounted: function() {
-        let lei = this.values.lei = MADRec.lei.sample;
-        this.loadLEI(lei, true).onError(x => {
-            this.nsGet.hide(0);
-            MADRec.fields.forEach(e => {
-                if(e.sample) {
-                    Vue.set(this.values, e.name, e.sample);
-                    Vue.set(this.modifiedFields, e.name, true);
-                }
+        this.lei = MADRec.lei.sample;
+        this.loadLEI(this.lei, true)
+            .onError(x => {
+                this.nsGet.hide(0);
+                MADRec.fields.forEach(e => {
+                    if(e.sample) {
+                        Vue.set(this.values, e.name, e.sample);
+                        Vue.set(this.modifiedFields, e.name, true);
+                    }
+                });
+                this.leiState = 2;
             });
-            this.leiState = 2;
-        });
+        this._initAutoCompleteFields();
     },
     computed: {
         modified() {
@@ -285,13 +288,55 @@ const MADRecAppSingleLEI = Vue.component('sec-madrec-single-lei', {
         }
     },
     methods: {
+        _initAutoCompleteFields() {
+            for(let i = 0; i < MADRec.fields.length; i++)
+            {
+                let f = MADRec.fields[i];
+                if(f.type != 'list' || f.values.length < 10) continue;
+
+                let values = f.values.sort().map(e => ({ value: e })),
+                    input = $("#madrecSingle-"+i)
+                        .on("focusout", () => { input.removeClass("autocomplete-active"); })
+                        .autocomplete({
+                            lookup: values,
+                            beforeRender() { input.addClass("autocomplete-active"); }
+                        });
+            }
+            let leiInput = $("#madrecSingleLei")
+                .on("focusout", () => { leiInput.removeClass("autocomplete-active"); })
+                .autocomplete({
+                    lookup: [
+                        { value: "549300LRI77T5F28OH18" },
+                        { value: "549300TK7G7NZTVM1Z30" },
+                        { value: "029200013A5N6ZD0F605" },
+                        { value: "029200137F2K8AH5C573" },
+                        { value: "315700Q9JC71ZUHQY351" },
+                        { value: "529900NNMOAG69TT1614" },
+                        { value: "969500X58FN3MWUL0B51" },
+                        { value: "815600115305C78FDE40" },
+                        { value: "635400JPZI3FORYGL643" },
+                        { value: "894500XEZHM2QO1Q4V38" },
+                        { value: "5299000IXAIL707XIT12" },
+                        { value: "335800H652ZAKERWKL73" },
+                        { value: "259400S8P72Y8W83QB51" },
+                        { value: "4469000001C3URXXX277" },
+                        { value: "4469000001C3YPQ9CX02" },
+                        { value: "969500JPGSZN1GFY9J93" }
+                    ],
+                    beforeRender() { leiInput.addClass("autocomplete-active"); },
+                    onSelect: (e) => { this.onLeiChanged(); }
+                });
+        },
         getExportUrl(result) {
             let json = JSON.stringify(result, null, 4),
                 blob = new Blob([json], { type: 'application/json;charset=utf-8;' });
             return URL.createObjectURL(blob);
         },
         onLoadLEI() {
-            this.loadLEI($("#madrecSingleLei").val(), true);
+            if(this.leiState == 0)
+                this.nsGet.failed("invalid LEI code", true);
+            else
+                this.loadLEI($("#madrecSingleLei").val(), true);
         },
         loadLEI(lei, subscribe) {
             this.nsGet.start();
@@ -305,7 +350,7 @@ const MADRecAppSingleLEI = Vue.component('sec-madrec-single-lei', {
                     this.exportUrl = this.getExportUrl(x.fields);
                     MADRecUtils.fillColors(x.fields);
                     Vue.set(this, "modifiedFields", {});
-                    Vue.set(this, "values", { lei: lei });
+                    Vue.set(this, "values", {});
                     Vue.set(this, "results", x.fields);
                     this.leiState = 2;
                     let mf = MADRec.fields.reduce((a, c) => { a[c.name] = c; return a; }, {});
@@ -318,13 +363,14 @@ const MADRecAppSingleLEI = Vue.component('sec-madrec-single-lei', {
         },
         onLeiChanged() {
             let lei = $("#madrecSingleLei").val();
+            if(lei == this.lei) return; // sometimes triggered on focus
+            this.lei = lei;
             Vue.set(this, "values", {});
-            if(MADRec.lei.verifier(lei).success) {
-                this.leiState = 1;
-                Vue.set(this.values, "lei", lei);
-            }
-            else
-                this.leiState = 0;
+            Vue.set(this, "results", {});
+            Vue.set(this, "warnings", []);
+            Vue.set(this, "modifiedFields", {});
+            if(this.exportUrl != "") URL.revokeObjectURL(this.exportUrl)
+            this.leiState = MADRec.lei.verifier(lei).success ? 1 : 0;
         },
         onFieldChanged(name, i) {
             let v = $("#madrecSingle-" + i).val(), x = this.results[name];
@@ -342,8 +388,12 @@ const MADRecAppSingleLEI = Vue.component('sec-madrec-single-lei', {
             }
         },
         async contributeLEI() {
+            if(this.leiState == 0) {
+                this.nsPut.failed("invalid LEI code", true);
+                return;
+            }
             // Filter modified fields
-            let lei = this.values.lei, val = {};
+            let lei = this.lei, val = {};
             this.onHashChanged(); // forces update of modified fields list
             for(let name in this.modifiedFields) {
                 if(this.modifiedFields[name]) {
@@ -923,6 +973,8 @@ const MADRecAppReports = Vue.component('sec-madrec-report', {
             this.download.retries = 0;
             this.download.showRetry = false;
             this.download.stopped = true;
+            this.download.started = false;
+            $("#madrec-leis-report-cursor").val(this.download.cursor);
             this.download.msg = "Stream stopped. " + (this.download.cursor - this.download.start) + " LEIs retrieved.";
             if(this.download.beforeClose != null) {
                 this.download.beforeClose();

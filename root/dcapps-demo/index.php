@@ -12,7 +12,7 @@
 {
 	"clusters": {
 <?php if($env == "prod") { ?>		"sec-demo-1": {
-			"key": "QUKJq9qc68fCsBnc4Tz2NBqF54uyy55R7IW2otRPzmRXCOoXs9dXwGST2UVgAHd5Rn+dEyIjfVXnRd36dvE3Gw==",
+			"key": "VJtQVRuL6gnZcVXVzjJwO93WYHJKnH3NkfNZ34yO0DN3aPKAEMU/bjJYCkHCedZ1BMiTekmaKtqsQP/ojEvhiQ==",
 			"gateways": [
 				{ "endpoint": "wss://ovh4.node.secretarium.org:443/", "name": "DEMO (OVH UK-1)" },
 				{ "endpoint": "wss://ovh5.node.secretarium.org:443/", "name": "DEMO (OVH DE-1)" },
@@ -44,7 +44,7 @@
 					{ "name": "madrec-formats-0.0.15", "src": "/dcapps-demo/madrec.formats-0.0.15.js" }
 				],
 				"templates": "/dcapps-demo/madrec.php",
-				"scripts": "/dcapps-demo/madrec-0.0.3.js"
+				"scripts": "/dcapps-demo/madrec-0.0.4.js"
 			}
 		},
 		"sbx": {

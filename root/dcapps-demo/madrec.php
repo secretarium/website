@@ -7,7 +7,9 @@
     #madrec-app .row input[type="checkbox"]{width:1.25rem;height:1.25rem;margin-top:0.25rem}
     #madrec-app .madrec-underline{border-bottom:.1rem solid transparent}
     #madrec-app .madrec-report-link{cursor:pointer}
-    #madrec-app .madrec-report{margin:.5rem 0 1rem 0;font-size:80%;padding:1rem;background-color:#f1f1f1}
+    #madrec-app .madrec-report{margin:.5rem 0 1rem 0;font-size:80%;padding:1rem;background-color:#f5f5f5}
+    #madrec-app .madrec-report-title{text-align:center;border-bottom:1px solid rgba(230,74,60,0.85)}
+    #madrec-app .madrec-report-status{border-top:1px solid rgba(230,74,60,0.85);background-color:#ededed}
 </style>
 
 <script type="text/x-template" id="sec-madrec">
@@ -211,7 +213,7 @@
                     <label for="madrecSingleLei" style="font-weight: bold;">LEI Code</label>
                 </div>
                 <div class="col-lg-3">
-                    <input type="text" class="form-control" id="madrecSingleLei" placeholder="LEI Code" v-model="values.lei" @input="onLeiChanged">
+                    <input type="text" class="form-control" id="madrecSingleLei" placeholder="LEI Code" :value="lei" @input="onLeiChanged">
                 </div>
                 <div class="col-lg-6 mt-2 mt-lg-0">
                     <a v-if="leiState==2&&exportUrl.length>0" class="btn btn-sec ml-1 mr-3" :href="exportUrl" download="single-LEI-report.json">Export</a>
@@ -230,11 +232,13 @@
                     <div class="col-lg-3 order-2 order-lg-1">
                         <input v-if="f.type=='text'" type="text" class="form-control form-control-sm"
                             :id="'madrecSingle-'+i" :placeholder="f.name" v-model="values[f.name]" @input="onFieldChanged(f.name, i)">
-                        <select v-else-if="f.type=='list'" class="form-control form-control-sm"
+                        <select v-else-if="f.type=='list'&&f.values.length<10" class="form-control form-control-sm"
                             :id="'madrecSingle-'+i" v-model="values[f.name]" @change="onFieldChanged(f.name, i)">
                             <option value=""></option>
                             <option v-for="el in f.values" :value="el">{{el}}</option>
                         </select>
+                        <input v-else-if="f.type=='list'" type="text" class="form-control form-control-sm"
+                            :id="'madrecSingle-'+i" :placeholder="f.name" v-model="values[f.name]" @input="onFieldChanged(f.name, i)">
                         <select v-else-if="f.type=='bool'" class="form-control form-control-sm"
                             :id="'madrecSingle-'+i" v-model="values[f.name]" @change="onFieldChanged(f.name, i)">
                             <option value=""></option>
@@ -289,6 +293,43 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            <div v-if="results&&Object.keys(results).length">
+                <hr class="my-3 sec" />
+                <div class="py-2">
+                    <h6 class="card-title"
+                        data-toggle="collapse" data-target="#madrecSingleLei-collapse"
+                        :aria-expanded="leiState==2" aria-controls="madrecSingleLei-collapse">
+                        Data quality reports
+                        <i class="fas fa-chevron-down float-right"></i>
+                    </h6>
+                    <div class="mt-3 collapse" id="madrecSingleLei-collapse" :class="{'show':leiState==2}">
+                        <div class="sec-columns pt-3" style="column-width:14em">
+                            <div v-for="(r, name) in results" class="mb-4 mr-2">
+                                <h6 class="madrec-report-title m-0 p-1">{{name}}</h6>
+                                <div class="madrec-report row m-0 p-2">
+                                    <div class="col-auto p-0">
+                                        <pie-chart :data="r.groups" :colors="r.colors"></pie-chart>
+                                    </div>
+                                    <div class="col px-2 pt-3 pt-lg-1" style="overflow: hidden;">
+                                        <div class="text-nowrap">Contrib: {{r.contribution}}</div>
+                                        <div class="text-nowrap">Total: {{r.total}}</div>
+                                        <div class="text-nowrap">
+                                            <span class="madrec-underline" :style="{ borderBottomColor: r.color }">
+                                                Group: {{r.groups[r.group]}}
+                                            </span>
+                                        </div>
+                                        <div class="text-nowrap">Split: {{JSON.stringify(r.groups)}}</div>
+                                    </div>
+                                </div>
+                                <div class="madrec-report-status text-center rounded-bottom p-1">
+                                    {{r.report}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </script>
@@ -373,8 +414,8 @@
                     <div v-if="!upload.done" class="mt-4">
                         <p class="card-text mt-2 mb-2">Please select one of the hashing options:</p>
                         <select class="custom-select" style="width: 350px;" id="madrecMultiPutHash">
-                            <option value="1" v-if="!verify.isHashed">Do not hash</option>
-                            <option value="2" v-if="!verify.isHashed" selected>Hash</option>
+                            <option value="1" v-if="!verify.isHashed" selected>Do not hash</option>
+                            <option value="2" v-if="!verify.isHashed">Hash</option>
                             <option value="3" v-if="verify.isHashed===true">Already hashed</option>
                         </select>
                         <div class="mt-3">
