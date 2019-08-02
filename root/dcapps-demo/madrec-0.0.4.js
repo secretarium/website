@@ -802,7 +802,7 @@ const MADRecAppReports = Vue.component('sec-madrec-report', {
 
         this.nsConsortiumReport.start("Loading ...", true);
         store.SCPs[MADRecCluster]
-            .newuery("madrec", "get-report-consortium", "madrec-get-report-consortium")
+            .newQuery("madrec", "get-report-consortium", "madrec-get-report-consortium")
             .onError(x => {
                 this.nsConsortiumReport.failed(x, true);
                 if(this.consortiumReportChart != null)

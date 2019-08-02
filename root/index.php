@@ -1828,8 +1828,10 @@
 					else
 						this.loadApp(); // Load the app UI, it has its own onboarding mechisms
 				}
-				else if(!store.SCPs[this.dcapp.cluster])
-					router.replace("/connect/" + this.name); // not connected yet
+				else if(store.user.ECDSA == null) // key not loaded yet
+					router.replace("/key");
+				else if(!store.SCPs[this.dcapp.cluster]) // not connected yet
+					router.replace("/connect/" + this.name);
 				else if(this.dcapp.loaded)
 					router.replace("/" + this.name); // go to app
 				else if(this.dcapp.ui)
