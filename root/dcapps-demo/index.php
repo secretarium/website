@@ -50,17 +50,17 @@
 		"semaphore": {
 			"name": "semaphore",
 			"display": "Semaphore",
-			"description": "Sharing data and getting signals from peers",
+			"description": "Access critical intelligence about your clients from peers to support KYC, AML and compliance",
 			"icon": "fa-sync-alt",
 			"cluster" : "sec-demo-1",
 			"ui": {
 				"require": [
 					{ "name": "papaparse-4.6.0", "src": "/scripts/papaparse-4.6.0.min.js" },
 					{ "name": "stream-saver-0.0.0", "src": "/scripts/stream-saver-0.0.0.js" },
-					{ "name": "semaphore-formats-0.0.1", "src": "/dcapps-demo/semaphore.formats-0.0.1.js" }
+					{ "name": "semaphore-formats-0.0.1", "src": "/dcapps-demo/semaphore.formats-0.0.2.js" }
 				],
 				"templates": "/dcapps-demo/semaphore.php",
-				"scripts": "/dcapps-demo/semaphore-0.0.1.js",
+				"scripts": "/dcapps-demo/semaphore-0.0.2.js",
 				"onboarding": true
 			}
 		},

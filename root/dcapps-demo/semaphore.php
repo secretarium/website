@@ -37,7 +37,7 @@
         <div v-else class="card card-sec border-0">
             <div class="card-header">
                 <h4><i class="fas fa-chart-pie fa-fw mr-2 text-sec"></i>Semaphore App</h4>
-                <p class="mb-0">Collectively improve KYC processes</p>
+                <p class="mb-0">Collective intelligence for KYC, AML and compliance</p>
             </div>
             <div class="card-body">
                 <router-view></router-view>
@@ -50,15 +50,16 @@
     <div class="card card-sec border-0">
         <div class="card-header">
             <h4><i class="fas fa-chart-pie fa-fw mr-2 text-sec"></i>Semaphore App</h4>
-            <p class="mb-0">Collectively improve KYC processes</p>
+            <p class="mb-0">Collective intelligence for KYC, AML and compliance</p>
         </div>
         <div class="card-body">
 			<div class="py-2">
                 <h6 class="card-title">Presentation</h6>
                 <p class="card-text text-justify">
-                    Semaphore, is the newest initiative to improve the quality of KYC reference data.
-                    This data is particularly hard to harvest, costly to verify, and can’t be disclosed.
-                    By signaling - without disclosing - data between members, the Semaphore application helps improving KYC data.
+                    Access critical intelligence about your clients from a peer network to support KYC, AML, and related
+                    compliance processes.
+                    Semaphore is designed to bootstrap an industry collaboration, allowing actors to maintain complete anonymity
+                    while improving their data.
                 </p>
             </div>
         </div>

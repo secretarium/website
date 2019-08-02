@@ -188,15 +188,15 @@ var Semaphore = (function() {
             { name: "Country", type: "list", values: ISO_3166_1_ALPHA_3, verifier: verifiers.COUNTRY, sample: "NER", required: true },
             { name: "Company Registration Number", type: "text", verifier: verifiers.CLEAN_STR, sample: "24325815", required: true },
             { name: "Client ID", type: "text", verifier: verifiers.CLEAN_STR, sample: "123456" },
-            { name: "Client Risk Profile", type: "list", values: RISK_PROFILES, verifier: verifiers.RISK_PROFILES, sample: "" },
-            { name: "Client Onboarding Status", type: "list", values: STATUS, verifier: verifiers.STATUS, sample: "" },
+            { name: "Client Risk Profile", type: "list", values: RISK_PROFILES, verifier: verifiers.RISK_PROFILES, sample: "Low" },
+            { name: "Client Onboarding Status", type: "list", values: STATUS, verifier: verifiers.STATUS, sample: "Approved" },
             { name: "Full Legal Name", type: "text", verifier: verifiers.CLEAN_STR, sample: "Unilever Finance International B.V." },
             { name: "LEI Code", type: "text", verifier: verifiers.LEI, sample: "549300LRI77T5F28OH18" },
             { name: "Politically Exposed Person", type: "bool", verifier: verifiers.YN, sample: "N" },
             { name: "PEP Reason", type: "list", values: PEP_FLAGS, verifier: verifiers.PEP_FLAGS, sample: "" },
             { name: "Sanctions", type: "bool", verifier: verifiers.YN, sample: "N" },
             { name: "Sanctions Reason", type: "list", values: SANCTIONS, verifier: verifiers.SANCTIONS, sample: "" },
-            { name: "Watchlist", type: "bool", verifier: verifiers.YN, sample: "N" },
+            { name: "Watchlist", type: "bool", verifier: verifiers.YN, sample: "" },
             { name: "Negative News", type: "bool", verifier: verifiers.YN, sample: "N" }
         ]
     };

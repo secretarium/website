@@ -275,6 +275,12 @@ const SemaphoreAppSingleContribution = Vue.component('sec-semaphore-single-contr
         }
     },
     mounted() {
+        Semaphore.fields.forEach(e => {
+            if(e.sample) {
+                Vue.set(this.values, e.name, e.sample);
+                Vue.set(this.modifiedFields, e.name, true);
+            }
+        });
         this._initAutoCompleteFields();
     },
     computed: {
