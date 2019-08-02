@@ -325,7 +325,11 @@ const SemaphoreAppSingleContribution = Vue.component('sec-semaphore-single-contr
                         { value: "4469000001C3YPQ9CX02" },
                         { value: "969500JPGSZN1GFY9J93" }
                     ],
-                    beforeRender() { leiInput.addClass("autocomplete-active"); }
+                    beforeRender() { leiInput.addClass("autocomplete-active"); },
+                    onSelect: (e) => {
+                        Vue.set(this.values, "LEI Code", e.value);
+                        this.onFieldChanged("LEI Code", 6);
+                    }
                 });
         },
         getExportUrl(result) {
@@ -334,7 +338,7 @@ const SemaphoreAppSingleContribution = Vue.component('sec-semaphore-single-contr
             return URL.createObjectURL(blob);
         },
         onFieldChanged(name, i) {
-            let v = $("#semaphoreSingle-" + i).val(), x = this.results[name];
+            let e = $("#semaphoreSingle-" + i), v = e.val(), x = this.results[name];
             Vue.set(this.modifiedFields, name, x == undefined || x.contribution != v);
         },
         async contribute() {
@@ -737,7 +741,7 @@ const SemaphoreAppSignals = Vue.component('sec-semaphore-signals', {
                 for(let i = 0; i < x.ids.length; i++) {
                     let fs = x.ids[i].fields, c = fs["Country"].contribution, n = fs["Company Registration Number"].contribution, s = [];
                     for(let name in fs) {
-                        if(name == "Country" || name == "Company Registration Number") continue;
+                        if(name == "Country" || name == "Company Registration Number" || name == "Client ID") continue;
                         let f = fs[name];
                         if(f.split.length > 1) s.push(name);
                     }
