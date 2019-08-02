@@ -30,6 +30,23 @@
 <?php } ?>
 	},
 	"dcapps": {
+		"madrec": {
+			"name": "madrec",
+			"display": "MADRec",
+			"description": "Massive Anonymous Data Reconciliation. Collectively measure reference data quality.",
+			"icon": "fa-chart-pie",
+			"cluster" : "sec-demo-1",
+			"ui": {
+				"require": [
+					{ "name": "papaparse-4.6.0", "src": "/scripts/papaparse-4.6.0.min.js" },
+					{ "name": "chart-2.8.0", "src": "/scripts/chart-2.8.0.min.js"},
+					{ "name": "stream-saver-0.0.0", "src": "/scripts/stream-saver-0.0.0.js" },
+					{ "name": "madrec-formats-0.0.15", "src": "/dcapps-demo/madrec.formats-0.0.15.js" }
+				],
+				"templates": "/dcapps-demo/madrec.php",
+				"scripts": "/dcapps-demo/madrec-0.0.5.js"
+			}
+		},
 		"semaphore": {
 			"name": "semaphore",
 			"display": "Semaphore",
@@ -45,23 +62,6 @@
 				"templates": "/dcapps-demo/semaphore.php",
 				"scripts": "/dcapps-demo/semaphore-0.0.1.js",
 				"onboarding": true
-			}
-		},
-		"madrec": {
-			"name": "madrec",
-			"display": "MADRec",
-			"description": "Massive Anonymous Data Reconciliation. Collectively measure reference data quality.",
-			"icon": "fa-chart-pie",
-			"cluster" : "sec-demo-1",
-			"ui": {
-				"require": [
-					{ "name": "papaparse-4.6.0", "src": "/scripts/papaparse-4.6.0.min.js" },
-					{ "name": "chart-2.8.0", "src": "/scripts/chart-2.8.0.min.js"},
-					{ "name": "stream-saver-0.0.0", "src": "/scripts/stream-saver-0.0.0.js" },
-					{ "name": "madrec-formats-0.0.15", "src": "/dcapps-demo/madrec.formats-0.0.15.js" }
-				],
-				"templates": "/dcapps-demo/madrec.php",
-				"scripts": "/dcapps-demo/madrec-0.0.4.js"
 			}
 		},
 		"sbx": {

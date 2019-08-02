@@ -11,7 +11,7 @@
 
 	<link rel="stylesheet" href="/styles/bootstrap-4.3.1.min.css" />
 	<link rel="stylesheet" href="/styles/fontawesome-5.7.2.all.min.css" />
-	<link rel="stylesheet" href="/styles/secretarium-0.0.12.min.css" />
+	<link rel="stylesheet" href="/styles/secretarium-0.0.14.min.css" />
 
 	<script src="/scripts/jquery-3.3.1.min.js"></script>
 	<script src="/scripts/jquery.autocomplete.min-1.4.10.js"></script>
@@ -19,8 +19,8 @@
 	<script src="/scripts/bootstrap-4.3.1.min.js"></script>
 	<script src="/scripts/vue-2.6.10.min.js"></script>
 	<script src="/scripts/vue-router-3.0.2.min.js"></script>
-	<script src="/scripts/secretarium-0.1.11.js"></script>
-	<script src="/scripts/secretarium.iu-0.0.1.js"></script>
+	<script src="/scripts/secretarium-0.1.12.js"></script>
+	<script src="/scripts/secretarium.iu-0.0.2.js"></script>
 </head>
 
 <body>
@@ -1171,7 +1171,7 @@
 			}, { threshold: [0.2, 0.3, 0.4, 0.5] });
 		const requiredScripts = [
 				"jquery-3.3.1", "jquery.autocomplete-1.4.10", "popper-1.14.7", "bootstrap-4.3.1",
-				"vue-2.6.10", "vue-router-3.0.2", "secretarium-0.1.11", "secretarium.ui-0.0.1"
+				"vue-2.6.10", "vue-router-3.0.2", "secretarium-0.1.12", "secretarium.ui-0.0.2"
 			],
 			onResize = {},
 			store = {

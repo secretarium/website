@@ -11,7 +11,7 @@
 
 	<link rel="stylesheet" href="/styles/bootstrap-4.3.1.min.css" />
 	<link rel="stylesheet" href="/styles/fontawesome-5.7.2.all.min.css" />
-	<link rel="stylesheet" href="/styles/secretarium-0.0.12.min.css" />
+	<link rel="stylesheet" href="/styles/secretarium-0.0.14.min.css" />
 
 	<script src="/scripts/jquery-3.3.1.min.js"></script>
 	<script src="/scripts/popper-1.14.7.min.js"></script>
@@ -19,7 +19,7 @@
 	<script src="/scripts/vue-2.6.10.min.js"></script>
 	<script src="/scripts/papaparse-4.6.0.min.js"></script>
 	<script src="/scripts/stream-saver-0.0.0.js"></script>
-	<script src="/scripts/secretarium-0.1.11.js"></script>
+	<script src="/scripts/secretarium-0.1.12.js"></script>
 	<script src="/dcapps-demo/madrec.formats-0.0.15.js"></script>
 </head>
 
