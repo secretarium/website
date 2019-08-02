@@ -19,8 +19,8 @@
 	<script src="/scripts/vue-2.6.10.min.js"></script>
 	<script src="/scripts/papaparse-4.6.0.min.js"></script>
 	<script src="/scripts/stream-saver-0.0.0.js"></script>
-	<script src="/scripts/madrec.formats-0.0.15.js"></script>
 	<script src="/scripts/secretarium-0.1.11.js"></script>
+	<script src="/dcapps-demo/madrec.formats-0.0.15.js"></script>
 </head>
 
 <body>

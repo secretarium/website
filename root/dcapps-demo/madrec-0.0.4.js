@@ -168,7 +168,7 @@ const MADRecAppAccessDenied = Vue.component('sec-madrec-access-denied', {
             if($("#madrec_ra_email").is(":checked")) args.items.push("email");
             this.nsRequest.start();
             store.SCPs[MADRecCluster]
-                .sendTx("identity", "share-with", "identity-share-with", args)
+                .newTx("identity", "share-with", "identity-share-with", args)
                 .onError(x => { this.nsRequest.failed(x, true); })
                 .onAcknowledged(() => { this.nsRequest.acknowledged(); })
                 .onProposed(() => { this.nsRequest.proposed(); })
@@ -176,13 +176,15 @@ const MADRecAppAccessDenied = Vue.component('sec-madrec-access-denied', {
                 .onExecuted(() => {
                     this.nsRequest.executed();
                     store.SCPs[MADRecCluster]
-                        .sendTx("madrec", "request-access", "madrec-request-access", { role: "participant" })
+                        .newTx("madrec", "request-access", "madrec-request-access", { role: "participant" })
                         .onError(x => { this.nsRequest.failed(x, true); })
                         .onAcknowledged(() => { this.nsRequest.acknowledged(); })
                         .onProposed(() => { this.nsRequest.proposed(); })
                         .onCommitted(() => { this.nsRequest.committed(); })
-                        .onExecuted(() => { this.nsRequest.executed().hide(); });
-                });
+                        .onExecuted(() => { this.nsRequest.executed().hide(); })
+                        .send();
+                })
+                .send();
         }
     }
 });
@@ -207,7 +209,7 @@ const MADRecAppMembers = Vue.component('sec-madrec-members', {
         getMembers() {
             this.ns.start("Updating members list", true);
             store.SCPs[MADRecCluster]
-                .sendQuery("madrec", "get-members", "madrec-get-members")
+                .newQuery("madrec", "get-members", "madrec-get-members")
                 .onError(x => { this.ns.failed(x, true); })
                 .onResult(x => {
                     this.ns.executed().hide(1);
@@ -229,13 +231,14 @@ const MADRecAppMembers = Vue.component('sec-madrec-members', {
                         return o;
                     });
                     Vue.set(store.user.dcapps.madrec.data, "requestingMembers", rp);
-                });
+                })
+                .send();
         },
         vote(status, cooptionId) {
             let args = { status: status, cooptionId: cooptionId };
             this.ns.start("Registering your vote", true);
             store.SCPs[MADRecCluster]
-                .sendTx("madrec", "coopt", "madrec-coopt", args)
+                .newTx("madrec", "coopt", "madrec-coopt", args)
                 .onError(x => { this.ns.failed(x, true); })
                 .onAcknowledged(() => { this.ns.acknowledged(); })
                 .onProposed(() => { this.ns.proposed(); })
@@ -243,7 +246,8 @@ const MADRecAppMembers = Vue.component('sec-madrec-members', {
                 .onExecuted(() => {
                     this.ns.executed();
                     this.getMembers();
-                });
+                })
+                .send();
         }
     }
 });
@@ -266,7 +270,7 @@ const MADRecAppSingleLEI = Vue.component('sec-madrec-single-lei', {
     },
     mounted: function() {
         this.lei = MADRec.lei.sample;
-        this.loadLEI(this.lei, true)
+        this.getCmdLoadLEI(this.lei, true)
             .onError(x => {
                 this.nsGet.hide(0);
                 MADRec.fields.forEach(e => {
@@ -276,7 +280,8 @@ const MADRecAppSingleLEI = Vue.component('sec-madrec-single-lei', {
                     }
                 });
                 this.leiState = 2;
-            });
+            })
+            .send();
         this._initAutoCompleteFields();
     },
     computed: {
@@ -336,12 +341,12 @@ const MADRecAppSingleLEI = Vue.component('sec-madrec-single-lei', {
             if(this.leiState == 0)
                 this.nsGet.failed("invalid LEI code", true);
             else
-                this.loadLEI($("#madrecSingleLei").val(), true);
+                this.getCmdLoadLEI($("#madrecSingleLei").val(), true).send();
         },
-        loadLEI(lei, subscribe) {
+        getCmdLoadLEI(lei, subscribe) {
             this.nsGet.start();
             return store.SCPs[MADRecCluster]
-                .sendQuery("madrec", "get", "madrec-single-get", { [MADRec.lei.name]: lei, subscribe: subscribe })
+                .newQuery("madrec", "get", "madrec-single-get", { [MADRec.lei.name]: lei, subscribe: subscribe })
                 .onError(x => { this.nsGet.failed(x, true); })
                 .onResult(x => {
                     this.nsGet.executed().hide();
@@ -428,15 +433,16 @@ const MADRecAppSingleLEI = Vue.component('sec-madrec-single-lei', {
             // Upload
             this.nsPut.start();
             store.SCPs[MADRecCluster]
-                .sendTx("madrec", "put", "madrec-single-put", args)
+                .newTx("madrec", "put", "madrec-single-put", args)
                 .onError(x => { this.nsPut.failed(x, true); })
                 .onAcknowledged(() => { this.nsPut.acknowledged(); })
                 .onProposed(() => { this.nsPut.proposed(); })
                 .onCommitted(() => { this.nsPut.committed(); })
                 .onExecuted(() => {
                     this.nsPut.executed().hide();
-                    this.loadLEI(lei, true);
-                });
+                    this.getCmdLoadLEI(lei, true).send();
+                })
+                .send();
         }
     }
 });
@@ -621,7 +627,7 @@ const MADRecAppMultiLEI = Vue.component('sec-madrec-multi-lei', {
                 args.push(await MADRecUtils.rowToJson(leiBuff[i], hashOpt));
             }
             store.SCPs[MADRecCluster]
-                .sendTx("madrec", "put-many", "madrec-multi-put-" + blockId, args)
+                .newTx("madrec", "put-many", "madrec-multi-put-" + blockId, args)
                 .onError(x => {
                     this.updateUploadBlockState(blockId, "failed", x);
                     this.upload.failed += items;
@@ -637,7 +643,8 @@ const MADRecAppMultiLEI = Vue.component('sec-madrec-multi-lei', {
                         this.updateUploadBlockState(blockId, "executed");
                         this.upload.executed += items;
                     }
-                });
+                })
+                .send();
         },
         uploadFile() {
             var self = this, leiBuff = [], hashOpt = $('#madrecMultiPutHash').val();
@@ -778,7 +785,7 @@ const MADRecAppReports = Vue.component('sec-madrec-report', {
     beforeMount: function() {
         this.nsUserReport.start("Loading ...", true);
         store.SCPs[MADRecCluster]
-            .sendQuery("madrec", "get-report", "madrec-get-report-user")
+            .newQuery("madrec", "get-report", "madrec-get-report-user")
             .onError(x => {
                 this.nsUserReport.failed(x, true);
                 if(this.consortiumReportChart != null)
@@ -790,11 +797,12 @@ const MADRecAppReports = Vue.component('sec-madrec-report', {
                 this.nsUserReport.executed().hide(0);
                 this.personalReport = x;
                 setTimeout(() => { this.drawUserReport(x); }, 200);
-            });
+            })
+            .send();
 
         this.nsConsortiumReport.start("Loading ...", true);
         store.SCPs[MADRecCluster]
-            .sendQuery("madrec", "get-report-consortium", "madrec-get-report-consortium")
+            .newuery("madrec", "get-report-consortium", "madrec-get-report-consortium")
             .onError(x => {
                 this.nsConsortiumReport.failed(x, true);
                 if(this.consortiumReportChart != null)
@@ -806,7 +814,8 @@ const MADRecAppReports = Vue.component('sec-madrec-report', {
                 this.nsConsortiumReport.executed().hide(0);
                 this.consortiumReport = x;
                 setTimeout(() => { this.drawConsortiumReport(x); }, 200);
-            });
+            })
+            .send();
     },
     beforeDestroy() {
         URL.revokeObjectURL(this.personalReportObjUrl);
@@ -930,7 +939,7 @@ const MADRecAppReports = Vue.component('sec-madrec-report', {
         downloadNextBlock() {
             this.download.msg = "Streaming ... " + this.download.cursor + "/" + (this.download.cursor + this.download.step);
             store.SCPs[MADRecCluster]
-                .sendQuery("madrec", "get-leis", "madrec-get-leis", { cursor: this.download.cursor, maxLEIs: this.download.step })
+                .newQuery("madrec", "get-leis", "madrec-get-leis", { cursor: this.download.cursor, maxLEIs: this.download.step })
                 .onError(x => {
                     if(this.download.stopped) return;
                     if(this.download.retries++ == 3) {
@@ -961,7 +970,8 @@ const MADRecAppReports = Vue.component('sec-madrec-report', {
                     } else {
                         this.downloadNextBlock();
                     }
-                });
+                })
+                .send();
         },
         retry() {
             this.download.retries = 0;
@@ -1111,17 +1121,18 @@ router.addRoutes([
         ]
     }
 ]);
-store.dcapps["madrec"].onLoad = new Promise((resolve, reject) => {
+store.dcapps["madrec"].onLoad = () => (new Promise((resolve, reject) => {
     store.SCPs[MADRecCluster]
-        .sendQuery("madrec", "get-status", "madrec-get-status")
+        .newQuery("madrec", "get-status", "madrec-get-status")
         .onResult(x => {
             Vue.set(store.user.dcapps.madrec.data, "accessStatus", x.status);
             Vue.set(store.user.dcapps.madrec.data, "grants", x.grants || 0);
             resolve();
         })
-        .onError(x => { resolve(); })
-});
-store.dcapps["madrec"].reset = new Promise((resolve, reject) => {
+        .onError(x => { reject(); })
+        .send();
+}));
+store.dcapps["madrec"].reset = () => (new Promise((resolve, reject) => {
     Vue.set(store.user.dcapps, "madrec", { data: { accessStatus: "denied", grants: 0 }});
     resolve();
-});
+}));

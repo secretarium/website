@@ -1047,6 +1047,13 @@
 					<p class="mb-0">Access to the most privacy-respecting apps in the industry</p>
 				</div>
 				<div class="card-body">
+					<div>
+						<router-link to="/demos" class="btn btn-link text-sec">
+							<i class="fas fa-angle-left fw pr-1"></i>
+							back to demos
+						</router-link>
+					</div>
+					<hr class="my-3 sec" />
 					<p v-if="state=='loading'" class="card-text">
                     	<i class="fas fa-hourglass-start text-warning fa-fw mr-2"></i>
 						Loading {{dcapp.display}} and its dependencies...
@@ -1056,8 +1063,12 @@
 						{{dcapp.display}} and its dependencies have been loaded.
 					</p>
 					<p v-else-if="state=='error'" class="card-text">
-                    	<i class="fas fa-exclamation-circle text-primary fa-fw mr-2"></i>
+                    	<i class="fas fa-exclamation-circle text-danger fa-fw mr-2"></i>
 						Error: unable to load {{dcapp.display}} or one of its dependencies.
+					</p>
+					<p v-else-if="state=='missing'" class="card-text">
+						<i class="fas fa-exclamation-circle text-danger fa-fw mr-2"></i>
+						Error: could not load {{dcapp.display}}, access to this demo is restricted.
 					</p>
 				</div>
 			</div>
@@ -1117,6 +1128,34 @@
 							Please choose an App from <router-link class="btn-link text-sec" to="/demos" tag="a">the menu</router-link>.
 						</p>
 					</div>
+				</div>
+			</div>
+		</div>
+	</script>
+	<script type="text/x-template" id="sec-fallback">
+		<div class="container fixed-center mw-md">
+			<div class="card card-sec mw-md border-0">
+				<div class="card-header">
+					<h4>Entrust your secrets with Secretarium</h4>
+					<p class="mb-0">Access to the most privacy-respecting apps in the industry</p>
+				</div>
+				<div class="card-body">
+					<p class="card-text">
+                    	<i class="fas fa-exclamation-circle text-danger fa-fw mr-2"></i>
+						Sorry, we could not find this page...
+					</p>
+					<p>
+						<router-link to="/#what-it-is" class="btn btn-link text-sec">
+							<i class="fas fa-angle-left fw pr-1"></i>
+							back to presentations
+						</router-link>
+					</p>
+					<p>
+						<router-link to="/demos" class="btn btn-link text-sec">
+							<i class="fas fa-angle-left fw pr-1"></i>
+							back to demos
+						</router-link>
+					</p>
 				</div>
 			</div>
 		</div>
@@ -1330,7 +1369,9 @@
 		const KeyLoader = Vue.component('sec-key-loader', {
 			template: '#sec-key-loader',
 			data: function () { return { referrer: null } },
-			beforeRouteEnter(to, from, next) { next(self => { self.referrer = Object.assign({}, from); }); }
+			beforeRouteEnter(to, from, next) {
+				next(self => { self.referrer = Object.assign({}, from.path == "/" ?  { path: "/demos" } : from); });
+			}
 		});
 		const KeyPicker = Vue.component('sec-key-picker', {
 			template: '#sec-key-picker',
@@ -1433,7 +1474,7 @@
 			computed: {
 				key() { return this.$root.keysManager.keys[this.id] || { name: '--deleted--', missing: true }; },
 				publicKeyStr() {
-					if(this.key.encrypted) return "(encrypted)";
+					if(!this.key.keys) return "(encrypted)";
 					if(this.key.name == "--deleted--") return "(deleted)";
 					return this.$root.keysManager.getPublicKeyHex(this.key, " ").toUpperCase();
 				}
@@ -1483,18 +1524,19 @@
 			},
 			created() {
 				if(store.user.ECDSA == null)
-					router.push("/key"); // key not loaded yet
+					router.replace("/key"); // key not loaded yet
 				else if(!store.SCPs[identityCluster])
-					router.push("/connect/me"); // not connected yet
+					router.replace("/connect/me"); // not connected yet
 				else {
 					this.ready = true;
-					store.SCPs[identityCluster].sendQuery("identity", "get", "identity-get")
+					store.SCPs[identityCluster].newQuery("identity", "get", "identity-get")
 						.onError(x => { this.errorMsg = x; })
 						.onResult(x => {
 							Vue.set(store.user.dcapps.identity.data, "firstname", x.firstname);
 							Vue.set(store.user.dcapps.identity.data, "lastname", x.lastname);
 							Vue.set(store.user.dcapps.identity.data, "personalRecords", x.personalRecords || {});
-						})
+						}).
+						send();
 				}
 			},
 			computed: {
@@ -1508,7 +1550,7 @@
 					let args = { firstname: $('#prFirstName').val(), lastname: $('#prLastName').val() };
 					this.identityInfo.ns.start();
 					store.SCPs[identityCluster]
-						.sendTx("identity", "set", "identity-set", args)
+						.newTx("identity", "set", "identity-set", args)
 						.onError(x => { this.identityInfo.ns.failed(x, true); })
 						.onAcknowledged(() => { this.identityInfo.ns.acknowledged(); })
 						.onProposed(() => { this.identityInfo.ns.proposed(); })
@@ -1517,7 +1559,8 @@
 							this.identityInfo.ns.executed().hide();
 							Vue.set(store.user.dcapps.identity.data, "firstname", args.firstname);
 							Vue.set(store.user.dcapps.identity.data, "lastname", args.lastname);
-						});
+						})
+						.send();
 				}
 			}
 		});
@@ -1540,7 +1583,7 @@
 					let name = this.name, value = $('#id-pr-' + name).val(), args = { name: name, value: value };
 					this.sendCodeNs.start("Registering...", true);
 					store.SCPs[identityCluster]
-						.sendTx("identity", "set-personal-record", "identity-set-personal-record-" + name, args)
+						.newTx("identity", "set-personal-record", "identity-set-personal-record-" + name, args)
 						.onError(x => { this.sendCodeNs.failed(x, true); })
 						.onAcknowledged(() => { this.sendCodeNs.acknowledged(); })
 						.onProposed(() => { this.sendCodeNs.proposed(); })
@@ -1551,26 +1594,28 @@
 							this.sendCodeNs.executed("Sending security challenge...", true);
 							let cmd = "send-personal-record-challenge";
 							store.SCPs[identityCluster]
-								.sendQuery("identity", cmd, "identity-" + cmd + "-" + name, { name: name })
+								.newQuery("identity", cmd, "identity-" + cmd + "-" + name, { name: name })
 								.onError(x => { this.sendCodeNs.failed(x, true); })
 								.onResult(x => {
 									this.sendCodeNs.executed("Success", true).hide();
-								});
-						});
+								})
+								.send();
+						})
+						.send();
 				},
 				verify() {
 					let name = this.name, code = $('#id-pr-code-' + name).val().toUpperCase(),
 						args = { name: name, code: code };
 					this.verifyNs.start("Verifying...", true);
 					store.SCPs[identityCluster]
-						.sendTx("identity", "verify-personal-record", "identity-verify-personal-record-" + name, args)
+						.newTx("identity", "verify-personal-record", "identity-verify-personal-record-" + name, args)
 						.onError(x => { this.verifyNs.failed(x, true); })
 						.onAcknowledged(() => { this.verifyNs.acknowledged(); })
 						.onProposed(() => { this.verifyNs.proposed(); })
 						.onCommitted(() => { this.verifyNs.committed(); })
 						.onExecuted(() => {
 							this.verifyNs.executed("Updating record...");
-							store.SCPs[identityCluster].sendQuery("identity", "get", "identity-get")
+							store.SCPs[identityCluster].newQuery("identity", "get", "identity-get")
 								.onError(x => { this.verifyNs.failed(x, true); })
 								.onResult(x => {
 									if(x.personalRecords[name].verified) {
@@ -1579,8 +1624,10 @@
 									}
 									else
 										this.verifyNs.failed("invalid security code", true);
-								});
-						});
+								})
+								.send();
+						})
+						.send();;
 				}
 			}
 		});
@@ -1595,13 +1642,14 @@
 			},
 			mounted() {
 				this.organisationsNs.start("loading organisations...", true);
-				store.SCPs[identityCluster].sendQuery("organisation", "get-user-organisations", "organisation-get-user-organisations")
+				store.SCPs[identityCluster].newQuery("organisation", "get-user-organisations", "organisation-get-user-organisations")
 					.onError(x => { this.organisationsNs.failed(x, true); })
 					.onResult(x => {
 						Vue.set(store.user.dcapps.identity.data, "organisations", x || {});
 						this.organisationsNs.executed().hide(0);
 						this.loaded = true;
-					});
+					})
+					.send();
 			},
 			computed: {
 				organisations() { return store.user.dcapps.identity.data.organisations; }
@@ -1623,7 +1671,7 @@
 			},
 			mounted() {
 				this.organisationsNs.start("loading organisations...", true);
-				store.SCPs[identityCluster].sendQuery("organisation", "get-organisations", "organisation-get-organisations")
+				store.SCPs[identityCluster].newQuery("organisation", "get-organisations", "organisation-get-organisations")
 					.onError(x => { this.organisationsNs.failed(x, true); })
 					.onResult(x => {
 						if(x.length == 0) {
@@ -1652,7 +1700,8 @@
 										this.name = org.name;
 									}
 								});
-					});
+					})
+					.send();
 			},
 			methods: {
 				join() {
@@ -1663,7 +1712,7 @@
 						.then(() => {
 							this.joinLeaveNs.start();
 							store.SCPs[identityCluster]
-								.sendTx("organisation", "request-access", "organisation-request-access", { id: this.organisation.id })
+								.newTx("organisation", "request-access", "organisation-request-access", { id: this.organisation.id })
 								.onError(x => { this.joinLeaveNs.failed(x, true); })
 								.onAcknowledged(() => { this.joinLeaveNs.acknowledged(); })
 								.onProposed(() => { this.joinLeaveNs.proposed(); })
@@ -1671,14 +1720,15 @@
 								.onExecuted(() => {
 									this.joinLeaveNs.executed("your request has been successfully registered", true);
 									this.organisation.status = "requested";
-								});
+								})
+								.send();;
 						})
 						.catch(() => { this.joinLeaveNs.failed("consent was denied", true); })
 				},
 				leave() {
 					this.joinLeaveNs.start();
 					store.SCPs[identityCluster]
-						.sendTx("organisation", "leave", "organisation-leave", { id: this.organisation.id })
+						.newTx("organisation", "leave", "organisation-leave", { id: this.organisation.id })
 						.onError(x => { this.joinLeaveNs.failed(x, true); })
 						.onAcknowledged(() => { this.joinLeaveNs.acknowledged(); })
 						.onProposed(() => { this.joinLeaveNs.proposed(); })
@@ -1686,7 +1736,8 @@
 						.onExecuted(() => {
 							this.joinLeaveNs.executed();
 							this.organisation.status = "empty";
-						});
+						})
+						.send();;
 				}
 			}
 		});
@@ -1722,7 +1773,7 @@
 					};
 					this.createNs.start("Registering...", true);
 					store.SCPs[identityCluster]
-						.sendTx("organisation", "create", "organisation-create", args)
+						.newTx("organisation", "create", "organisation-create", args)
 						.onError(x => { this.createNs.failed(x, true); })
 						.onAcknowledged(() => { this.createNs.acknowledged(); })
 						.onProposed(() => { this.createNs.proposed(); })
@@ -1730,7 +1781,8 @@
 						.onExecuted(() => {
 							this.createNs.executed();
 							setTimeout(() => { router.push("/organisations"); }, 1000);
-						});
+						})
+						.send();;
 				}
 			}
 		});
@@ -1768,47 +1820,66 @@
 				dcapp() { return store.dcapps[this.name]; }
 			},
 			created() {
-				if(store.user.ECDSA == null)
-					router.push("/key"); // key not loaded yet
-				else if(!this.dcapp || !store.SCPs[this.dcapp.cluster])
-					router.push("/connect/" + this.name); // not connected yet
-				else {
-					if(!this.dcapp.loaded) { // we need to load the app code
-						this.state = "loading";
-						if(this.dcapp.ui) {
-							let onUILoaded = () => {
-									if(this.dcapp.onLoad) { // promise registered by app
-										this.dcapp.onLoad
-											.then(() => { router.push("/" + this.name); })
-											.catch(e => { this.state = "error"; })
-									}
-									else setTimeout(() => { router.push("/" + this.name); }, 1000);
-								},
-								loadUI = () => {
-									$.get(this.dcapp.ui.templates)
-										.done(data => {
-											$("body").append(data);
-											this.dcapp.loaded = true;
-											this.state = "initialising";
-											if(this.dcapp.ui.scripts) {
-												loadScript(this.name, this.dcapp.ui.scripts)
-													.then(onUILoaded)
-													.catch(e => { this.state = "error"; })
-											}
-											else onUILoaded();
-										})
-										.fail((j, t, e) => { this.state = "error"; });
-								};
-							if(this.dcapp.ui.require) {
-								let p = this.dcapp.ui.require.map(x => { return loadScript(x.name, x.src); });
-								Promise.all(p)
-									.then(loadUI)
-									.catch(e => { this.state = "error"; })
-							} else loadUI();
-						}
-					} else {
-						router.push("/" + this.name);
+				if(!this.dcapp)
+					router.replace("/demos"); // this app does not exist
+				else if(this.dcapp.ui && this.dcapp.ui.onboarding) {
+					if(this.dcapp.loaded)
+						this.onUILoaded(); // go to app
+					else
+						this.loadApp(); // Load the app UI, it has its own onboarding mechisms
+				}
+				else if(!store.SCPs[this.dcapp.cluster])
+					router.replace("/connect/" + this.name); // not connected yet
+				else if(this.dcapp.loaded)
+					router.replace("/" + this.name); // go to app
+				else if(this.dcapp.ui)
+					this.loadApp(); // Load the app UI
+				else
+					this.state = "missing"; // Unknown UI
+			},
+			methods: {
+				onUILoaded(t = 1000) {
+					if(this.dcapp.onLoad) { // promise registered by app
+						this.dcapp.onLoad()
+							.then(() => { router.replace("/" + this.name); })
+							.catch(e => { this.state = "error"; })
 					}
+					else setTimeout(() => { router.replace("/" + this.name); }, t);
+				},
+				loadUI() {
+					$.get(this.dcapp.ui.templates)
+						.done(data => {
+							$("body").append(data);
+							this.dcapp.loaded = true;
+							if(this.dcapp.ui.scripts) {
+								this.loadScript(this.name, this.dcapp.ui.scripts)
+									.then(this.onUILoaded)
+									.catch(e => { this.state = "error"; })
+							}
+							else this.onUILoaded(1000);
+						})
+						.fail((j, t, e) => { this.state = "error"; });
+				},
+				loadScript(name, src) {
+					return new Promise((resolve, reject) => {
+						if(requiredScripts.includes(name)) { resolve(); return; }
+						let script = document.createElement('script');
+						script.type = "text/javascript";
+						script.defer = true;
+						script.onload = () => { requiredScripts.push(name); resolve(); };
+						script.onerror = () => { reject(); };
+						script.src = src;
+						try { document.head.appendChild(script); } catch (e) { reject(e); }
+					});
+				},
+				loadApp() {
+					this.state = "loading";
+					if(this.dcapp.ui.require) {
+						let p = this.dcapp.ui.require.map(x => { return this.loadScript(x.name, x.src); });
+						Promise.all(p)
+							.then(this.loadUI)
+							.catch(e => { this.state = "error"; })
+					} else this.loadUI();
 				}
 			}
 		});
@@ -1823,11 +1894,9 @@
 				}
 			},
 			beforeRouteEnter(to, from, next) {
-				if(store.user.ECDSA == null)
-					router.push("/key"); // key not loaded yet
-				loadDcappsList()
-					.then(() => { next(self => { self.referrer = Object.assign({}, from); }); })
-					.catch(e => { router.push("/"); /* unknown app */ });
+				if(store.user.ECDSA == null) // key not loaded yet
+					router.replace("/demo/" + (this.name || to.params.name));
+				next(self => { self.referrer = Object.assign({}, from); });
 			},
 			mounted() {
 				$('#id-btn-connect').focus();
@@ -1860,6 +1929,20 @@
 				}
 			}
 		});
+		const Fallback = Vue.component('sec-fallback', {
+			template: '#sec-fallback',
+			data: () => { return {} },
+			beforeRouteEnter(to, from, next) {
+				if(to.path != "/" && to.path[0] == "/") {
+					let a = to.path.split("/")[1];
+					loadDcappsList()
+						.catch(e => { next() })
+						.then(e => { router.replace("/demo/" + a); });
+				} else {
+					next();
+				}
+			}
+		});
 
 		const router = new VueRouter({
 			mode: 'history',
@@ -1880,7 +1963,7 @@
 				{ path: '/demos', component: DemoApps },
 				{ path: '/demo/:name', component: DemoLoader, name: 'demo-loader', props: true },
 				{ path: '/connect/:name', component: Connect, name: 'connect', props: true },
-				{ path: '*', redirect: '/' },
+				{ path: '*', component: Fallback },
 			]
 		});
 		router.beforeEach((to, from, next) => {
@@ -1937,7 +2020,7 @@
 			},
 			methods: {
 				setKey(key) {
-					this.disconnectAll();
+					this.disconnectAll(false);
 					store.user.ECDSA = key.cryptoKey;
 					store.user.ECDSAPubHex = this.$root.keysManager.getPublicKeyHex(key, " ").toUpperCase();
 				},
@@ -2024,7 +2107,7 @@
 							.catch(e => { reject(e); });
 					});
 				},
-				disconnectAll() {
+				disconnectAll(goToKeys = true) {
 					for (var name in store.dcapps) {
 						let dcapp = store.dcapps[name];
 						if(store.SCPs[dcapp.cluster]) {
@@ -2035,13 +2118,13 @@
 							clearTimeout(this.connections[dcapp.cluster].timer);
 							Vue.delete(this.connections, dcapp.cluster);
 						}
-						if(store.user.dcapps[name] && store.user.dcapps[name].reset) {
-							store.user.dcapps[name].reset();
+						if(dcapp.reset) {
+							store.dcapps[name].reset();
 						}
 					}
 					store.user.ECDSA = null;
 					store.user.ECDSAPubHex = null;
-					router.push("/key");
+					if(goToKeys) router.push("/key");
 				}
 			}
 		}).$mount('#app');
@@ -2058,18 +2141,6 @@
 		}
 		function unsubscribeOnScroll(id) {
 			delete scrollSpies[id];
-		}
-		function loadScript(name, src) {
-			return new Promise((resolve, reject) => {
-				if(requiredScripts.includes(name)) { resolve(); return; }
-				let script = document.createElement('script');
-				script.type = "text/javascript";
-				script.defer = true;
-				script.onload = () => { requiredScripts.push(name); resolve(); };
-				script.onerror = () => { reject(); };
-				script.src = src;
-				try { document.head.appendChild(script); } catch (e) { reject(e); }
-			});
 		}
 		function loadDcappsList() {
 			return new Promise((resolve, reject) => {

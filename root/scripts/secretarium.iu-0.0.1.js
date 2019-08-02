@@ -285,7 +285,7 @@ sec.ui.requestConsent = Vue.component('sec-request-consent', {
                     return;
                 }
             }
-            this.scp.sendTx("identity", "share-with", "identity-share-with", { id: this.from.id, items: this.requested })
+            this.scp.newTx("identity", "share-with", "identity-share-with", { id: this.from.id, items: this.requested })
                     .onError(x => { this.sharingNs.failed(x, true); })
                     .onAcknowledged(() => { this.sharingNs.acknowledged(); })
                     .onProposed(() => { this.sharingNs.proposed(); })
@@ -294,7 +294,8 @@ sec.ui.requestConsent = Vue.component('sec-request-consent', {
                         this.sharingNs.executed();
                         sec.ui._appInst.close();
                         sec.ui._callbacks.onRequestConsented&&sec.ui._callbacks.onRequestConsented();
-                    });
+                    })
+                    .send();;
         },
         onCancel() {
             sec.ui._appInst.close();

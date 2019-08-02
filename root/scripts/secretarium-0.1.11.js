@@ -298,48 +298,46 @@ var sec, secretarium = sec = {
             return this;
         }
 
-        sendQuery(dcapp, command, requestId, args) {
-            let query = JSON.stringify({ "dcapp": dcapp, "function": command, "requestId": requestId, args: args });
-            console.debug("sending:" + query);
-            this.send(sec.utils.encode(query));
-            if(requestId) {
-                let cbs = this.requests[requestId] = {}, res = {
-                        onError: x => { (cbs["onError"] = cbs["onError"] || []).push(x); return res; },
-                        onResult: x => { (cbs["onResult"] = cbs["onResult"] || []).push(x); return res; }
-                    };
-                return res;
-            }
-            return this;
+        newQuery(dcapp, command, requestId, args) {
+            let cbs = this.requests[requestId] = {}, cmd = {};
+            cmd.onError = x => { (cbs["onError"] = cbs["onError"] || []).push(x); return cmd; };
+            cmd.onResult = x => { (cbs["onResult"] = cbs["onResult"] || []).push(x); return cmd; };
+            cmd.send = () => { this.send(dcapp, command, requestId, args, cmd); return cmd; };
+            return cmd;
         }
 
-        sendTx(dcapp, command, requestId, args) {
-            let query = JSON.stringify({ "dcapp": dcapp, "function": command, "requestId": requestId, args: args });
-            console.debug("sending:" + query);
-            this.send(sec.utils.encode(query));
-            if(requestId) {
-                let cbs = this.requests[requestId] = {}, res = {
-                        onError: x => { (cbs["onError"] = cbs["onError"] || []).push(x); return res; },
-                        onAcknowledged: x => { (cbs["onAcknowledged"] = cbs["onAcknowledged"] || []).push(x); return res; },
-                        onProposed: x => { (cbs["onProposed"] = cbs["onProposed"] || []).push(x); return res; },
-                        onCommitted: x => { (cbs["onCommitted"] = cbs["onCommitted"] || []).push(x); return res; },
-                        onExecuted: x => { (cbs["onExecuted"] = cbs["onExecuted"] || []).push(x); return res; }
-                    };
-                return res;
-            }
-            return this;
+        newTx(dcapp, command, requestId, args) {
+            let cbs = this.requests[requestId] = {}, cmd = {};
+            cmd.onError =  x => { (cbs["onError"] = cbs["onError"] || []).push(x); return cmd; };
+            cmd.onAcknowledged = x => { (cbs["onAcknowledged"] = cbs["onAcknowledged"] || []).push(x); return cmd; };
+            cmd.onProposed = x => { (cbs["onProposed"] = cbs["onProposed"] || []).push(x); return cmd; };
+            cmd.onCommitted = x => { (cbs["onCommitted"] = cbs["onCommitted"] || []).push(x); return cmd; };
+            cmd.onExecuted = x => { (cbs["onExecuted"] = cbs["onExecuted"] || []).push(x); return cmd; };
+            cmd.send = () => { this.send(dcapp, command, requestId, args, cmd); return cmd; };
+            return cmd;
         }
 
-        async send(data) {
-            if (this.socket.state !== 1)
-                return;
+        async send(dcapp, command, requestId, args, cmd) {
+            if (this.socket.state !== 1) {
+                if(cmd) cmd.onError("not connected");
+                else throw "not connected";
+            }
 
-            let ivOffset = sec.utils.getRandomUint8Array(16),
+            let query = JSON.stringify({ "dcapp": dcapp, "function": command, "requestId": requestId, args: args }),
+                data = sec.utils.encode(query),
+                ivOffset = sec.utils.getRandomUint8Array(16),
                 iv = this.aesctr.iv.secIncrementBy(ivOffset), self = this;
+
+            console.debug("sending:" + query);
 
             return window.crypto.subtle.encrypt({ name: "AES-CTR", counter: iv, length: 128 }, this.aesctr.cryptokey, data)
                 .then(msg => {
                     let full = sec.utils.concatUint8Array(ivOffset, new Uint8Array(msg));
                     self.socket.send(full);
+                })
+                .catch(e => {
+                    if(cmd) cmd.onError(e.message);
+                    else throw e.message;
                 });
         }
 
