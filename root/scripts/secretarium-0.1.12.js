@@ -567,8 +567,9 @@ var sec, secretarium = sec = {
             return String.fromCharCode.apply(null, this);
         }
 
-        Uint8Array.prototype.secToBase64 = function() {
-            return btoa(this.secToString());
+        Uint8Array.prototype.secToBase64 = function(url = false) {
+            let x = btoa(this.secToString());
+            return url ? x.replace(/\+/g, "-").replace(/\//g, "_") : x;
         }
 
         Uint8Array.prototype.secToHex = function(delimiter = '') {
@@ -590,8 +591,9 @@ var sec, secretarium = sec = {
             return buf;
         }
 
-        Uint8Array.secFromBase64 = function(str) {
-            return new Uint8Array(atob(str).split('').map(function (c) { return c.charCodeAt(0); }));
+        Uint8Array.secFromBase64 = function(str, url = false) {
+            let x = url ? str.replace(/\-/g, "+").replace(/\_/g, "/") : str;
+            return new Uint8Array(atob(x).split('').map(function (c) { return c.charCodeAt(0); }));
         }
 
         var getRandomUint8Array = function(size = 32) {
@@ -647,10 +649,6 @@ var sec, secretarium = sec = {
             hashBase64: async function(str) {
 				let h = await this.hash(encoder.encode(str));
                 return new Uint8Array(h).secToBase64();
-            },
-            base64ToUint8Array: function(str) {
-                str = str.replace(/-/g, "+").replace(/_/g, "/");
-                return new Uint8Array(atob(str).split('').map(function (c) { return c.charCodeAt(0); }));
             },
             ecdh: {
                 importPub: async function (pub, format = "raw", exportable = false) {

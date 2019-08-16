@@ -1707,7 +1707,11 @@
 				join() {
 					let org = this.organisation;
 					if(!org) return;
-
+					for(let s in org.requiredSharings) {
+						if(!store.user.dcapps.identity.data[s] && !!store.user.dcapps.identity.data.personalRecords[s]) {
+							this.joinLeaveNs.start().failed("You must share all required sharings. Missing: '" + s + "'", true);
+						}
+					}
 					sec.requestConsent(org.name, org.id, org.requiredSharings, store.user.dcapps.identity.data, store.SCPs[identityCluster])
 						.then(() => {
 							this.joinLeaveNs.start();
@@ -1721,7 +1725,7 @@
 									this.joinLeaveNs.executed("your request has been successfully registered", true);
 									this.organisation.status = "requested";
 								})
-								.send();;
+								.send();
 						})
 						.catch(() => { this.joinLeaveNs.failed("consent was denied", true); })
 				},
@@ -2098,7 +2102,7 @@
 									this.retryConnection(cluster);
 								connection.lastState = x;
 							})
-							.connect(connection.endpoint, store.user.ECDSA, sec.utils.base64ToUint8Array(trustedKey), "pair1")
+							.connect(connection.endpoint, store.user.ECDSA, Uint8Array.secFromBase64(trustedKey, true), "pair1")
 							.then(() => {
 								connection.retrying = false;
 								connection.retryingMsg = "";

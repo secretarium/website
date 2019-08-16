@@ -12,7 +12,7 @@
 {
 	"clusters": {
 <?php if($env == "prod") { ?>		"sec-demo-1": {
-			"key": "r0UPU4g6jReXZ58yoYkYaTJrJH8t5T7iz5sQl/KKrH1ynskPwJBtai8OkPxpC/CT/IhA1qOk0iAq5v5IDhnx/g==",
+			"key": "dBsDWuZyJg3mbMhsKnsRyhKLwTwmZurcoFc5l7SuRF5P6OSY0RZNQlgYu1yi53onXnIUu6mBdMmlGDFVJsnwjg==",
 			"gateways": [
 				{ "endpoint": "wss://ovh7.node.secretarium.org:443/", "name": "DEMO (OVH UK-1)" },
 				{ "endpoint": "wss://ovh7.node.secretarium.org:443/", "name": "DEMO (OVH DE-1)" },

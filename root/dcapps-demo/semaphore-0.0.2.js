@@ -519,7 +519,7 @@ const SemaphoreAppMultiContribution = Vue.component('sec-semaphore-multi-contrib
         },
         verifyFile() {
             var self = this, signalsBuff = [], hasFailed = false, tempWarnings = {};
-            var checkBuff = function() {
+            var checkBuff = async function() {
                     let v = self.verify.read - self.verify.verified;
                     if(self.verify.verified == 0) {
                         let fieldCheck = SemaphoreUtils.verifyFieldNames(signalsBuff[0]);
@@ -529,6 +529,13 @@ const SemaphoreAppMultiContribution = Vue.component('sec-semaphore-multi-contrib
                         }
                     }
                     for(let i = 0; i < signalsBuff.length; i++) {
+                        let country = signalsBuff[i]["Country"], regNum = signalsBuff[i]["Company Registration Number"];
+                        if(!country || !regNum) {
+                            let row = (self.rowsCount - self.verify.blockSize + i + 2);
+                            self.verify.msg = "Error on row " + row + ", missing either field 'Country' or 'Company Registration Number'";
+                            return false;
+                        }
+                        signalsBuff[i]["id"] = await sec.utils.hashBase64(country + regNum);
                         let check = SemaphoreUtils.verifyData(signalsBuff[i]);
                         if(check.success !== true) {
                             let row = (self.rowsCount - self.verify.blockSize + i + 2);
@@ -745,7 +752,11 @@ const SemaphoreAppSignals = Vue.component('sec-semaphore-signals', {
                 this.ns.executed().hide(0);
                 let t = [];
                 for(let i = 0; i < x.ids.length; i++) {
-                    let fs = x.ids[i].fields, c = fs["Country"].contribution, n = fs["Company Registration Number"].contribution, s = [];
+                    let fs = x.ids[i].fields,
+                        cf = fs["Country"],
+                        nf = fs["Company Registration Number"];
+                    if(!cf || !nf) continue;
+                    let c = cf.contribution, n = nf.contribution, s = [];
                     for(let name in fs) {
                         if(name == "Country" || name == "Company Registration Number" || name == "Client ID") continue;
                         let f = fs[name];
