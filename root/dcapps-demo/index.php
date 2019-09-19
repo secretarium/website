@@ -47,6 +47,18 @@
 				"scripts": "/dcapps-demo/madrec-0.0.5.js"
 			}
 		},
+		"smex": {
+			"name": "smex",
+			"display": "Molecule Research Exchange",
+			"description": "Secure reconciliation of research on molecules and exchange facility",
+			"icon": "fa-atom",
+			"cluster" : "sec-demo-1",
+			"ui": {
+				"templates": "/dcapps-demo/smex.php",
+				"scripts": "/dcapps-demo/smex-0.0.1.js",
+				"onboarding": true
+			}
+		},
 		"semaphore": {
 			"name": "semaphore",
 			"display": "Semaphore",

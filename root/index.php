@@ -2125,7 +2125,7 @@
 							Vue.delete(this.connections, dcapp.cluster);
 						}
 						if(dcapp.reset) {
-							store.dcapps[name].reset();
+							dcapp.reset();
 						}
 					}
 					store.user.ECDSA = null;
