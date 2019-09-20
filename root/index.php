@@ -1506,11 +1506,11 @@
 			}
 		});
 
-		store.dcapps["identity"] = { data: { personalRecords: {}, organisations: {} } }
-		store.dcapps["identity"].reset = new Promise((resolve, reject) => {
+		Vue.set(store.user.dcapps, "identity", { data: { personalRecords: {}, organisations: {} }});
+		store.dcapps["identity"] = { reset: () => (new Promise((resolve, reject) => {
     		Vue.set(store.user.dcapps, "identity", { data: { personalRecords: {}, organisations: {} } });
 			resolve();
-		});
+		}))};
 		const Identity = Vue.component('sec-identity', {
 			template: '#sec-identity',
 			data: () => {
