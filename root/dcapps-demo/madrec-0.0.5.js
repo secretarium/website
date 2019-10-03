@@ -904,13 +904,13 @@ const MADRecAppReports = Vue.component('sec-madrec-report', {
                 fields = o.map(x => x.name), self = this;
             if(this.personalReportChart == null) {
                 let datasets = sets.map((z, i) => {
-                    return { label: z, backgroundColor: colors[i], data: o.map(x => (x[z] || 0)) };
+                    return { label: z, backgroundColor: colors[i], data: o.map(x => (x[z] && x[z] < 10000000 ? x[z] : 0)) };
                 });
                 this.personalReportChart = this.createChart(c, fields, datasets);
             } else {
                 this.personalReportChart.data.labels = fields;
                 sets.map((z, i) => {
-                    return self.personalReportChart.data.datasets[i].data = o.map(x => (x[z] || 0));
+                    return self.personalReportChart.data.datasets[i].data = o.map(x => (x[z] && x[z] < 10000000 ? x[z] : 0));
                 });
             }
             this.personalReportChart.canvas.parentNode.style.height = (70 + 16 * o.length) + "px";
@@ -924,13 +924,13 @@ const MADRecAppReports = Vue.component('sec-madrec-report', {
                 fields = o.map(x => x.name + " (" + x.participants + ")"), self = this;
             if(this.consortiumReportChart == null) {
                 let datasets = sets.map((z, i) => {
-                    return { label: z, backgroundColor: colors[i], data: o.map(x => (x[z] || 0)) };
+                    return { label: z, backgroundColor: colors[i], data: o.map(x => (x[z] && x[z] < 10000000 ? x[z] : 0)) };
                 });
                 this.consortiumReportChart = this.createChart(c, fields, datasets);
             } else {
                 this.consortiumReportChart.data.labels = fields;
                 sets.map((z, i) => {
-                    return self.consortiumReportChart.data.datasets[i].data = o.map(x => (x[z] || 0));
+                    return self.consortiumReportChart.data.datasets[i].data = o.map(x => (x[z] && x[z] < 10000000 ? x[z] : 0));
                 });
             }
             this.consortiumReportChart.canvas.parentNode.style.height = (60 + 15 * o.length) + 'px';
