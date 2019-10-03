@@ -270,18 +270,18 @@ const MADRecAppSingleLEI = Vue.component('sec-madrec-single-lei', {
     },
     mounted: function() {
         this.lei = MADRec.lei.sample;
-        this.getCmdLoadLEI(this.lei, true)
-            .onError(x => {
-                this.nsGet.hide(0);
+        //this.getCmdLoadLEI(this.lei, true)
+        //    .onError(x => {
+        //        this.nsGet.hide(0);
                 MADRec.fields.forEach(e => {
                     if(e.sample) {
                         Vue.set(this.values, e.name, e.sample);
                         Vue.set(this.modifiedFields, e.name, true);
                     }
                 });
-                this.leiState = 2;
-            })
-            .send();
+                this.leiState = 1;
+        //    })
+        //    .send();
         this._initAutoCompleteFields();
     },
     computed: {

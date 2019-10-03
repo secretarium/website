@@ -11,7 +11,7 @@
 
 	<link rel="stylesheet" href="/styles/bootstrap-4.3.1.min.css" />
 	<link rel="stylesheet" href="/styles/fontawesome-5.7.2.all.min.css" />
-	<link rel="stylesheet" href="/styles/secretarium-0.0.14.min.css" />
+	<link rel="stylesheet" href="/styles/secretarium-0.0.15.min.css" />
 
 	<script src="/scripts/jquery-3.3.1.min.js"></script>
 	<script src="/scripts/jquery.autocomplete.min-1.4.10.js"></script>
@@ -203,7 +203,24 @@
 
 	<script type="text/x-template" id="sec-presentation">
 		<div id="presentation">
-			<section id="welcome">
+			<section id="welcome" style="position: relative;">
+				<div class="events p-sm-3">
+					<div class="events-box px-4 py-3">
+						<h5>We will be attending the following events</h5>
+						<p>
+							<a class="text-sec" href="https://summit.ovhcloud.com/en/schedule-day/" target="_blank">OVHCloud Summit</a>
+							Paris - 10th of Oct
+						</p>
+						<p>
+							<a class="text-sec" href="https://www.eventbrite.com/e/securing-applications-with-intel-sgx-tickets-75106440385" target="_blank">Intel® SGX Meetup</a>
+							London - 22nd of Oct
+						</p>
+						<p>
+							<a class="text-sec" href="https://www.wired.co.uk/partnerships/wired-smarter" target="_blank">WIRED Smarter</a>
+							London - 30th of Oct
+						</p>
+					</div>
+				</div>
 			</section>
 			<section id="what-it-is">
 				<div class="container">
@@ -1305,6 +1322,7 @@
 					scrollObserver.observe(target);
 				});
 				setTimeout(() => { $("a.go-to-next").css("opacity", 1); }, 3000);
+				setTimeout(() => { $(".events").css("opacity", 1); }, 1000);
 				canvas.fill();
 				canvas.start(1500);
 			},
@@ -2125,7 +2143,7 @@
 							Vue.delete(this.connections, dcapp.cluster);
 						}
 						if(dcapp.reset) {
-							dcapp.reset();
+							dcapp.reset().then(() => {});
 						}
 					}
 					store.user.ECDSA = null;
