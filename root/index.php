@@ -1178,6 +1178,47 @@
 		</div>
 	</script>
 
+	<script type="text/x-template" id="sec-funding-campaign">
+		<div class="container fixed-center mw-md">
+			<div class="card card-sec mw-md border-0">
+				<h2>Our first funding campaign is coming soon !</h2>
+				<div class="row mx-0 mt-5">
+					<div class="col-md-8 px-0 pr-md-5">
+						<h4 class="mb-4">Register your interest</h4>
+						<p>
+							We will be launching a funding campaign soon, on Seedrs, where anyone will be able to invest from £50.
+						</p>
+						<p>
+							Would you like to become a shareholder, please register and we will invite you to the pre-campaign when it starts.
+						</p>
+						<form class="form-sec mt-3" @submit.prevent>
+							<input type="email" name="email" class="form-control form-control-sm" placeholder="Your email" v-model="email">
+							<textarea name="message" class="form-control form-control-sm my-2" rows="4"
+								v-model="message" placeholder="(Optional) Please tell us more about you"></textarea>
+							<div class="mt-2">
+								<button type="submit" class="btn btn-sec" @click.prevent="register">Register interest</button>
+								<sec-notif-state :state="ns.data" class="pl-3"></sec-notif-state>
+							</div>
+						</form>
+					</div>
+					<div class="col-md-4 px-0 pl-md-5 mt-5 mt-md-0">
+						<h4 class="mb-4">Get in touch</h4>
+						<a class="link-unstyled" href="mailto:contact@secretarium.org" target="_blank" style="white-space: nowrap;">
+							<i class="fas fa-envelope"></i>
+							<span>contact@secretarium.org</span>
+						</a>
+						<p style="min-width: 12rem;" class="mt-3">
+							Société Générale Incubator<br/>
+							The Greenhouse, 6th floor<br/>
+							41 Tower Hill,<br/>
+							EC3N 4SG, London, UK
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</script>
+
 	<script>
 		var onDrop = null, scrollSpies = {},
 			scrollObserver = new IntersectionObserver((entries, observer) => {
@@ -1968,6 +2009,25 @@
 			}
 		});
 
+		const FundingCampaign = Vue.component('sec-funding-campaign', {
+			template: '#sec-funding-campaign',
+			data: () => { return { email: "", message: "", ns: new sec.notifState() } },
+			methods: {
+				register(e) {
+					this.ns.start("Registering...", true);
+					let o = $(e.target).closest("form").serializeObject();
+					$.post("/services/", { type: "user.register-funding-campaign", data: o }, "json")
+						.done(x => {
+							if(x.success) this.ns.executed("Success", true);
+							else this.ns.failed("Unable to register: " + x.message, true);
+						})
+						.fail((j, t, e) => {
+							this.ns.failed("Unable to register: " + e, true);
+						});
+				}
+			}
+		});
+
 		const router = new VueRouter({
 			mode: 'history',
 			routes: [
@@ -1987,6 +2047,7 @@
 				{ path: '/demos', component: DemoApps },
 				{ path: '/demo/:name', component: DemoLoader, name: 'demo-loader', props: true },
 				{ path: '/connect/:name', component: Connect, name: 'connect', props: true },
+				{ path: '/funding-campaign', component: FundingCampaign },
 				{ path: '*', component: Fallback },
 			]
 		});

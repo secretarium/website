@@ -26,6 +26,11 @@ class Email {
         $this->_message->setBcc(["bertrand.foing@gmail.com" => "Bertrand Bcc"]);
         return $this;
     }
+    public function setCc($email, $name = "") {
+        if($name == "") $this->_message->setCc($email);
+        else $this->_message->setCc([$email => $name]);
+        return $this;
+    }
     public function setBodyText($text) {
         $this->_message->setBody($text);
         return $this;

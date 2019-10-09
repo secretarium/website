@@ -27,6 +27,10 @@ switch ($type) {
             case "user.request-docs":
                 requestDocs($_POST["data"]);
                 break;
+
+            case "user.register-funding-campaign":
+                registerFundingCampaign($_POST["data"]);
+                break;
         }
         break;
 

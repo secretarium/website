@@ -31,4 +31,28 @@ function requestDocs($data) {
     returnSuccess("successfully sent");
 }
 
+function registerFundingCampaign($data) {
+
+    if(!checkString($data, "email"))
+        returnError("invalid email");
+    if(!checkEmail($data["email"], $error))
+        returnError($error);
+    if(!checkString($data, "message"))
+        $data["message"] = "";
+    $emailTxt = "\nPre-campaign registration successfully saved\n\n" .
+        "From: " . $data["email"] . "\n" .
+        "Message: " . $data["message"] . "\n\n";
+    $email = (new Email())
+        ->setSubject("Secretarium - Pre-Campaign Registration")
+        ->setTo("contact@secretarium.org")
+        ->setCc($data["email"])
+        ->setBodyText($emailTxt);
+
+    if(!$email->send()) {
+        returnError("failed to register the request");
+    }
+
+    returnSuccess("successfully saved");
+}
+
 ?>
