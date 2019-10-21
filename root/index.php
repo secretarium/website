@@ -206,11 +206,7 @@
 			<section id="welcome" style="position: relative;">
 				<div class="events p-sm-3">
 					<div class="events-box px-4 py-3">
-						<h5>We will be attending the following events</h5>
-						<p>
-							<a class="text-sec" href="https://summit.ovhcloud.com/en/schedule-day/" target="_blank">OVHCloud Summit</a>
-							Paris - 10th of Oct
-						</p>
+						<h5>Meet us this month at</h5>
 						<p>
 							<a class="text-sec" href="https://www.eventbrite.com/e/securing-applications-with-intel-sgx-tickets-75106440385" target="_blank">Intel® SGX Meetup</a>
 							London - 22nd of Oct

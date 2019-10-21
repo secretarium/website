@@ -17,7 +17,7 @@ const SmexAppSearch = Vue.component('sec-smex-search', {
     template: '#sec-smex-search',
     data: () => {
         return {
-            smile: "[11CH2]1NCCN2C[C@@H]3CCC[C@@H]3c4cccc1c24",
+            smile: "Brc1ccc(cc1)S(=O)(=O)N2CCN(CC2)C(=O)C3CCN(CC3)c4ccncn4",
             identity: {},
             ns: new sec.notifState(),
             results: {},
@@ -61,7 +61,7 @@ const SmexAppSearch = Vue.component('sec-smex-search', {
             let smiles = Object.keys(x).map(smile => ({ smile: smile, dist: parseFloat(x[smile]) }));
             smiles.sort(SmexUtils.smileComparer);
             let r = smiles.map(z => {
-                    let pct = z.dist <= 0.4 ? 1 : z.dist > 3 ? 0 : (1 - (3.0 - z.dist) / 2.6);
+                    let pct = z.dist <= 0.4 ? 0 : z.dist > 3 ? 1 : (1 - (3.0 - z.dist) / 2.6);
                     return {
                         smile: z.smile,
                         dist: z.dist,
