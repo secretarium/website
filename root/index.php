@@ -17,7 +17,7 @@
 	<script src="/scripts/jquery.autocomplete.min-1.4.10.js"></script>
 	<script src="/scripts/popper-1.14.7.min.js"></script>
 	<script src="/scripts/bootstrap-4.3.1.min.js"></script>
-	<script src="/scripts/vue-2.6.10.min.js"></script>
+	<script src="/scripts/vue-2.6.10.js"></script>
 	<script src="/scripts/vue-router-3.0.2.min.js"></script>
 	<script src="/scripts/secretarium-0.1.12.js"></script>
 	<script src="/scripts/secretarium.iu-0.0.2.js"></script>
@@ -162,7 +162,7 @@
 					<div class="col-sm">
 						<h5 class="footer-category">Community</h5>
 						<ul>
-							<li><a href="https://twitter.com/secretarium1" target="_blank">Twitter</a></li>
+							<li><a href="https://twitter.com/secretarium" target="_blank">Twitter</a></li>
 							<li><a href="https://www.linkedin.com/company/secretarium" target="_blank">LinkedIn</a></li>
 						</ul>
 					</div>
@@ -204,7 +204,7 @@
 	<script type="text/x-template" id="sec-presentation">
 		<div id="presentation">
 			<section id="welcome" style="position: relative;">
-				<div class="events p-sm-3">
+				<!--<div class="events p-sm-3">
 					<div class="events-box px-4 py-3">
 						<h5>Meet us this month at</h5>
 						<p>
@@ -216,7 +216,7 @@
 							London - 30th of Oct
 						</p>
 					</div>
-				</div>
+				</div>-->
 			</section>
 			<section id="what-it-is">
 				<div class="container">
@@ -478,12 +478,12 @@
 							</p>
 						</div>
 						<div class="col-md-4 px-0 px-md-4 mt-5 mt-md-0">
-							<h4 class="mb-3">Swisscom Blockchain</h4>
+							<h4 class="mb-3">Swisscom</h4>
 							<div class="comp-logo">
-								<img src="/images/logo_swisscom_blockchain.jpg"/>
+								<img src="/images/swisscom_logo.png"/>
 							</div>
 							<p class="mt-3">
-								Swisscom Blockchain supports Secretarium with engineers, business developers,
+								Swisscom supports Secretarium with engineers, business developers,
 								infrastructure. Our partnership includes a comprehensive joined go-to-market
 								agreement, as well as a mutually approach to engage with large institutions.
 							</p>
@@ -555,10 +555,10 @@
 								<div class="col-sm pb-3">
 									<h5>Visit us</h5>
 									<p class="pl-3" style="min-width: 12rem;">
-										Société Générale Incubator<br/>
-										The Greenhouse, 6th floor<br/>
-										41 Tower Hill,<br/>
-										EC3N 4SG, London, UK
+										Société Générale<br/>
+										Innovation Center, 5th floor<br/>
+										1 Bank Street,<br/>
+										E14 4SG, London, UK
 									</p>
 								</div>
 							</div>
