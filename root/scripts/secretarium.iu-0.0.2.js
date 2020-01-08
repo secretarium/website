@@ -295,7 +295,7 @@ sec.ui.requestConsent = Vue.component('sec-request-consent', {
                         sec.ui._appInst.close();
                         sec.ui._callbacks.onRequestConsented&&sec.ui._callbacks.onRequestConsented();
                     })
-                    .send();;
+                    .send();
         },
         onCancel() {
             sec.ui._appInst.close();

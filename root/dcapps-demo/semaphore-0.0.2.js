@@ -554,22 +554,22 @@ const SemaphoreAppMultiContribution = Vue.component('sec-semaphore-multi-contrib
                     self.verify.verified = self.verify.read;
                     return true;
                 },
-                onNewLine = function(row, parser) {
+                onNewLine = async function(row, parser) {
                     self.verify.read = row.meta.cursor * 100 / self.file.size;
                     signalsBuff.push(row.data[0]);
-                    if(signalsBuff.length == self.verify.blockSize) {
-                        if(!checkBuff()) {
+                    /*if(signalsBuff.length == self.verify.blockSize) {
+                        if(!await checkBuff()) {
                             parser.abort();
                             hasFailed = true;
                         }
                         signalsBuff.length = 0;
                         self.verify.warnings = Object.keys(tempWarnings).map(x => { return x + (tempWarnings[x] > 1 ? " (" + tempWarnings[x] + " times)" : ""); });
-                    }
+                    }*/
                     self.rowsCount++;
                 },
-                onComplete = function() {
+                onComplete = async function() {
                     if(signalsBuff.length > 0) {
-                        if(!checkBuff()) {
+                        if(!await checkBuff()) {
                             hasFailed = true;
                         }
                         signalsBuff.length = 0;
@@ -593,6 +593,8 @@ const SemaphoreAppMultiContribution = Vue.component('sec-semaphore-multi-contrib
         async uploadBlock(signalsBuff, blockId) {
             let args = [], items = signalsBuff.length;
             for(let i = 0; i < signalsBuff.length; i++) {
+                let country = signalsBuff[i]["Country"], regNum = signalsBuff[i]["Company Registration Number"];
+                signalsBuff[i]["id"] = await sec.utils.hashBase64(country + regNum);
                 SemaphoreUtils.verifyData(signalsBuff[i]["id"], signalsBuff[i]); // verify does transform
                 args.push(await SemaphoreUtils.rowToJson(signalsBuff[i]));
             }

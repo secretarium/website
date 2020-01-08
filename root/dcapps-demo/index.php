@@ -12,11 +12,11 @@
 {
 	"clusters": {
 <?php if($env == "prod") { ?>		"sec-demo-1": {
-			"key": "HjpaRFUv4D2MJJMamDK0ER9mFMDQ4Y9E4o6w/OBy9PfjCagzebjNMscCsCtQC6AJjzbxv9f/GXfki9lhf4btoA==",
+			"key": "SOOXTo9EpqZzSuStIPeB7D2uO+5gQ4S+Q7H/I4JlV/LJU14DMR+d/DyD4iL+O77GvznSEIq9I+YHN0N4QB/96w==",
 			"gateways": [
-				{ "endpoint": "wss://ovh3.node.secretarium.org:443/", "name": "DEMO (OVH UK-1)" },
-				{ "endpoint": "wss://ovh3.node.secretarium.org:443/", "name": "DEMO (OVH DE-1)" },
-				{ "endpoint": "wss://ovh3.node.secretarium.org:443/", "name": "DEMO (OVH DE-2)" }
+				{ "endpoint": "wss://ovh-fr-rbx-2288-1.node.secretarium.org:443/", "name": "DEMO (OVH UK-1)" },
+				{ "endpoint": "wss://ovh-fr-rbx-2288-1.node.secretarium.org:443/", "name": "DEMO (OVH DE-1)" },
+				{ "endpoint": "wss://ovh-fr-rbx-2288-1.node.secretarium.org:443/", "name": "DEMO (OVH DE-2)" }
 			]
 		}
 <?php } else if($env == "dev") { ?>		"sec-demo-1": {
@@ -30,23 +30,6 @@
 <?php } ?>
 	},
 	"dcapps": {
-		"madrec": {
-			"name": "madrec",
-			"display": "MADRec",
-			"description": "Massive Anonymous Data Reconciliation. Collectively measure reference data quality.",
-			"icon": "fa-chart-pie",
-			"cluster" : "sec-demo-1",
-			"ui": {
-				"require": [
-					{ "name": "papaparse-4.6.0", "src": "/scripts/papaparse-4.6.0.min.js" },
-					{ "name": "chart-2.8.0", "src": "/scripts/chart-2.8.0.min.js"},
-					{ "name": "stream-saver-0.0.0", "src": "/scripts/stream-saver-0.0.0.js" },
-					{ "name": "madrec-formats-0.0.15", "src": "/dcapps-demo/madrec.formats-0.0.15.js" }
-				],
-				"templates": "/dcapps-demo/madrec.php",
-				"scripts": "/dcapps-demo/madrec-0.0.6.js"
-			}
-		},
 		"smex": {
 			"name": "smex",
 			"display": "Molecule Research Exchange",
