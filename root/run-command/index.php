@@ -53,6 +53,7 @@
 				<input type="text" class="form-control" placeholder="Endpoint" required v-model="endpoint" style="min-width: 20rem;">
 				<input type="text" class="form-control ml-3" placeholder="Trusted Key" required v-model="trustedKey" style="min-width: 50rem;">
 				<button type="submit" class="btn btn-primary mx-3" @click.prevent="connect">CONNECT</button>
+				<button type="submit" class="btn btn-primary mx-3" @click.prevent="disconnect">DISCONNECT</button>
 				<sec-notif-state :state="nsConnect.data"></sec-notif-state>
 			</form>
 			<hr class="my-4">
@@ -230,7 +231,7 @@
 							.on("statechange", x => {
 								if(x == 2) // connection dropped
 									this.retryConnection();
-								this.connection.lastState = x;
+								if(this.connection) this.connection.lastState = x;
 							})
 							.connect(this.connection.endpoint, this.store.user.key.cryptoKey, Uint8Array.secFromBase64(this.trustedKey, true), "pair1")
 							.then(() => {
@@ -261,6 +262,7 @@
 							.onProposed(() => { this.nsSingle.proposed(); })
 							.onCommitted(() => { this.nsSingle.committed(); })
 							.onExecuted(() => { this.nsSingle.executed("Executed", true); })
+							.onResult(x => { this.nsSingle.executed(JSON.stringify(x), true); })
 							.send();
 					} catch (x) {
 						this.nsSingle.failed(x, true);
