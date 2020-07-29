@@ -1,18 +1,9 @@
 {
-    "liveSassCompile.settings.formats":[
-    //    {
-    //        "format": "expanded",
-    //        "extensionName": ".css",
-    //        "savePath": "/root/styles"
-    //    },
-       {
-           "extensionName": ".min.css",
-           "format": "compressed",
-           "savePath": "/root/styles"
-       }
-   ],
-   "liveSassCompile.settings.includeItems": [
-      "root/styles/secretarium-*.scss"
-   ],
-   "liveSassCompile.settings.generateMap": false
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.autoIndent": "advanced",
+    "editor.tabSize": 4,
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true
+    }
 }
