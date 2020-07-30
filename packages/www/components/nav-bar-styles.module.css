@@ -1,0 +1,17 @@
+.navBarWrapper {
+    height: 100%;
+    background-color: #fff;
+}
+
+.navBar {
+    height: 100%;
+    line-height: 5.5rem;
+}
+
+.navBar img {
+    display: inline;
+}
+
+.navBar a {
+    display: inline;
+}

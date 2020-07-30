@@ -1,9 +1,0 @@
-.navBarWrapper {
-    background-color: #fff;
-    height: 6rem;
-}
-
-.navBar {
-    @apply mx-auto;
-    @apply px-5;
-}

@@ -2,7 +2,13 @@ import { AppProps } from 'next/app'
 import Router from 'next/router';
 import NProgress from 'nprogress';
 import { AnimatePresence } from 'framer-motion';
-import '../styles/index.css'
+import { config, library } from '@fortawesome/fontawesome-svg-core'
+import { faFacebook } from '@fortawesome/free-brands-svg-icons'
+import '@fortawesome/fontawesome-svg-core/styles.css';
+import '../styles/index.css';
+
+config.autoAddCss = false;
+library.add(faFacebook)
 
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeComplete', () => NProgress.done());

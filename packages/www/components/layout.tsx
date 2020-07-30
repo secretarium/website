@@ -4,6 +4,7 @@ import Footer from './footer'
 import Meta from './meta'
 import Sticky from 'react-sticky-el';
 import NavBar from './nav-bar';
+import layoutStyles from './layout-styles.module.css'
 
 type Props = {
     preview?: boolean
@@ -14,7 +15,9 @@ const Layout = ({ preview, children }: Props) => {
     return (
         <>
             <Meta />
-            <Sticky style={{ zIndex: 999, position: 'relative' }}>
+            <Sticky
+                className={layoutStyles.stickyPanel}
+                stickyClassName={layoutStyles.stuck}>
                 <NavBar />
             </Sticky>
             <motion.div

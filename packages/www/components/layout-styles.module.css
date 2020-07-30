@@ -1,0 +1,15 @@
+.stickyPanel {
+    height: 6rem;
+    z-index: 999;
+    position: 'relative';
+}
+
+.stickyPanel > div {
+    height: 6rem;
+    box-shadow: 0 0 0 0 #fff;
+    transition: box-shadow 300ms ease-in-out;
+}
+
+.stickyPanel .stuck {
+    box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.1);
+}
