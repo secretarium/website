@@ -48,6 +48,10 @@
         "draft"
       ],
       "required": true
+    },
+    "tags": {
+      "via": "posts",
+      "collection": "tags"
     }
   }
 }
