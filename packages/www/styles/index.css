@@ -14,8 +14,31 @@
 
 /* Root styles */
 
+@font-face {
+  font-family: Grotesk;
+  src: url('../public/assets/webfonts/TypoGroteskRegular.eot'); /* IE9 Compat Modes */
+  src: url('../public/assets/webfonts/TypoGroteskRegular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('../public/assets/webfonts/TypoGroteskRegular.woff2') format('woff2'), /* Super Modern Browsers */
+       url('../public/assets/webfonts/TypoGroteskRegular.woff') format('woff'), /* Pretty Modern Browsers */
+       url('../public/assets/webfonts/TypoGroteskRegular.ttf')  format('truetype'); /* Safari, Android, iOS */
+}
+
+@font-face {
+  font-family: Lato;
+  src: url('../public/assets/webfonts/LatoRegular.eot'); /* IE9 Compat Modes */
+  src: url('../public/assets/webfonts/LatoRegular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('../public/assets/webfonts/LatoRegular.woff2') format('woff2'), /* Super Modern Browsers */
+       url('../public/assets/webfonts/LatoRegular.woff') format('woff'), /* Pretty Modern Browsers */
+       url('../public/assets/webfonts/LatoRegular.ttf')  format('truetype'); /* Safari, Android, iOS */
+}
+
 html {
     font-size: 13px;
+    font-family: 'Lato';
+}
+
+h1, h2, h3 {
+    font-family: 'Grotesk';
 }
 
 /* Page progress bar */

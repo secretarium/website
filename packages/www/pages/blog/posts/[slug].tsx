@@ -2,7 +2,6 @@ import { useRouter } from 'next/router'
 import ErrorPage from 'next/error'
 import Container from '../../../components/container'
 import PostBody from '../../../components/post-body'
-import Header from '../../../components/header'
 import PostHeader from '../../../components/post-header'
 import Layout from '../../../components/layout'
 import { getAllPostsWithSlug, getPostAndMorePosts } from '../../../lib/api'
@@ -10,8 +9,6 @@ import PostTitle from '../../../components/post-title'
 import Head from 'next/head'
 import markdownToHtml from '../../../lib/markdownToHtml'
 import PostType from '../../../types/post'
-import Sticky from 'react-sticky-el'
-import NavBar from '../../../components/nav-bar'
 
 type Props = {
     post: PostType
@@ -27,7 +24,6 @@ const Post = ({ post, morePosts, preview }: Props) => {
     return (
         <Layout preview={preview}>
             <Container>
-                <Header />
                 {router.isFallback ? (
                     <PostTitle>Loading…</PostTitle>
                 ) : (
@@ -43,6 +39,7 @@ const Post = ({ post, morePosts, preview }: Props) => {
                                     title={post.title}
                                     coverImage={post.coverImage.url}
                                     date={post.date}
+                                    tags={post.tags}
                                     author={post.author}
                                 />
                                 <PostBody content={post.content} />
@@ -60,9 +57,10 @@ type Params = {
     params: {
         slug: string
     }
+    preview: any
 }
 
-export async function getStaticProps({ params, preview = null }: { params: any, preview: any }) {
+export async function getStaticProps({ params, preview = null }: Params) {
     const data = await getPostAndMorePosts(params.slug, preview)
     const content = await markdownToHtml(data?.posts[0]?.content || '')
 
@@ -77,7 +75,6 @@ export async function getStaticProps({ params, preview = null }: { params: any, 
         },
     }
 }
-
 
 export async function getStaticPaths() {
     const allPosts = await getAllPostsWithSlug()

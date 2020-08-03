@@ -42,25 +42,43 @@ export async function getPreviewPostBySlug(slug: any) {
 }
 
 export async function getAllPostsWithSlug() {
-    const data = await fetchAPI(gql`
-    {
-      posts {
-        slug
-      }
-    }
-  `)
+    const data = await fetchAPI(
+        gql`{
+            posts {
+                slug
+            }
+        }`
+    )
+
     return data?.allPosts
+}
+
+export async function getAllTags() {
+    const data = await fetchAPI(
+        gql`{
+            tags {
+                label
+            }
+        }`
+    )
+
+    return {
+        tags: data?.tags.map((tag: { label: string }) => tag.label.toLocaleLowerCase())
+    }
 }
 
 export async function getAllPostsForHome(preview: any) {
     const data = await fetchAPI(
         gql`
-        query Posts($where: JSON){
+        query Posts($where: JSON) {
             posts(sort: "date:desc", limit: 10, where: $where) {
                 title
                 slug
                 excerpt
                 date
+                tags {
+                    label
+                }
                 coverImage {
                     url
                 }
@@ -82,12 +100,63 @@ export async function getAllPostsForHome(preview: any) {
             },
         }
     )
+
     return data?.posts.map((post: any) => {
         post.coverImage.url = `${post.coverImage.url.startsWith('/') ? process.env.NEXT_PUBLIC_STRAPI_API_URL : ''}${post.coverImage.url}`;
+        post.tags = post.tags.map((tag: { label: string }) => tag.label.toLocaleLowerCase());
         if (post.author.picture.url)
             post.author.picture.url = `${post.author.picture.url.startsWith('/') ? process.env.NEXT_PUBLIC_STRAPI_API_URL : ''}${post.author.picture.url}`;
         return post;
     })
+}
+
+export async function getPostsByTag(label: any) {
+    const data = await fetchAPI(
+        gql`
+        query PostsForTag($where: JSON) {
+            tags(where: $where) {
+                posts {
+                    title
+                    slug
+                    excerpt
+                    date
+                    tags {
+                        label
+                    }
+                    coverImage {
+                        url
+                    }
+                    author {
+                        firstname
+                        lastname
+                        picture {
+                            url
+                        }
+                    }
+                }
+            }
+        }
+        `,
+        {
+            variables: {
+                where: {
+                    label
+                }
+            },
+        }
+    )
+
+    console.log('BOO>', data)
+
+    return {
+        posts: data.tags[0]?.posts.map((post: any) => {
+            post.coverImage.url = `${post.coverImage.url.startsWith('/') ? process.env.NEXT_PUBLIC_STRAPI_API_URL : ''}${post.coverImage.url}`;
+            post.tags = post.tags.map((tag: { label: string }) => tag.label.toLocaleLowerCase());
+            if (post.author.picture.url)
+                post.author.picture.url = `${post.author.picture.url.startsWith('/') ? process.env.NEXT_PUBLIC_STRAPI_API_URL : ''}${post.author.picture.url}`;
+            return post;
+        }) || []
+    }
 }
 
 export async function getPostAndMorePosts(slug: any, preview: any) {
@@ -99,6 +168,9 @@ export async function getPostAndMorePosts(slug: any, preview: any) {
                 slug
                 content
                 date
+                tags {
+                    label
+                }
                 coverImage {
                     url
                 }
@@ -116,6 +188,9 @@ export async function getPostAndMorePosts(slug: any, preview: any) {
                 slug
                 excerpt
                 date
+                tags {
+                    label
+                }
                 coverImage {
                     url
                 }
@@ -147,12 +222,14 @@ export async function getPostAndMorePosts(slug: any, preview: any) {
     return {
         posts: data.posts.map((post: any) => {
             post.coverImage.url = `${post.coverImage.url.startsWith('/') ? process.env.NEXT_PUBLIC_STRAPI_API_URL : ''}${post.coverImage.url}`;
+            post.tags = post.tags.map((tag: { label: string }) => tag.label.toLocaleLowerCase());
             if (post.author.picture.url)
                 post.author.picture.url = `${post.author.picture.url.startsWith('/') ? process.env.NEXT_PUBLIC_STRAPI_API_URL : ''}${post.author.picture.url}`;
             return post;
         }),
         morePosts: data.morePosts.map((post: any) => {
             post.coverImage.url = `${post.coverImage.url.startsWith('/') ? process.env.NEXT_PUBLIC_STRAPI_API_URL : ''}${post.coverImage.url}`;
+            post.tags = post.tags.map((tag: { label: string }) => tag.label.toLocaleLowerCase());
             if (post.author.picture.url)
                 post.author.picture.url = `${post.author.picture.url.startsWith('/') ? process.env.NEXT_PUBLIC_STRAPI_API_URL : ''}${post.author.picture.url}`;
             return post;

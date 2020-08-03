@@ -5,6 +5,7 @@ import Meta from './meta'
 import Sticky from 'react-sticky-el';
 import NavBar from './nav-bar';
 import layoutStyles from './layout-styles.module.css'
+import { useState } from 'react';
 
 type Props = {
     preview?: boolean
@@ -12,13 +13,18 @@ type Props = {
 }
 
 const Layout = ({ preview, children }: Props) => {
+
+    const [fixedToggle, setFixedToggle] = useState(false);
+
     return (
         <>
             <Meta />
             <Sticky
                 className={layoutStyles.stickyPanel}
-                stickyClassName={layoutStyles.stuck}>
-                <NavBar />
+                stickyClassName={layoutStyles.stuck}
+                onFixedToggle={(fixed) => setFixedToggle(fixed)}
+            >
+                <NavBar fixedToggle={fixedToggle} />
             </Sticky>
             <motion.div
                 initial={{ opacity: 0 }}

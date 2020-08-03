@@ -3,19 +3,28 @@ import DateFormater from './date-formater'
 import CoverImage from './cover-image'
 import PostTitle from './post-title'
 import Author from '../types/author'
+import Link from 'next/link'
 
 type Props = {
     title: string
     coverImage: string
     date: string
+    tags: string[]
     author: Author
 }
 
-const PostHeader = ({ title, coverImage, date, author }: Props) => {
+const PostHeader = ({ title, coverImage, date, tags, author }: Props) => {
     return (
         <>
             <PostTitle>{title}</PostTitle>
-            <div className="hidden md:block md:mb-12">
+            <div className="block mb-5 mt-0 md:mb-12 md:-mt-5">
+                {
+                    tags.map(tag => <Link as={`/blog/tags/${tag}`} href="/blog/tags/[label]" key={tag}>
+                        <a className="inline-block bg-gray-200 hover:bg-gray-300 rounded-full px-3 py-1 md:text-xl font-semibold text-gray-700 mr-2">#{tag}</a>
+                    </Link>)
+                }
+            </div>
+            <div className="hidden md:block md:mb-5">
                 <Avatar name={`${author.firstname} ${author.lastname}`} picture={author.picture.url} />
             </div>
             <div className="mb-8 md:mb-16 -mx-5 sm:mx-0">

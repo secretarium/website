@@ -1,6 +1,5 @@
 import cn from 'classnames'
 import Link from 'next/link'
-import { motion } from 'framer-motion';
 
 type Props = {
     title: string
@@ -10,8 +9,7 @@ type Props = {
 
 const CoverImage = ({ title, src, slug }: Props) => {
     const image = (
-        <motion.img
-            layoutId={slug}
+        <img
             src={src}
             alt={`Cover Image for ${title}`}
             className={cn('shadow-small', {

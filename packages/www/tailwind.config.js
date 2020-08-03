@@ -13,7 +13,7 @@ module.exports = {
                 28: '4rem',
             },
             letterSpacing: {
-                tighter: '-.04em',
+                tighter: '0em',
             },
             lineHeight: {
                 tight: 1.2,
@@ -26,7 +26,7 @@ module.exports = {
             },
             fontFamily: {
                 sans:
-                    '-apple-system, "Helvetica Neue", "Segoe UI", Roboto, Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+                    'Lato, -apple-system, "Helvetica Neue", "Segoe UI", Roboto, Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
             },
             boxShadow: {
                 small: '0 5px 10px rgba(0, 0, 0, 0.12)',

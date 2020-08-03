@@ -8,6 +8,7 @@ type Props = {
     title: string
     coverImage: string
     date: string
+    tags: string[]
     excerpt: string
     author: Author
     slug: string
@@ -17,10 +18,12 @@ const HeroPost = ({
     title,
     coverImage,
     date,
+    tags,
     excerpt,
     author,
     slug,
 }: Props) => {
+    console.log(tags);
     return (
         <section>
             <div className="mb-8 md:mb-16">
@@ -33,6 +36,13 @@ const HeroPost = ({
                             <a className="hover:underline">{title}</a>
                         </Link>
                     </h3>
+                    <div className="mb-4 md:mb-0 text-lg pb-3">
+                        {
+                            tags.map(tag => <Link as={`/blog/tags/${tag}`} href="/blog/tags/[label]" key={tag}>
+                                <a className="inline-block bg-gray-200 hover:bg-gray-300 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">#{tag}</a>
+                            </Link>)
+                        }
+                    </div>
                     <div className="mb-4 md:mb-0 text-lg">
                         <DateFormater dateString={date} />
                     </div>

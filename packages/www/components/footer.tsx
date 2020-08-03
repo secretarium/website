@@ -1,6 +1,6 @@
 import Container from './container'
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
-import logo from '../public/assets/logoOutlineBlack.svg';
+import logo from '../public/assets/images/logoOutlineBlack.svg';
 import { faTwitter, faLinkedinIn, faGithub } from '@fortawesome/free-brands-svg-icons'
 import Link from 'next/link';
 
@@ -12,10 +12,10 @@ const Footer = () => {
                     <div className="leading-tight text-xl mb-10 lg:mb-0 lg:pr-4 lg:w-1/2">
                         <Link href="/">
                             <a title="Secretarium">
-                                <img src={logo} alt="Secretarium" className="pb-6" />
+                                <img src={logo} alt="Secretarium" className="pb-8" />
                             </a>
                         </Link>
-                        <div className="text-center text-lg lg:text-left mb-4 text-gray-700">
+                        <div className="text-center text-lg lg:text-left mb-4 text-gray-700 pb-5">
                             Europe:<br />
                             1 Bank St<br />
                             London E14 4SG<br />
@@ -45,7 +45,8 @@ const Footer = () => {
                     </div>
                 </div>
                 <div className="w-full text-center text-sm pb-20">
-                    Secretarium © 2020 All Rights Reserved <Link href="/legal"><a className="text-red-500 hover:text-red-300">Legal information</a></Link>, <Link href="/legal/privacy-policy"><a className="text-red-500 hover:text-red-300">Privacy policy</a></Link>
+                    Secretarium © 2020 All Rights Reserved<br />
+                    <Link href="/legal"><a className="text-red-500 hover:text-red-300">Legal information</a></Link> - <Link href="/legal/privacy-policy"><a className="text-red-500 hover:text-red-300">Privacy policy</a></Link>
                 </div>
             </Container>
         </footer>
