@@ -1,7 +1,7 @@
 import Container from './container'
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
 import logo from '../public/assets/images/logoOutlineBlack.svg';
-import { faTwitter, faLinkedinIn, faGithub } from '@fortawesome/free-brands-svg-icons'
+import { faTwitter, faLinkedinIn, faGithub, faDiscord } from '@fortawesome/free-brands-svg-icons'
 import Link from 'next/link';
 
 const Footer = () => {
@@ -23,9 +23,10 @@ const Footer = () => {
                             <a href="mailto:contact@secretarium.com">contact@secretarium.com</a>
                         </div>
                         <div className="text-center text-3xl lg:text-left">
-                            <a className="pr-3 inline hover:text-gray-600 duration-200 transition-colors" href="https://www.linkedin.com/company/secretarium/" target="_blank"><Icon icon={faLinkedinIn} /></a>
-                            <a className="pl-3 pr-3 inline hover:text-gray-600 duration-200 transition-colors" href="https://twitter.com/secretarium" target="_blank"><Icon icon={faTwitter} /></a>
-                            <a className="pl-3 inline hover:text-gray-600 duration-200 transition-colors" href="https://github.com/secretarium" target="_blank"><Icon icon={faGithub} /></a>
+                            <a className="pr-3 inline hover:text-gray-600 duration-200 transition-colors" href="https://github.com/secretarium" target="_blank"><Icon icon={faGithub} /></a>
+                            <a className="pl-3 pr-3 inline hover:text-gray-600 duration-200 transition-colors" href="https://www.linkedin.com/company/secretarium/" target="_blank"><Icon icon={faLinkedinIn} /></a>
+                            <a className="pl-3 pr-3 inline hover:text-gray-600 duration-200 transition-colors" href="https://discordapp.com/channels/670348155682029588/" target="_blank"><Icon icon={faDiscord} /></a>
+                            <a className="pl-3 inline hover:text-gray-600 duration-200 transition-colors" href="https://twitter.com/secretarium" target="_blank"><Icon icon={faTwitter} /></a>
                         </div>
                     </div>
                     <div className="flex flex-col lg:flex-row justify-center items-center lg:pl-4 lg:w-1/2">

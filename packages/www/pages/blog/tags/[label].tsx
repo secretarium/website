@@ -39,6 +39,7 @@ const Tag = ({ tag, posts }: Props) => {
                                             title={post.title}
                                             coverImage={post.coverImage.url}
                                             date={post.date}
+                                            tags={post.tags}
                                             author={post.author}
                                             slug={post.slug}
                                             excerpt={post.excerpt}
