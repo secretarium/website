@@ -4,7 +4,7 @@ import Container from '../../../components/container'
 import PostBody from '../../../components/post-body'
 import PostHeader from '../../../components/post-header'
 import Layout from '../../../components/layout'
-import { getAllPostsWithSlug, getPostAndMorePosts } from '../../../lib/api'
+import { getPostAndMorePosts } from '../../../lib/api'
 import PostTitle from '../../../components/post-title'
 import Head from 'next/head'
 import markdownToHtml from '../../../lib/markdownToHtml'
@@ -60,7 +60,7 @@ type Params = {
     preview: any
 }
 
-export async function getStaticProps({ params, preview = null }: Params) {
+export async function getServerSideProps({ params, preview = null }: Params) {
     const data = await getPostAndMorePosts(params.slug, preview)
     const content = await markdownToHtml(data?.posts[0]?.content || '')
 
@@ -73,13 +73,5 @@ export async function getStaticProps({ params, preview = null }: Params) {
             },
             morePosts: data?.morePosts,
         },
-    }
-}
-
-export async function getStaticPaths() {
-    const allPosts = await getAllPostsWithSlug()
-    return {
-        paths: allPosts?.map((post: PostType) => `/blog/posts/${post.slug}`) || [],
-        fallback: true,
     }
 }

@@ -14,7 +14,7 @@ type Props = {
 const Index = ({ allPosts }: Props) => {
     const heroPost = allPosts[0]
     const morePosts = allPosts.slice(1)
-    console.log(allPosts);
+
     return (
         <>
             <Layout>
@@ -43,7 +43,7 @@ const Index = ({ allPosts }: Props) => {
 
 export default Index
 
-export async function getStaticProps({ preview = null }) {
+export async function getServerSideProps({ preview = null }) {
     const allPosts = (await getAllPostsForHome(preview)) || []
     return {
         props: { allPosts, preview },

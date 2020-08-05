@@ -23,7 +23,7 @@ const HeroPost = ({
     author,
     slug,
 }: Props) => {
-    console.log(tags);
+
     return (
         <section>
             <div className="mb-8 md:mb-16">

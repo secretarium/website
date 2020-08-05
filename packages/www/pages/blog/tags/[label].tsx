@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import ErrorPage from 'next/error'
 import Container from '../../../components/container'
 import Layout from '../../../components/layout'
-import { getAllTags, getPostsByTag } from '../../../lib/api'
+import { getPostsByTag } from '../../../lib/api'
 import PostTitle from '../../../components/post-title'
 import Head from 'next/head'
 import PostType from '../../../types/post'
@@ -62,28 +62,15 @@ type Params = {
     }
 }
 
-export async function getStaticProps({ params }: Params) {
+export async function getServerSideProps({ params }: Params) {
 
     const data = await getPostsByTag(params.label)
     const posts = data.posts
-    // const posts = data.posts.map(async (post: PostType) => ({
-    //     ...post,
-    //     content: await markdownToHtml(post?.content || '')
-    // }))
 
     return {
         props: {
             tag: params.label,
             posts
         },
-    }
-}
-
-export async function getStaticPaths() {
-    const allTags = await getAllTags();
-
-    return {
-        paths: allTags?.tags.map((tag: string) => `/blog/tags/${tag}`) || [],
-        fallback: true,
     }
 }
