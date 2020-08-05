@@ -1,0 +1,57 @@
+@import 'layout-styles.module.css';
+
+.navBarWrapper {
+    height: 100%;
+    background-color: #fff;
+}
+
+.navBar {
+    height: 100%;
+    line-height: 5.5rem;
+    transition: line-height 300ms ease-in-out;
+}
+
+.navBar img {
+    height: 3rem;
+    display: inline-block;
+    transition: height 300ms ease-in-out;
+}
+
+.navBar a {
+    display: inline;
+    font-family: 'Grotesk';
+    font-size: 1.5rem;
+}
+
+.fixedToggle .navBar {
+    line-height: 7rem;
+}
+
+.fixedToggle .navBar img {
+    height: 4rem;
+}
+
+.logoWrapper {
+    overflow: hidden;
+}
+
+@media (max-width: 30rem) {
+
+    .navBar, .fixedToggle .navBar {
+        line-height: 5.5rem;
+    }
+
+    .navBar img, .fixedToggle .navBar img {
+        height: 3rem;
+    }
+}
+
+@media (max-width: 20rem) {
+    .logoWrapper {
+        width: 3rem;
+    }
+    
+    .navBar img, .fixedToggle .navBar img {
+        max-width: unset;
+    }
+}
