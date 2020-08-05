@@ -15,7 +15,8 @@
     "scripts": {
         "dev": "lerna run --stream dev",
         "build": "lerna run --stream build",
-        "start": "lerna run --stream start"
+        "start": "lerna run --stream start",
+        "dockerize": "docker build ."
     },
     "devDependencies": {
         "lerna": "3.22.1"
