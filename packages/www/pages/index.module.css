@@ -1,9 +1,16 @@
 .secImgContainer {
     width: 100%;
-    height: 15rem;
     text-align: center;
     margin-top: 3rem;
     margin-bottom: 3rem;
+}
+
+.secImgFixedHeight {
+    height: 15rem;
+}
+
+.secImgTechStack {
+    height: 25rem;
 }
 
 .companyLogo {
@@ -12,5 +19,5 @@
 
 .secImgContainer img, .companyLogo img {
     height: 100%;
-    width: 100%;
+    width: auto;
 }

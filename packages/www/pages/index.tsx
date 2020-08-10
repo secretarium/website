@@ -28,12 +28,12 @@ const Index = () => {
                     <div className="container mx-auto px-5">
                         <h2 className="mt-8 mb-2 text-4xl lg:text-4xl tracking-tighter leading-tight">What is Secretarium&nbsp;?</h2>
                         <h3 className="mb-8 text-2xl lg:text-3xl tracking-tighter leading-tight text-red-500">Secretarium is an integrity and confidentiality crypto-platform</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 md:col-gap-16 lg:col-gap-32 row-gap-20 md:row-gap-32 mb-32">
-                            <div className="col-md-6 px-0 pr-md-5">
-                                <div className={indexStyles.secImgContainer}>
-                                    <img src={imgFencedNetwork} alt="confidential computing platform image" />
+                        <div className="grid grid-cols-1 md:grid-cols-2 md:col-gap-16 lg:col-gap-32 row-gap-20 md:row-gap-32 mb-32 ">
+                            <div className="px-0 pr-md-5">
+                                <div className={`${indexStyles.secImgContainer} ${indexStyles.secImgFixedHeight}`}>
+                                    <img src={imgFencedNetwork} alt="Confidential computing platform image" />
                                 </div>
-                                <h4 className="mb-2">Distributed Confidential computing platform</h4>
+                                <h4 className="mb-2 uppercase text-gray-600">Distributed Confidential computing platform</h4>
                                 <p>
                                     Relying on trusted execution environments and powered by secure multi-party
                                     computing, Secretarium has been designed to run applications on encrypted
@@ -41,11 +41,11 @@ const Index = () => {
                                     possible data leakage or manipulation, and no single point of failure.
 							</p>
                             </div>
-                            <div className="col-md-6 px-0 pl-md-5 mt-5 mt-md-0">
-                                <div className={indexStyles.secImgContainer}>
+                            <div className="px-0 pl-md-5 mt-md-0">
+                                <div className={`${indexStyles.secImgContainer} ${indexStyles.secImgFixedHeight}`}>
                                     <img src={imgDCApp} alt="DCApp image" />
                                 </div>
-                                <h4 className="mb-2">Hosting Distributed Confidential Applications </h4>
+                                <h4 className="mb-2 uppercase text-gray-600">Hosting Distributed Confidential Applications </h4>
                                 <p>
                                     Distributed Confidential Applications (DCApps) are smart contracts systems
                                     with cryptographic proof of integrity.
@@ -61,11 +61,11 @@ const Index = () => {
                         <h2 className="mt-8 mb-2 text-4xl lg:text-4xl tracking-tighter leading-tight">What does Secretarium provide&nbsp;?</h2>
                         <h3 className="mb-8 text-2xl lg:text-3xl tracking-tighter leading-tight text-red-500">Total confidentiality: nobody sees the data, including Secretarium</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 md:col-gap-16 lg:col-gap-32 row-gap-20 md:row-gap-32 mb-32">
-                            <div className="col-md-6 px-0 pr-md-5">
-                                <div className={indexStyles.secImgContainer}>
+                            <div className="px-0 pr-md-5">
+                                <div className={`${indexStyles.secImgContainer} ${indexStyles.secImgFixedHeight}`}>
                                     <img src={imgShield} alt="intellectual property image" />
                                 </div>
-                                <h4 className="mb-2">Protects intellectual property and commercial rights</h4>
+                                <h4 className="mb-2 uppercase text-gray-600">Protects intellectual property and commercial rights</h4>
                                 <p>
                                     Secretarium guarantees privacy by default and by design: users always keep
                                     control of their data. Secretarium uses end-to-end encryption: data
@@ -74,11 +74,11 @@ const Index = () => {
                                     property of the DCApp writer.
 							</p>
                             </div>
-                            <div className="col-md-6 px-0 pl-md-5 mt-5 mt-md-0">
-                                <div className={indexStyles.secImgContainer}>
+                            <div className="px-0 pl-md-5 mt-md-0">
+                                <div className={`${indexStyles.secImgContainer} ${indexStyles.secImgFixedHeight}`}>
                                     <img src={imgPuzzle} alt="easy integration image" />
                                 </div>
-                                <h4 className="mb-2">Offers easy integration to your processes</h4>
+                                <h4 className="mb-2 uppercase text-gray-600">Offers easy integration to your processes</h4>
                                 <p>
                                     Every Secretarium node is coupled with a web server. Secretarium connection
                                     protocol integrates easily into recent browsers and tablets.
@@ -91,12 +91,12 @@ const Index = () => {
                     </div>
                 </section>
                 <section id="scaling">
-                    <div className="container mx-auto px-5">
+                    <div className="container mx-auto px-5 mb-32">
                         <h2 className="mt-8 mb-2 text-4xl lg:text-4xl tracking-tighter leading-tight">How does Secretarium scale&nbsp;?</h2>
                         <h3 className="mb-8 text-2xl lg:text-3xl tracking-tighter leading-tight text-red-500">Secretarium commoditises privacy at scale for application editors</h3>
                         <div className="row mx-0 mt-5">
-                            <div className="col-md-8 px-0">
-                                <h4 className="mb-2">Facilitates confidential computing at scale</h4>
+                            <div className="px-0">
+                                <h4 className="mb-2 uppercase text-gray-600">Facilitates confidential computing at scale</h4>
                                 <p>
                                     The throughput and latency of a confidential computing system should be
                                     compatible with real-life scenarios. We believe in a system that can
@@ -104,7 +104,7 @@ const Index = () => {
 							</p>
                             </div>
                         </div>
-                        <div className="sec-img scale">
+                        <div className={`${indexStyles.secImgContainer}`}>
                             <img src={imgScale} alt="scale image" />
                         </div>
                     </div>
@@ -114,22 +114,22 @@ const Index = () => {
                         <h2 className="mt-8 mb-2 text-4xl lg:text-4xl tracking-tighter leading-tight">Why Secretarium&nbsp;?</h2>
                         <h3 className="mb-8 text-2xl lg:text-3xl tracking-tighter leading-tight text-red-500">A platform built for data privacy, ownership and control</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 md:col-gap-16 lg:col-gap-32 row-gap-20 md:row-gap-32 mb-32">
-                            <div className="col-md-6 px-0 pr-md-5">
-                                <div className={indexStyles.secImgContainer}>
+                            <div className="px-0 pr-md-5">
+                                <div className={`${indexStyles.secImgContainer} ${indexStyles.secImgFixedHeight}`}>
                                     <img src={imgRestore} alt="restore right to privacy image" />
                                 </div>
-                                <h4 className="mb-2">Restore the right to privacy for people and companies</h4>
+                                <h4 className="mb-2 uppercase text-gray-600">Restore the right to privacy for people and companies</h4>
                                 <p>
                                     Consent, privacy by design and by default, are our DNA. We believe people and
                                     companies should have the option of using
                                     a technology that enforces their privacy.
 							</p>
                             </div>
-                            <div className="col-md-6 px-0 pl-md-5 mt-5 mt-md-0">
-                                <div className={indexStyles.secImgContainer}>
+                            <div className="px-0 pl-md-5 mt-md-0">
+                                <div className={`${indexStyles.secImgContainer} ${indexStyles.secImgFixedHeight}`}>
                                     <img src={imgReaper} alt="prevent scavenging image" />
                                 </div>
-                                <h4 className="mb-2">Prevent scavenging and monetization of private data</h4>
+                                <h4 className="mb-2 uppercase text-gray-600">Prevent scavenging and monetization of private data</h4>
                                 <p>
                                     The internet was intended for driving collaboration, but the balance between
                                     data originators and data aggregators has been heavily tilted toward the latter.
@@ -141,13 +141,13 @@ const Index = () => {
                     </div>
                 </section>
                 <section id="whom-for">
-                    <div className="container mx-auto px-5">
+                    <div className="container mx-auto px-5 mb-32">
                         <h2 className="mt-8 mb-2 text-4xl lg:text-4xl tracking-tighter leading-tight">Who is Secretarium for&nbsp;?</h2>
                         <h3 className="mb-8 text-2xl lg:text-3xl tracking-tighter leading-tight text-red-500">Secretarium enables impartial and trustful exchanges between distrusting
                         parties.
                         Shared services are distributed and controlled multilaterally, preventing any
 						single party from pulling the plug.</h3>
-                        <div className={indexStyles.secImgContainer}>
+                        <div className={`${indexStyles.secImgContainer}`}>
                             <img src={imgMap} alt="map image" />
                         </div>
                     </div>
@@ -157,8 +157,8 @@ const Index = () => {
                         <h2 className="mt-8 mb-2 text-4xl lg:text-4xl tracking-tighter leading-tight">Our story and vision</h2>
                         <h3 className="mb-8 text-2xl lg:text-3xl tracking-tighter leading-tight text-red-500">From technology, pharma, banking, cryptography, and restoring privacy for all</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 md:col-gap-16 lg:col-gap-32 row-gap-20 md:row-gap-32 mb-32">
-                            <div className="col-md-6 px-0 pr-md-5">
-                                <h4 className="mb-2">Our story</h4>
+                            <div className="px-0 pr-md-5">
+                                <h4 className="mb-2 uppercase text-gray-600">Our story</h4>
                                 <p>
                                     Secretarium founders are engineers who have worked for many years in challenging
 								environments.<br />
@@ -175,8 +175,8 @@ const Index = () => {
 								progress.
 							</p>
                             </div>
-                            <div className="col-md-6 px-0 pl-md-5 mt-5 mt-md-0">
-                                <h4 className="mb-2">Our vision and philosophy</h4>
+                            <div className="px-0 pl-md-5 mt-md-0">
+                                <h4 className="mb-2 uppercase text-gray-600">Our vision and philosophy</h4>
                                 <p>
                                     Secretarium seeks to restore the right to privacy for people and companies.<br />
 								Our short term objectives are located in the Pharmatech, RegTech and InsurTech
@@ -197,8 +197,8 @@ const Index = () => {
                         <h2 className="mt-8 mb-2 text-4xl lg:text-4xl tracking-tighter leading-tight">How does Secretarium work&nbsp;?</h2>
                         <h3 className="mb-8 text-2xl lg:text-3xl tracking-tighter leading-tight text-red-500">Secretarium leverages cryptography and trusted execution environments</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 md:col-gap-16 lg:col-gap-32 row-gap-20 md:row-gap-32 mb-32">
-                            <div className="col-md-8 px-0 pr-md-2">
-                                <h4 className="mb-2">Confidentiality out of the box</h4>
+                            <div className="px-0 pr-md-2">
+                                <h4 className="mb-2 uppercase text-gray-600">Confidentiality out of the box</h4>
                                 <p>
                                     We designed a secure connection protocol to guarantee to end-users the integrity
                                     of the remote nodes. Our
@@ -206,7 +206,7 @@ const Index = () => {
                                     inside distributed confidential
                                     applications, so you don’t have to deal with all the complexity.
 							</p>
-                                <h4 className="mt-5 mb-2">Peer-to-peer network</h4>
+                                <h4 className="mt-5 mb-2 uppercase text-gray-600">Peer-to-peer network</h4>
                                 <p>
                                     We set-up multiple trusted nodes to communicate with one another over an
                                     encrypted peer to peer network, without a
@@ -214,7 +214,7 @@ const Index = () => {
                                     we call "identification friend-or-foe",
                                     we guarantee the integrity of the network at all times.
 							</p>
-                                <h4 className="mt-5 mb-2">Secure hardware</h4>
+                                <h4 className="mt-5 mb-2 uppercase text-gray-600">Secure hardware</h4>
                                 <p>
                                     To avoid security vs performance trade-offs, we use trusted execution
                                     environments. Encrypted enclaves on secure
@@ -222,8 +222,8 @@ const Index = () => {
                                     to the machine and operating system.
 							</p>
                             </div>
-                            <div className="col-md-4 px-0">
-                                <div className={indexStyles.secImgContainer}>
+                            <div className="px-0">
+                                <div className={`${indexStyles.secImgContainer} ${indexStyles.secImgTechStack}`}>
                                     <img src={imgTechnology} alt="technology image" />
                                 </div>
                             </div>
@@ -235,11 +235,11 @@ const Index = () => {
                         <h2 className="mt-8 mb-2 text-4xl lg:text-4xl tracking-tighter leading-tight">Secretive insight</h2>
                         <h3 className="mb-8 text-2xl lg:text-3xl tracking-tighter leading-tight text-red-500">Build insight on data, without disclosing the data</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 md:col-gap-16 lg:col-gap-32 row-gap-20 md:row-gap-32 mb-32">
-                            <div className="col-md-6 px-0 pr-md-5">
-                                <div className={indexStyles.secImgContainer}>
+                            <div className="px-0 pr-md-5">
+                                <div className={`${indexStyles.secImgContainer} ${indexStyles.secImgFixedHeight}`}>
                                     <img src={imgSecretProcessing} alt="secret processing image" />
                                 </div>
-                                <h4 className="mb-2">Secret processing</h4>
+                                <h4 className="mb-2 uppercase text-gray-600">Secret processing</h4>
                                 <p>
                                     Some parties have proprietary algorithms, other parties have confidential
                                     data-banks. Secret processing involves combining both while guaranteeing
@@ -250,11 +250,11 @@ const Index = () => {
                                     data rental, a new way of monetizing confidential data.
 							</p>
                             </div>
-                            <div className="col-md-6 px-0 pl-md-5 mt-5 mt-md-0">
-                                <div className={indexStyles.secImgContainer}>
+                            <div className="px-0 pl-md-5 mt-md-0">
+                                <div className={`${indexStyles.secImgContainer} ${indexStyles.secImgFixedHeight}`}>
                                     <img src={imgSecretMixing} alt="secret mixing image" />
                                 </div>
-                                <h4 className="mb-2">Secret mixing</h4>
+                                <h4 className="mb-2 uppercase text-gray-600">Secret mixing</h4>
                                 <p>
                                     Allows a group to pool private data together and collectively achieve insight.
                                     Designed for data pooling and data matching, it can be used to compute market
@@ -273,8 +273,8 @@ const Index = () => {
                         <h2 className="mt-8 mb-2 text-4xl lg:text-4xl tracking-tighter leading-tight">Our sponsors and partners</h2>
                         <h3 className="mb-8 text-2xl lg:text-3xl tracking-tighter leading-tight text-red-500">Reputable partners are helping us growing</h3>
                         <div className="grid grid-cols-1 md:grid-cols-3 md:col-gap-16 lg:col-gap-32 row-gap-20 md:row-gap-32 mb-32">
-                            <div className="col-md-4 px-0 pr-0 pr-md-4">
-                                <h4 className="mb-3">Intel Corporation</h4>
+                            <div className="px-0 pr-0 pr-md-4">
+                                <h4 className="mb-3 uppercase text-gray-600">Intel Corporation</h4>
                                 <div className="comp-logo">
                                     <img src={imgLogoIntel} />
                                 </div>
@@ -283,8 +283,8 @@ const Index = () => {
                                     support with engineers, infrastructure and sales teams.
 							</p>
                             </div>
-                            <div className="col-md-4 px-0 px-md-4 mt-5 mt-md-0">
-                                <h4 className="mb-3">Swisscom</h4>
+                            <div className="px-0 px-md-4 mt-md-0">
+                                <h4 className="mb-3 uppercase text-gray-600">Swisscom</h4>
                                 <div className={indexStyles.companyLogo}>
                                     <img src={imgLogoSwisscom} />
                                 </div>
@@ -294,8 +294,8 @@ const Index = () => {
                                     agreement, as well as a mutually approach to engage with large institutions.
 							</p>
                             </div>
-                            <div className="col-md-4 px-0 pl-0 pl-md-4 mt-5 mt-md-0">
-                                <h4 className="mb-3">Société Générale</h4>
+                            <div className="px-0 pl-0 pl-md-4 mt-md-0">
+                                <h4 className="mb-3 uppercase text-gray-600">Société Générale</h4>
                                 <div className={indexStyles.companyLogo}>
                                     <img src={imgLogoSocGen} />
                                 </div>
@@ -305,8 +305,8 @@ const Index = () => {
                                     influencers and specialists.
 							</p>
                             </div>
-                            <div className="col-md-4 px-0 pl-0 pl-md-4 mt-5 mt-md-0">
-                                <h4 className="mb-3">Allen &amp; Overy</h4>
+                            <div className="px-0 pl-0 pl-md-4 mt-md-0">
+                                <h4 className="mb-3 uppercase text-gray-600">Allen &amp; Overy</h4>
                                 <div className={indexStyles.companyLogo}>
                                     <img src={imgLogoAnO} />
                                 </div>
