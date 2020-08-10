@@ -1,7 +1,7 @@
 const gql = String.raw;
 
 async function fetchAPI(query: string, { variables }: any = {}) {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/graphql`, {
+    const res = await fetch('http://localhost:1337/graphql', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

@@ -4,5 +4,6 @@ scripts
 *Dockerfile*
 **/node_modules
 **/build
+**/.cache
 **/.next
 .env

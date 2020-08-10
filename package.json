@@ -16,7 +16,7 @@
         "dev": "lerna run --stream dev",
         "build": "lerna run --stream build",
         "start": "lerna run --stream start",
-        "dockerize": "docker build ."
+        "dockerize": "docker build -t secretarium/website ."
     },
     "devDependencies": {
         "lerna": "3.22.1"

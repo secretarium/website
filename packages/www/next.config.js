@@ -16,16 +16,6 @@ const nextConfig = {
     },
     async rewrites() {
         return [
-            // we need to define a no-op rewrite to trigger checking
-            // all pages/static files before we attempt proxying
-            // {
-            //     source: '/:path*',
-            //     destination: '/:path*',
-            // },
-            // {
-            //     source: '/blog/:path*',
-            //     destination: '/:path*',
-            // },
             {
                 source: '/graphql/:path*',
                 destination: 'http://localhost:1337/graphql/:path*',
@@ -35,8 +25,12 @@ const nextConfig = {
                 destination: 'http://localhost:1337/uploads/:path*',
             },
             {
-                source: '/cms/:path*',
-                destination: 'http://localhost:1337/cms/:path*',
+                source: '/content-manager/:path*',
+                destination: 'http://localhost:1337/content-manager/:path*',
+            },
+            {
+                source: '/admin/:path*',
+                destination: 'http://localhost:1337/admin/:path*',
             }
         ]
     },

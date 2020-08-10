@@ -1,9 +1,9 @@
 {
-    "name": "frontend",
+    "name": "@secretarium/website-www",
     "version": "1.0.0",
     "license": "MIT",
     "scripts": {
-        "dev": "next",
+        "dev": "next -p 3044",
         "build": "next build",
         "start": "next start",
         "typecheck": "tsc"
@@ -21,9 +21,10 @@
         "nprogress": "0.2.0",
         "react": "16.13.1",
         "react-dom": "16.13.1",
+        "react-ga": "3.1.2",
+        "react-sticky-el": "2.0.5",
         "remark": "12.0.1",
-        "remark-html": "12.0.0",
-        "react-sticky-el": "2.0.5"
+        "remark-html": "12.0.0"
     },
     "devDependencies": {
         "@next/bundle-analyzer": "9.5.1",
