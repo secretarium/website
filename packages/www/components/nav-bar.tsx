@@ -27,10 +27,12 @@ const NavBar: React.FC<NavBarProps> = ({ fixedToggle }) => {
                     </div>
                     <div className={`w-full flex-grow md:flex md:items-right md:w-auto ${isExpanded ? 'block' : 'hidden'}`}>
                         <div className="text-xl md:flex-grow text-right">
+                            <Link href="/">
+                                <a className="block mt-4 md:inline-block md:mt-0 mr-12 duration-200 transition-colors hover:text-red-500">product</a>
+                            </Link>
                             <Link href="/blog">
                                 <a className="block mt-4 md:inline-block md:mt-0 mr-12 duration-200 transition-colors hover:text-red-500">blog</a>
                             </Link>
-                            <a href="#documentation" className="block mt-4 md:inline-block md:mt-0 duration-200 transition-colors hover:text-red-500">docs</a>
                         </div>
                     </div>
                 </nav>
