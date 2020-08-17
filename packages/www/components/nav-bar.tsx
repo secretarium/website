@@ -11,6 +11,18 @@ const NavBar: React.FC<NavBarProps> = ({ fixedToggle }) => {
 
     const [isExpanded, setIsExpanded] = useState(false);
 
+    const menuItems = (
+        <div className="text-xl md:flex-grow text-left md:text-right">
+            <Link href="/">
+                <a className="block mt-4 md:inline md:mt-0 mr-12 duration-200 transition-colors hover:text-red-500">product</a>
+            </Link>
+            <Link href="/blog">
+                <a className="block mt-4 md:inline md:mt-0 mr-12 duration-200 transition-colors hover:text-red-500">blog</a>
+            </Link>
+            <a href="#contact" className="block mt-4 md:inline md:mt-0 duration-200 transition-colors text-white bg-red-500 hover:bg-red-400 rounded-lg px-3 py-2" onClick={() => setIsExpanded(false)}>contact</a>
+        </div>
+    )
+
     return (
         <div className={`border-b border-accent-2 ${navBarStyles.navBarWrapper} ${fixedToggle ? '' : navBarStyles.fixedToggle}`}>
             <div className={`container mx-auto px-5 md:text-center ${navBarStyles.navBar}`}>
@@ -21,22 +33,23 @@ const NavBar: React.FC<NavBarProps> = ({ fixedToggle }) => {
                         </a>
                     </Link>
                     <div className="block md:hidden">
-                        <button className="flex items-center px-3 py-2 border rounded" onClick={() => setIsExpanded(!isExpanded)}>
-                            <svg className="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" /></svg>
-                        </button>
-                    </div>
-                    <div className={`w-full flex-grow md:flex md:items-right md:w-auto ${isExpanded ? 'block' : 'hidden'}`}>
-                        <div className="text-xl md:flex-grow text-right">
-                            <Link href="/">
-                                <a className="block mt-4 md:inline-block md:mt-0 mr-12 duration-200 transition-colors hover:text-red-500">product</a>
-                            </Link>
-                            <Link href="/blog">
-                                <a className="block mt-4 md:inline-block md:mt-0 mr-12 duration-200 transition-colors hover:text-red-500">blog</a>
-                            </Link>
+                        <div className={navBarStyles.plate} onClick={() => setIsExpanded(!isExpanded)}>
+                            <div className={`${navBarStyles.burger} ${isExpanded ? navBarStyles.open : ''}`}></div>
                         </div>
+                    </div>
+                    <div className={`w-full flex-grow md:flex md:items-right md:w-auto hidden`}>
+                        {menuItems}
                     </div>
                 </nav>
             </div>
+            {isExpanded
+                ? (
+                    <div className={`bg-white p-5 pb-6 ${navBarStyles.menuPanelShadow}`}>
+                        {menuItems}
+                    </div>
+                )
+                : null
+            }
         </div>
     )
 }
