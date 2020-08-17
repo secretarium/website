@@ -52,7 +52,19 @@ h1, h2, h3 {
     box-shadow: 0 0 10px #FC5753, 0 0 5px #FC5753;
 }
 
+#nprogress .spinner {
+    top: 2.7rem;
+}
+
 #nprogress .spinner-icon {
+
     border-top-color: #FC5753;
     border-left-color: #FC5753;
+}
+
+@media (max-width: 30rem) {
+
+    #nprogress .spinner {
+        visibility: hidden;
+    }
 }
