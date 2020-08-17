@@ -5,11 +5,11 @@ import imgFencedNetwork from '../public/assets/images/figure_fencedNetwork.svg';
 import imgDCApp from '../public/assets/images/figure_dcApp.svg';
 import imgShield from '../public/assets/images/figure_shield.svg';
 import imgPuzzle from '../public/assets/images/figure_puzzle.svg';
-import imgScale from '../public/assets/images/figure_scale.png';
+// import imgScale from '../public/assets/images/figure_scale.png';
 import imgRestore from '../public/assets/images/figure_restore.svg';
 import imgReaper from '../public/assets/images/figure_reaper.svg';
-import imgMap from '../public/assets/images/figure_map.png';
-import imgTechnology from '../public/assets/images/figure_technology.svg';
+// import imgMap from '../public/assets/images/figure_map.png';
+// import imgTechnology from '../public/assets/images/figure_technology.svg';
 import imgSecretProcessing from '../public/assets/images/figure_secretProcessing.svg';
 import imgSecretMixing from '../public/assets/images/figure_secretMixing.svg';
 import imgLogoIntel from '../public/assets/images/logo_intel.svg';
@@ -25,7 +25,7 @@ const Index = () => {
                     <title>Secretarium Blog</title>
                 </Head>
                 <section id="what-it-is">
-                    <div className="container mx-auto px-5">
+                    <div className="container mx-auto px-5 md:py-20">
                         <h2 className="mt-8 mb-2 text-4xl lg:text-4xl tracking-tighter leading-tight">What is Secretarium&nbsp;?</h2>
                         <h3 className="mb-8 text-2xl lg:text-3xl tracking-tighter leading-tight text-red-500">Secretarium is an integrity and confidentiality crypto-platform</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 md:col-gap-16 lg:col-gap-32 row-gap-20 md:row-gap-32 mb-32 ">
@@ -34,7 +34,7 @@ const Index = () => {
                                     <img src={imgFencedNetwork} alt="Confidential computing platform image" />
                                 </div>
                                 <h4 className="mb-2 uppercase text-gray-600">Distributed Confidential computing platform</h4>
-                                <p>
+                                <p className="text-justify">
                                     Relying on trusted execution environments and powered by secure multi-party
                                     computing, Secretarium has been designed to run applications on encrypted
                                     data in a trustable, distributed, scalable and efficient way, with no
@@ -46,7 +46,7 @@ const Index = () => {
                                     <img src={imgDCApp} alt="DCApp image" />
                                 </div>
                                 <h4 className="mb-2 uppercase text-gray-600">Hosting Distributed Confidential Applications </h4>
-                                <p>
+                                <p className="text-justify">
                                     Distributed Confidential Applications (DCApps) are smart contracts systems
                                     with cryptographic proof of integrity.
                                     End-users can grant access to subsets of their private data to DCApps, and
@@ -57,7 +57,7 @@ const Index = () => {
                     </div>
                 </section>
                 <section id="what-it-does">
-                    <div className="container mx-auto px-5">
+                    <div className="container mx-auto px-5 md:py-20">
                         <h2 className="mt-8 mb-2 text-4xl lg:text-4xl tracking-tighter leading-tight">What does Secretarium provide&nbsp;?</h2>
                         <h3 className="mb-8 text-2xl lg:text-3xl tracking-tighter leading-tight text-red-500">Total confidentiality: nobody sees the data, including Secretarium</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 md:col-gap-16 lg:col-gap-32 row-gap-20 md:row-gap-32 mb-32">
@@ -66,7 +66,7 @@ const Index = () => {
                                     <img src={imgShield} alt="intellectual property image" />
                                 </div>
                                 <h4 className="mb-2 uppercase text-gray-600">Protects intellectual property and commercial rights</h4>
-                                <p>
+                                <p className="text-justify">
                                     Secretarium guarantees privacy by default and by design: users always keep
                                     control of their data. Secretarium uses end-to-end encryption: data
                                     uploaded to Secretarium remains the property of its originators and no one
@@ -79,7 +79,7 @@ const Index = () => {
                                     <img src={imgPuzzle} alt="easy integration image" />
                                 </div>
                                 <h4 className="mb-2 uppercase text-gray-600">Offers easy integration to your processes</h4>
-                                <p>
+                                <p className="text-justify">
                                     Every Secretarium node is coupled with a web server. Secretarium connection
                                     protocol integrates easily into recent browsers and tablets.
                                     Secretarium is real-time and has the capacity of pushing data to end-users.
@@ -91,26 +91,26 @@ const Index = () => {
                     </div>
                 </section>
                 <section id="scaling">
-                    <div className="container mx-auto px-5 mb-32">
+                    <div className="container mx-auto px-5 md:py-20">
                         <h2 className="mt-8 mb-2 text-4xl lg:text-4xl tracking-tighter leading-tight">How does Secretarium scale&nbsp;?</h2>
                         <h3 className="mb-8 text-2xl lg:text-3xl tracking-tighter leading-tight text-red-500">Secretarium commoditises privacy at scale for application editors</h3>
                         <div className="row mx-0 mt-5">
                             <div className="px-0">
                                 <h4 className="mb-2 uppercase text-gray-600">Facilitates confidential computing at scale</h4>
-                                <p>
+                                <p className="text-justify">
                                     The throughput and latency of a confidential computing system should be
                                     compatible with real-life scenarios. We believe in a system that can
                                     grow organically in the same way the internet did.
 							</p>
                             </div>
                         </div>
-                        <div className={`${indexStyles.secImgContainer}`}>
-                            <img src={imgScale} alt="scale image" />
+                        <div className={`${indexStyles.secImgContainer} ${indexStyles.secImgScaling}`}>
+                            {/* <img src={imgScale} alt="scale image" /> */}
                         </div>
                     </div>
                 </section>
                 <section id="why">
-                    <div className="container mx-auto px-5">
+                    <div className="container mx-auto px-5 md:py-20">
                         <h2 className="mt-8 mb-2 text-4xl lg:text-4xl tracking-tighter leading-tight">Why Secretarium&nbsp;?</h2>
                         <h3 className="mb-8 text-2xl lg:text-3xl tracking-tighter leading-tight text-red-500">A platform built for data privacy, ownership and control</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 md:col-gap-16 lg:col-gap-32 row-gap-20 md:row-gap-32 mb-32">
@@ -119,7 +119,7 @@ const Index = () => {
                                     <img src={imgRestore} alt="restore right to privacy image" />
                                 </div>
                                 <h4 className="mb-2 uppercase text-gray-600">Restore the right to privacy for people and companies</h4>
-                                <p>
+                                <p className="text-justify">
                                     Consent, privacy by design and by default, are our DNA. We believe people and
                                     companies should have the option of using
                                     a technology that enforces their privacy.
@@ -130,7 +130,7 @@ const Index = () => {
                                     <img src={imgReaper} alt="prevent scavenging image" />
                                 </div>
                                 <h4 className="mb-2 uppercase text-gray-600">Prevent scavenging and monetization of private data</h4>
-                                <p>
+                                <p className="text-justify">
                                     The internet was intended for driving collaboration, but the balance between
                                     data originators and data aggregators has been heavily tilted toward the latter.
                                     Our goal is to achieve the same level of service automation without disclosing
@@ -141,25 +141,25 @@ const Index = () => {
                     </div>
                 </section>
                 <section id="whom-for">
-                    <div className="container mx-auto px-5 mb-32">
+                    <div className="container mx-auto px-5 md:py-20">
                         <h2 className="mt-8 mb-2 text-4xl lg:text-4xl tracking-tighter leading-tight">Who is Secretarium for&nbsp;?</h2>
                         <h3 className="mb-8 text-2xl lg:text-3xl tracking-tighter leading-tight text-red-500">Secretarium enables impartial and trustful exchanges between distrusting
                         parties.
                         Shared services are distributed and controlled multilaterally, preventing any
 						single party from pulling the plug.</h3>
-                        <div className={`${indexStyles.secImgContainer}`}>
-                            <img src={imgMap} alt="map image" />
+                        <div className={`${indexStyles.secImgContainer} ${indexStyles.secImgMap}`}>
+                            {/* <div alt="map image" /> */}
                         </div>
                     </div>
                 </section>
                 <section id="vision">
-                    <div className="container mx-auto px-5">
+                    <div className="container mx-auto px-5 md:py-20">
                         <h2 className="mt-8 mb-2 text-4xl lg:text-4xl tracking-tighter leading-tight">Our story and vision</h2>
                         <h3 className="mb-8 text-2xl lg:text-3xl tracking-tighter leading-tight text-red-500">From technology, pharma, banking, cryptography, and restoring privacy for all</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 md:col-gap-16 lg:col-gap-32 row-gap-20 md:row-gap-32 mb-32">
                             <div className="px-0 pr-md-5">
                                 <h4 className="mb-2 uppercase text-gray-600">Our story</h4>
-                                <p>
+                                <p className="text-justify">
                                     Secretarium founders are engineers who have worked for many years in challenging
 								environments.<br />
 								In 2014, they volunteered to create a blockchain lab for a tier-one European bank.
@@ -177,7 +177,7 @@ const Index = () => {
                             </div>
                             <div className="px-0 pl-md-5 mt-md-0">
                                 <h4 className="mb-2 uppercase text-gray-600">Our vision and philosophy</h4>
-                                <p>
+                                <p className="text-justify">
                                     Secretarium seeks to restore the right to privacy for people and companies.<br />
 								Our short term objectives are located in the Pharmatech, RegTech and InsurTech
 								sectors, where we provide the infrastructure rails for secrets intermediation.<br />
@@ -193,13 +193,13 @@ const Index = () => {
                     </div>
                 </section>
                 <section id="technology">
-                    <div className="container mx-auto px-5">
+                    <div className="container mx-auto px-5 md:py-20">
                         <h2 className="mt-8 mb-2 text-4xl lg:text-4xl tracking-tighter leading-tight">How does Secretarium work&nbsp;?</h2>
                         <h3 className="mb-8 text-2xl lg:text-3xl tracking-tighter leading-tight text-red-500">Secretarium leverages cryptography and trusted execution environments</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 md:col-gap-16 lg:col-gap-32 row-gap-20 md:row-gap-32 mb-32">
                             <div className="px-0 pr-md-2">
                                 <h4 className="mb-2 uppercase text-gray-600">Confidentiality out of the box</h4>
-                                <p>
+                                <p className="text-justify">
                                     We designed a secure connection protocol to guarantee to end-users the integrity
                                     of the remote nodes. Our
                                     crypto-platform is designed to facilitate the development of the business logic
@@ -207,7 +207,7 @@ const Index = () => {
                                     applications, so you don’t have to deal with all the complexity.
 							</p>
                                 <h4 className="mt-5 mb-2 uppercase text-gray-600">Peer-to-peer network</h4>
-                                <p>
+                                <p className="text-justify">
                                     We set-up multiple trusted nodes to communicate with one another over an
                                     encrypted peer to peer network, without a
                                     single point of failure. Using a protocol inspired by the military aviation that
@@ -215,7 +215,7 @@ const Index = () => {
                                     we guarantee the integrity of the network at all times.
 							</p>
                                 <h4 className="mt-5 mb-2 uppercase text-gray-600">Secure hardware</h4>
-                                <p>
+                                <p className="text-justify">
                                     To avoid security vs performance trade-offs, we use trusted execution
                                     environments. Encrypted enclaves on secure
                                     hardware provide privacy and integrity, even to an attacker with physical access
@@ -224,14 +224,14 @@ const Index = () => {
                             </div>
                             <div className="px-0">
                                 <div className={`${indexStyles.secImgContainer} ${indexStyles.secImgTechStack}`}>
-                                    <img src={imgTechnology} alt="technology image" />
+                                    {/* <img src={imgTechnology} alt="technology image" /> */}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </section>
                 <section id="secretive-insight">
-                    <div className="container mx-auto px-5">
+                    <div className="container mx-auto px-5 md:py-20">
                         <h2 className="mt-8 mb-2 text-4xl lg:text-4xl tracking-tighter leading-tight">Secretive insight</h2>
                         <h3 className="mb-8 text-2xl lg:text-3xl tracking-tighter leading-tight text-red-500">Build insight on data, without disclosing the data</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 md:col-gap-16 lg:col-gap-32 row-gap-20 md:row-gap-32 mb-32">
@@ -240,7 +240,7 @@ const Index = () => {
                                     <img src={imgSecretProcessing} alt="secret processing image" />
                                 </div>
                                 <h4 className="mb-2 uppercase text-gray-600">Secret processing</h4>
-                                <p>
+                                <p className="text-justify">
                                     Some parties have proprietary algorithms, other parties have confidential
                                     data-banks. Secret processing involves combining both while guaranteeing
                                     secrecy.
@@ -255,7 +255,7 @@ const Index = () => {
                                     <img src={imgSecretMixing} alt="secret mixing image" />
                                 </div>
                                 <h4 className="mb-2 uppercase text-gray-600">Secret mixing</h4>
-                                <p>
+                                <p className="text-justify">
                                     Allows a group to pool private data together and collectively achieve insight.
                                     Designed for data pooling and data matching, it can be used to compute market
                                     data benchmarks, detect fraudulent insurance claims, compare reference data.
@@ -269,16 +269,16 @@ const Index = () => {
                     </div>
                 </section>
                 <section id="sponsors">
-                    <div className="container mx-auto px-5">
+                    <div className="container mx-auto px-5 md:py-20">
                         <h2 className="mt-8 mb-2 text-4xl lg:text-4xl tracking-tighter leading-tight">Our sponsors and partners</h2>
                         <h3 className="mb-8 text-2xl lg:text-3xl tracking-tighter leading-tight text-red-500">Reputable partners are helping us growing</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-3 md:col-gap-16 lg:col-gap-32 row-gap-20 md:row-gap-32 mb-32">
+                        <div className="grid grid-cols-1 md:grid-cols-3 md:col-gap-16 lg:col-gap-32 row-gap-20 md:row-gap-8 mb-32">
                             <div className="px-0 pr-0 pr-md-4">
                                 <h4 className="mb-3 uppercase text-gray-600">Intel Corporation</h4>
                                 <div className="comp-logo">
                                     <img src={imgLogoIntel} />
                                 </div>
-                                <p className="mt-3">
+                                <p className="mt-3 text-justify">
                                     Intel supports Secretarium with sponsored hardware, early access,
                                     support with engineers, infrastructure and sales teams.
 							</p>
@@ -288,7 +288,7 @@ const Index = () => {
                                 <div className={indexStyles.companyLogo}>
                                     <img src={imgLogoSwisscom} />
                                 </div>
-                                <p className="mt-3">
+                                <p className="mt-3 text-justify">
                                     Swisscom supports Secretarium with engineers, business developers,
                                     infrastructure. Our partnership includes a comprehensive joined go-to-market
                                     agreement, as well as a mutually approach to engage with large institutions.
@@ -299,7 +299,7 @@ const Index = () => {
                                 <div className={indexStyles.companyLogo}>
                                     <img src={imgLogoSocGen} />
                                 </div>
-                                <p className="mt-3">
+                                <p className="mt-3 text-justify">
                                     Société Générale UK hosts Secretarium in its London incubator “the Greenhouse”.
                                     This partnership grants us access to Société Générale's business leaders,
                                     influencers and specialists.
@@ -310,7 +310,7 @@ const Index = () => {
                                 <div className={indexStyles.companyLogo}>
                                     <img src={imgLogoAnO} />
                                 </div>
-                                <p className="mt-3">
+                                <p className="mt-3 text-justify">
                                     Allen &amp; Overy UK hosts Secretarium in its London incubator “FUSE”.
                                     This partnership grants us access to A&amp;O's lawyers and clients to co-design
                                     new Legaltech initiatives.							</p>

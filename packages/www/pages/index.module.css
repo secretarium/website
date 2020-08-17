@@ -10,7 +10,27 @@
 }
 
 .secImgTechStack {
+    background: url('../public/assets/images/figure_technology.svg') no-repeat;
+    background-size: contain;
+    background-position: center;
+    min-height: 25rem;
+    max-height: 25rem;
+}
+
+.secImgScaling {
+    background: url('../public/assets/images/figure_scale.png') no-repeat;
+    background-size: contain;
+    background-position: center;
+    min-height: 25rem;
+    max-height: 25rem;
+}
+
+.secImgMap {
+    background: url('../public/assets/images/figure_map.png') no-repeat;
+    background-size: contain;
+    background-position: center;
     height: 25rem;
+    max-height: 25rem;
 }
 
 .companyLogo {
@@ -18,6 +38,9 @@
 }
 
 .secImgContainer img, .companyLogo img {
-    height: 100%;
+    max-height: 100%;
     width: auto;
+}
+.companyLogo img {
+    height: 100%;
 }
