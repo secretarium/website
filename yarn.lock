@@ -13848,15 +13848,6 @@ strapi-database@3.1.4:
     p-map "4.0.0"
     verror "^1.10.0"
 
-strapi-generate-api@3.1.3:
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/strapi-generate-api/-/strapi-generate-api-3.1.3.tgz#ca21aad153f25e55a88afe2ea2695c473b6a5b3f"
-  integrity sha512-N9HHu+55RSpBgxYWcBl9Ju41tjNQSwYzthml/h1hoxQZAqPlQ2UIQ4u+D2IzYfmGbiGJbGVCqNq67y54GZT2yQ==
-  dependencies:
-    lodash "4.17.19"
-    pluralize "^8.0.0"
-    strapi-utils "3.1.3"
-
 strapi-generate-api@3.1.4:
   version "3.1.4"
   resolved "https://registry.yarnpkg.com/strapi-generate-api/-/strapi-generate-api-3.1.4.tgz#fa51805973898d1a5cedda26270da4c05473c8c8"
@@ -13923,17 +13914,6 @@ strapi-generate-service@3.1.4:
   dependencies:
     lodash "4.17.19"
     strapi-utils "3.1.4"
-
-strapi-generate@3.1.3:
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/strapi-generate/-/strapi-generate-3.1.3.tgz#ef9d81801c8656d72c492dd47b9d3c49f3fdb6ac"
-  integrity sha512-XJgsf02L+tnGVUmp0BFrZIetZsC1AC6mdUuG9l7MDwiNpmfx655mYEBfvgeVkVE/yFwbFb7knAacDzE2XLeiHQ==
-  dependencies:
-    async "^2.6.2"
-    fs-extra "^8.0.1"
-    lodash "4.17.19"
-    reportback "^2.0.2"
-    strapi-utils "3.1.3"
 
 strapi-generate@3.1.4:
   version "3.1.4"
@@ -14034,10 +14014,10 @@ strapi-plugin-content-manager@3.1.4:
     strapi-utils "3.1.4"
     yup "^0.27.0"
 
-strapi-plugin-content-type-builder@3.1.3:
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/strapi-plugin-content-type-builder/-/strapi-plugin-content-type-builder-3.1.3.tgz#9a6497c5da234e4b348bdd358c8d45347913e97d"
-  integrity sha512-BpF6BwtjiK2oub+esWzSvnwpRtBMlD3jEULbIHeygUADE5XwYLuiLSMZxrJyss4xeAmBk9lU8aM2kFryTrO25g==
+strapi-plugin-content-type-builder@3.1.4:
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/strapi-plugin-content-type-builder/-/strapi-plugin-content-type-builder-3.1.4.tgz#9977a7365b5c09c8fcb2bce4312f771bcaf1e692"
+  integrity sha512-Bj5ToTfCtw0/JZQNl87nYagwrNxYNPpnjF5nr9SRjUSKssQoOcqKvfBEeotnag5NNMB8TW3ciBek6HKrxe2lKg==
   dependencies:
     "@sindresorhus/slugify" "1.1.0"
     fs-extra "^7.0.0"
@@ -14054,10 +14034,10 @@ strapi-plugin-content-type-builder@3.1.3:
     redux "^4.0.1"
     redux-immutable "^4.0.0"
     reselect "^4.0.0"
-    strapi-generate "3.1.3"
-    strapi-generate-api "3.1.3"
-    strapi-helper-plugin "3.1.3"
-    strapi-utils "3.1.3"
+    strapi-generate "3.1.4"
+    strapi-generate-api "3.1.4"
+    strapi-helper-plugin "3.1.4"
+    strapi-utils "3.1.4"
     yup "^0.27.0"
 
 strapi-plugin-email@3.1.4:
