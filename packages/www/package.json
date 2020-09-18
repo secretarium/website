@@ -38,7 +38,7 @@
         "@types/react-dom": "16.9.8",
         "@types/react-sticky-el": "1.0.2",
         "postcss-preset-env": "6.7.0",
-        "tailwindcss": "1.8.5",
+        "tailwindcss": "1.8.10",
         "typescript": "4.0.2",
         "url-loader": "4.1.0"
     }
