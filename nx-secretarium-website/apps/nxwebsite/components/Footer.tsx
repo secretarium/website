@@ -64,38 +64,32 @@ const Footer = () => {
                   </Link>
                 </li>
                 <li className="mt-4">
-                  <ExternalLink
-                    href="https://opencollective.com/formik"
-                    className="text-base leading-6 text-gray-500 hover:text-gray-900"
-                  >
+                  <Link href="https://opencollective.com/formik">
                     <a className="text-base leading-6 text-gray-500 hover:text-gray-900">
                       Funding
                     </a>
-                  </ExternalLink>
+                  </Link>
                 </li>
                 <li className="mt-4">
-                  <ExternalLink
-                    href="#"
-                    className="text-base leading-6 text-gray-500 hover:text-gray-900"
-                  >
-                    Community Chat
-                  </ExternalLink>
+                  <Link href="#">
+                    <a className="text-base leading-6 text-gray-500 hover:text-gray-900">
+                      Community Chat
+                    </a>
+                  </Link>
                 </li>
                 <li className="mt-4">
-                  <ExternalLink
-                    href="#"
-                    className="text-base leading-6 text-gray-500 hover:text-gray-900"
-                  >
-                    Project Forum
-                  </ExternalLink>
+                  <Link href="#">
+                    <a className="text-base leading-6 text-gray-500 hover:text-gray-900">
+                      Project Forum
+                    </a>
+                  </Link>
                 </li>
                 <li className="mt-4">
-                  <ExternalLink
-                    href="#"
-                    className="text-base leading-6 text-gray-500 hover:text-gray-900"
-                  >
-                    Releases
-                  </ExternalLink>
+                  <Link href="#">
+                    <a className="text-base leading-6 text-gray-500 hover:text-gray-900">
+                      Releases
+                    </a>
+                  </Link>
                 </li>
                 <li className="mt-4">
                   <ExternalLink
@@ -107,7 +101,9 @@ const Footer = () => {
                     data-show-count="true"
                     aria-label="Star formik/formik on GitHub"
                   >
-                    Star
+                    <a className="text-base leading-6 text-gray-500 hover:text-gray-900">
+                      Star
+                    </a>
                   </ExternalLink>
                 </li>
               </ul>
