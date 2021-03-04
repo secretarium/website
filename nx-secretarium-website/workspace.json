@@ -1,0 +1,99 @@
+{
+  "version": 2,
+  "cli": {
+    "defaultCollection": "@nrwl/next"
+  },
+  "defaultProject": "nxwebsite",
+  "generators": {
+    "@nrwl/react": {
+      "application": {
+        "babel": true
+      }
+    },
+    "@nrwl/next": {
+      "application": {
+        "style": "css",
+        "linter": "eslint"
+      }
+    }
+  },
+  "projects": {
+    "nxwebsite": {
+      "root": "apps/nxwebsite",
+      "sourceRoot": "apps/nxwebsite",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/next:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "root": "apps/nxwebsite",
+            "outputPath": "dist/apps/nxwebsite"
+          },
+          "configurations": {
+            "production": {}
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/next:server",
+          "options": {
+            "buildTarget": "nxwebsite:build",
+            "dev": true
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "nxwebsite:build:production",
+              "dev": false
+            }
+          }
+        },
+        "export": {
+          "executor": "@nrwl/next:export",
+          "options": {
+            "buildTarget": "nxwebsite:build:production"
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/nxwebsite"],
+          "options": {
+            "jestConfig": "apps/nxwebsite/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/nxwebsite/**/*.{ts,tsx,js,jsx}"]
+          }
+        }
+      }
+    },
+    "nxwebsite-e2e": {
+      "root": "apps/nxwebsite-e2e",
+      "sourceRoot": "apps/nxwebsite-e2e/src",
+      "projectType": "application",
+      "targets": {
+        "e2e": {
+          "executor": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/nxwebsite-e2e/cypress.json",
+            "tsConfig": "apps/nxwebsite-e2e/tsconfig.e2e.json",
+            "devServerTarget": "nxwebsite:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "nxwebsite:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/nxwebsite-e2e/**/*.{js,ts}"]
+          }
+        }
+      }
+    }
+  }
+}

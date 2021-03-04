@@ -19,6 +19,11 @@
         "dockerize": "docker build -t secretarium/website ."
     },
     "devDependencies": {
-        "lerna": "3.22.1"
-    }
+        "autoprefixer": "^10.2.4",
+        "lerna": "3.22.1",
+        "postcss": "^8.2.7",
+        "postcss-loader": "^5.0.0",
+        "tailwindcss": "^2.0.3"
+    },
+    "dependencies": {}
 }
