@@ -6,7 +6,7 @@
 
 .app {
   font-family: sans-serif;
-  margin: 50px auto;
+  margin: auto;
 }
 
 .app .gutter-left {
@@ -15,12 +15,6 @@
 
 .app .col-span-2 {
   grid-column: span 2;
-}
-
-.app .flex {
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .app header {

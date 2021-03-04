@@ -92,7 +92,7 @@ const Footer = () => {
                   </Link>
                 </li>
                 <li className="mt-4">
-                  <ExternalLink
+                <ExternalLink
                     className="github-button"
                     href="https://github.com/formium/formik"
                     data-color-scheme="no-preference: light; light: light; dark: dark;"
@@ -101,9 +101,7 @@ const Footer = () => {
                     data-show-count="true"
                     aria-label="Star formik/formik on GitHub"
                   >
-                    <a className="text-base leading-6 text-gray-500 hover:text-gray-900">
-                      Star
-                    </a>
+                    Star
                   </ExternalLink>
                 </li>
               </ul>

@@ -3,7 +3,6 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import Banner from '../components/Banner';
-
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import Sticky from '../components/Sticky';
@@ -21,9 +20,7 @@ export function Index() {
       </Head>
       <div className="bg-gray-50 h-full min-h-full">
         <Banner />
-        <Sticky>
           <Nav />
-        </Sticky>
         <div className="relative bg-white overflow-hidden">
           <div className="hidden lg:block lg:absolute lg:inset-0">
             <svg
@@ -63,11 +60,10 @@ export function Index() {
 
           <div className="py-24 mx-auto container px-4 sm:mt-12  relative">
             <div className="hidden lg:block absolute lg:w-3/5 right-0 lg:-rotate-30 lg:translate-x-1/3 lg:-translate-y-16 md:w-1/2 sm:w-2/3 top-0  transform  -translate-y-12">
-              <Image
+              <img
                 src="/images/hero6.png"
                 width={1042}
                 height={990}
-                priority={true}
               />
             </div>
             <div className="grid grid-cols-12 gap-8">
