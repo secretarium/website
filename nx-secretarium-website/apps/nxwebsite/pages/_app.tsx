@@ -8,7 +8,6 @@ function CustomApp({ Component, pageProps }: AppProps) {
     <>
       <Head>
         <title>Welcome to nxwebsite!</title>
-        <script async defer src="https://buttons.github.io/buttons.js"></script>
       </Head>
       <div className="app">
         <main>

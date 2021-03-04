@@ -91,19 +91,6 @@ const Footer = () => {
                     </a>
                   </Link>
                 </li>
-                <li className="mt-4">
-                <ExternalLink
-                    className="github-button"
-                    href="https://github.com/formium/formik"
-                    data-color-scheme="no-preference: light; light: light; dark: dark;"
-                    data-icon="octicon-star"
-                    data-size="large"
-                    data-show-count="true"
-                    aria-label="Star formik/formik on GitHub"
-                  >
-                    Star
-                  </ExternalLink>
-                </li>
               </ul>
             </div>
             <div className="mt-12 lg:mt-0">
