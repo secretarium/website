@@ -1,0 +1,37 @@
+{
+  "implicitDependencies": {
+    "workspace.json": "*",
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
+    },
+    "tsconfig.base.json": "*",
+    "tslint.json": "*",
+    ".eslintrc.json": "*",
+    "nx.json": "*"
+  },
+  "affected": {
+    "defaultBase": "master"
+  },
+  "npmScope": "nxstrapiintegration",
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nrwl/nx-cloud",
+      "options": {
+        "cacheableOperations": ["build", "lint", "test", "e2e"],
+        "accessToken": "ZDJkYjM0YzUtYTE5ZS00NDk3LWFjYTMtY2VlODBhMDEyZTdmfHJlYWQtd3JpdGU=",
+        "canTrackAnalytics": false,
+        "showUsageWarnings": true
+      }
+    }
+  },
+  "projects": {
+    "strapiwebsite": {
+      "tags": []
+    },
+    "strapiwebsite-e2e": {
+      "tags": [],
+      "implicitDependencies": ["strapiwebsite"]
+    }
+  }
+}
