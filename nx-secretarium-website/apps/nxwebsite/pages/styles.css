@@ -180,7 +180,7 @@ details > summary {
   @apply font-bold text-base;
 }
 
-img {
+.article-image {
   height: 300px;
 }
 

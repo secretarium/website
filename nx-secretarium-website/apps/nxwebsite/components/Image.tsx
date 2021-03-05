@@ -9,6 +9,7 @@ const Image = ({image}) => {
         alt={image.alternativeText || image.name}
         height="300"
         width='100%'
+        className="article-image"
       />
     );
 }
