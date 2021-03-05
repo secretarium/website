@@ -1,18 +1,13 @@
 {
   "implicitDependencies": {
     "workspace.json": "*",
-    "package.json": {
-      "dependencies": "*",
-      "devDependencies": "*"
-    },
+    "package.json": { "dependencies": "*", "devDependencies": "*" },
     "tsconfig.base.json": "*",
     "tslint.json": "*",
     ".eslintrc.json": "*",
     "nx.json": "*"
   },
-  "affected": {
-    "defaultBase": "master"
-  },
+  "affected": { "defaultBase": "master" },
   "npmScope": "nx-secretarium-website",
   "tasksRunnerOptions": {
     "default": {
@@ -26,12 +21,10 @@
     }
   },
   "projects": {
-    "nxwebsite": {
-      "tags": []
-    },
-    "nxwebsite-e2e": {
-      "tags": [],
-      "implicitDependencies": ["nxwebsite"]
-    }
+    "nxwebsite": { "tags": [] },
+    "nxwebsite-e2e": { "tags": [], "implicitDependencies": ["nxwebsite"] },
+    "store-ui-shared": { "tags": [] },
+    "store-media": { "tags": [] },
+    "store-ui-data": { "tags": [] }
   }
 }

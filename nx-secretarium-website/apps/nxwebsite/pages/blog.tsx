@@ -3,7 +3,7 @@ import Article from '../components/Article';
 import Container from '../components/Container';
 import Banner from '../components/Banner';
 import Nav from '../components/Nav';
-import { fetchAPI } from '../lib/api';
+import { fetchAPI } from "@nx-secretarium-website/store/ui-data";
 
 const Blog = ({ articles, homepage }) => {
   return (
@@ -11,7 +11,7 @@ const Blog = ({ articles, homepage }) => {
       <Banner />
       <Nav />
       <Container>
-        <h1 className="text-6xl capitalize mb-5 text-center">{homepage.hero.title}</h1>
+        <h1 className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl sm:leading-10 text-center">{homepage.hero.title}</h1>
         <Article articles={articles} />
       </Container>
     </div>

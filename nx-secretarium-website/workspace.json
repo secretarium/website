@@ -1,21 +1,10 @@
 {
   "version": 2,
-  "cli": {
-    "defaultCollection": "@nrwl/next"
-  },
+  "cli": { "defaultCollection": "@nrwl/next" },
   "defaultProject": "nxwebsite",
   "generators": {
-    "@nrwl/react": {
-      "application": {
-        "babel": true
-      }
-    },
-    "@nrwl/next": {
-      "application": {
-        "style": "css",
-        "linter": "eslint"
-      }
-    }
+    "@nrwl/react": { "application": { "babel": true } },
+    "@nrwl/next": { "application": { "style": "css", "linter": "eslint" } }
   },
   "projects": {
     "nxwebsite": {
@@ -30,16 +19,11 @@
             "root": "apps/nxwebsite",
             "outputPath": "dist/apps/nxwebsite"
           },
-          "configurations": {
-            "production": {}
-          }
+          "configurations": { "production": {} }
         },
         "serve": {
           "executor": "@nrwl/next:server",
-          "options": {
-            "buildTarget": "nxwebsite:build",
-            "dev": true
-          },
+          "options": { "buildTarget": "nxwebsite:build", "dev": true },
           "configurations": {
             "production": {
               "buildTarget": "nxwebsite:build:production",
@@ -49,9 +33,7 @@
         },
         "export": {
           "executor": "@nrwl/next:export",
-          "options": {
-            "buildTarget": "nxwebsite:build:production"
-          }
+          "options": { "buildTarget": "nxwebsite:build:production" }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -82,15 +64,70 @@
             "devServerTarget": "nxwebsite:serve"
           },
           "configurations": {
-            "production": {
-              "devServerTarget": "nxwebsite:serve:production"
-            }
+            "production": { "devServerTarget": "nxwebsite:serve:production" }
           }
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
+          "options": { "lintFilePatterns": ["apps/nxwebsite-e2e/**/*.{js,ts}"] }
+        }
+      }
+    },
+    "store-ui-shared": {
+      "root": "libs/store/ui-shared",
+      "sourceRoot": "libs/store/ui-shared/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["apps/nxwebsite-e2e/**/*.{js,ts}"]
+            "lintFilePatterns": ["libs/store/ui-shared/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/store/ui-shared"],
+          "options": {
+            "jestConfig": "libs/store/ui-shared/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "store-media": {
+      "root": "libs/store/media",
+      "sourceRoot": "libs/store/media/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": { "lintFilePatterns": ["libs/store/media/**/*.ts"] }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/store/media"],
+          "options": {
+            "jestConfig": "libs/store/media/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "store-ui-data": {
+      "root": "libs/store/ui-data",
+      "sourceRoot": "libs/store/ui-data/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": { "lintFilePatterns": ["libs/store/ui-data/**/*.ts"] }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/store/ui-data"],
+          "options": {
+            "jestConfig": "libs/store/ui-data/jest.config.js",
+            "passWithNoTests": true
           }
         }
       }

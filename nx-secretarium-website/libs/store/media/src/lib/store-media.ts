@@ -1,4 +1,4 @@
-import { getStrapiURL } from "./api";
+import { getStrapiURL } from '../../../ui-data/src/lib/store-ui-data';
 
 export function getStrapiMedia(media) {
   const imageUrl = media.url.startsWith("/")

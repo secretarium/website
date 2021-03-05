@@ -14,7 +14,15 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@nx-secretarium-website/store/ui-shared": [
+        "libs/store/ui-shared/src/index.ts"
+      ],
+      "@nx-secretarium-website/store/media": ["libs/store/media/src/index.ts"],
+      "@nx-secretarium-website/store/ui-data": [
+        "libs/store/ui-data/src/index.ts"
+      ]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
