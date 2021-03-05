@@ -181,7 +181,7 @@ details > summary {
 }
 
 img {
-  max-height: 300px;
+  height: 300px;
 }
 
 @tailwind utilities;
