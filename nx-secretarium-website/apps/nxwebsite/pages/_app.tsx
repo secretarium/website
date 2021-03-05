@@ -5,7 +5,7 @@ import Head from 'next/head';
 import './styles.css';
 
 import { createContext } from "react";
-import { getStrapiMedia } from "@nx-secretarium-website/store/media";
+import { getStrapiMedia } from "@nx-secretarium-website/store/ui-media";
 import { fetchAPI } from "@nx-secretarium-website/store/ui-data";
 
 // Store Strapi Global object in context

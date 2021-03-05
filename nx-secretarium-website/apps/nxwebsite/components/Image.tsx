@@ -1,4 +1,4 @@
-import { getStrapiMedia } from "@nx-secretarium-website/store/media";
+import { getStrapiMedia } from "@nx-secretarium-website/store/ui-media";
 
 const Image = ({image}) => {
     const imageUrl = getStrapiMedia(image);

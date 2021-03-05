@@ -25,6 +25,7 @@
     "nxwebsite-e2e": { "tags": [], "implicitDependencies": ["nxwebsite"] },
     "store-ui-shared": { "tags": [] },
     "store-media": { "tags": [] },
-    "store-ui-data": { "tags": [] }
+    "store-ui-data": { "tags": [] },
+    "store-ui-media": { "tags": [] }
   }
 }

@@ -131,6 +131,25 @@
           }
         }
       }
+    },
+    "store-ui-media": {
+      "root": "libs/store/ui-media",
+      "sourceRoot": "libs/store/ui-media/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": { "lintFilePatterns": ["libs/store/ui-media/**/*.ts"] }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/store/ui-media"],
+          "options": {
+            "jestConfig": "libs/store/ui-media/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   }
 }
