@@ -180,5 +180,9 @@ details > summary {
   @apply font-bold text-base;
 }
 
+img {
+  max-height: 300px;
+}
+
 @tailwind utilities;
 /* purgecss end ignore */

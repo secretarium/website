@@ -7,22 +7,22 @@ import { users } from '../users';
 export interface UsersProps {}
 
 export function Users() {
-    const showcase = users.map(user => (
-        <a
-          href={user.infoLink}
-          key={user.infoLink}
-          className="flex items-center justify-center"
-        >
-          <img
-            src={user.image}
-            alt={user.caption}
-            title={user.caption}
-            style={user.style}
-          />
-        </a>
-      ));
-      return (
-        <div className=" h-full min-h-full">
+  const showcase = users.map((user) => (
+    <a
+      href={user.infoLink}
+      key={user.infoLink}
+      className="flex items-center justify-center"
+    >
+      <img
+        src={user.image}
+        alt={user.caption}
+        title={user.caption}
+        style={user.style}
+      />
+    </a>
+  ));
+  return (
+    <div className="h-full min-h-full">
       <Banner />
       <Nav />
       <Container>
@@ -52,10 +52,9 @@ export function Users() {
           </div>
         </div>
       </Container>
-
       <Footer />
     </div>
-      )
+  );
 }
 
 export default Users;
