@@ -5,14 +5,14 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ nx-codebase ]
   pull_request:
-    branches: [ master ]
+    branches: [ nx-codebase ]
 
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows
 
     strategy:
       matrix:
