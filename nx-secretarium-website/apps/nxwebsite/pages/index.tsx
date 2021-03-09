@@ -1,6 +1,5 @@
 import React from 'react';
 import Head from 'next/head';
-import Image from 'next/image';
 import Link from 'next/link';
 import Banner from '../components/Banner';
 import Nav from '../components/Nav';
@@ -20,7 +19,7 @@ export function Index() {
       </Head>
       <div className="bg-gray-50 h-full min-h-full">
         <Banner />
-          <Nav />
+        <Nav />
         <div className="relative bg-white overflow-hidden">
           <div className="hidden lg:block lg:absolute lg:inset-0">
             <svg
@@ -60,11 +59,7 @@ export function Index() {
 
           <div className="py-24 mx-auto container px-4 sm:mt-12  relative">
             <div className="hidden lg:block absolute lg:w-3/5 right-0 lg:-rotate-30 lg:translate-x-1/3 lg:-translate-y-16 md:w-1/2 sm:w-2/3 top-0  transform  -translate-y-12">
-              <img
-                src="/images/hero6.png"
-                width={1042}
-                height={990}
-              />
+              <img src="/images/hero6.png" width={1042} height={990} />
             </div>
             <div className="grid grid-cols-12 gap-8">
               <div className="col-span-12 lg:col-span-6 ">
@@ -89,7 +84,7 @@ export function Index() {
                     </div>
                     <div className="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
                       <a
-                        href='#'
+                        href="#"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base leading-6 font-medium rounded-md text-blue-600 bg-white hover:text-blue-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition duration-150 ease-in-out md:py-4 md:text-lg md:px-10"
@@ -104,7 +99,7 @@ export function Index() {
           </div>
         </div>
         <div className="text-lg border-t border-gray-100 bg-gray-50 ">
-          <div className="py-24  ">
+          <div className="py-24">
             <div className="mx-auto container">
               <div className="lg:grid lg:grid-cols-3 lg:gap-8">
                 <div>
@@ -160,17 +155,49 @@ export function Index() {
           </div>
         </div>
 
-        <div className="bg-gray-100 relative py-24 border-t border-gray-200 ">
-          <div className="px-4 sm:px-6 lg:px-8  mx-auto container max-w-3xl sm:text-center">
-            <h3 className="text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl sm:leading-10 lg:leading-none mt-2">
-              Less Code. Fewer Edge Cases.
+        <div className="relative py-24 border-t section-data-processing">
+          <div className="mx-auto container">
+            <h3 className="text-3xl leading-8 font-extrabold tracking-tight sm:leading-10 lg:leading-none mt-2 text-white sm:text-4xl">
+              Truly secure data processing
             </h3>
-            <p className="my-4 text-xl leading-7  text-gray-600">
-              Formik comes with battle-tested solutions for input validation,
-              formatting, masking, arrays, and error handling. This means you
-              spend less time writing form code and more time building your next
-              big thing.
+            <p className="my-4 text-xl leading-7 text-white max-w-2xl">
+              Secretarium secure cloud technology uses a combination of secure
+              hardware and cryptography to ensure total data privacy. It’s the
+              only technology that can guarantee data encryption during
+              processing.
             </p>
+            <div className="mt-11">
+              <div className="lg:grid lg:grid-cols-4 lg:gap-8">
+                <div>
+                  <div>
+                    <p className="mt-2 lg:mt-4 text-base xl:text-lg lg:leading-normal leading-6 text-white text-center">
+                      No body sees the data (not even us)
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-10 lg:mt-0">
+                  <div>
+                    <p className="mt-2  lg:mt-4 text-base xl:text-lg lg:leading-normal leading-6 text-white text-center">
+                      No single point of failure
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-10 lg:mt-0">
+                  <div>
+                    <p className="mt-2  lg:mt-4 text-base xl:text-lg lg:leading-normal leading-6 text-white text-center">
+                      Cryptographic proof of integrity
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-10 lg:mt-0">
+                  <div>
+                    <p className="mt-2  lg:mt-4 text-base xl:text-lg lg:leading-normal leading-6 text-white text-center">
+                      Removes risk of data leakage
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -291,7 +318,7 @@ export function Index() {
               </div>
               <div className="ml-3 inline-flex rounded-md shadow">
                 <a
-                  href='#'
+                  href="#"
                   className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base leading-6 font-medium rounded-md text-blue-600 bg-white hover:text-blue-500 focus:outline-none focus:shadow-outline transition duration-150 ease-in-out"
                 >
                   GitHub

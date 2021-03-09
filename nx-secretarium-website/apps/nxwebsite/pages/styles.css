@@ -3,11 +3,19 @@
 @tailwind components;
 /* purgecss end ignore */
 
+@font-face {
+  font-family: 'Aller';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Aller'), url('../fonts/Aller_Rg.woff') format('woff');
+}
+
 body,
 html {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-family: 'Aller', sans-serif;
 }
 
 .top-24 {
@@ -182,6 +190,10 @@ details > summary {
 
 .article-image {
   height: 300px;
+}
+
+.section-data-processing {
+  background-color: rgb(226, 27, 66)
 }
 
 @tailwind utilities;
