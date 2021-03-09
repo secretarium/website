@@ -206,7 +206,7 @@ export function Index() {
                 <h3 className="text-3xl mx-auto leading-tight font-extrabold tracking-tight sm:text-4xl  lg:leading-none mt-2 text-red-600">
                   Say hello to total data control
                 </h3>
-                <p className="mt-4 text-xl max-w-3xl mx-auto leading-7 text-gray-700 pr-15">
+                <p className="mt-4 text-xl max-w-3xl leading-7 text-gray-700 pr-15">
                   We believe everyone has the right to control their own data,
                   people and businesses. The ability to protect sensitive
                   information during processing opens the door to endless
@@ -217,32 +217,32 @@ export function Index() {
               <div className="...">
               <div className="grid grid-flow-row grid-cols-1 sm:grid-cols-2 gap-4 text-gray-700 max-w-screen-lg mx-auto text-lg">
                 <a className="mb-1">
-                  <span className="bg-blue-100 text-blue-500 w-4 h-4 mr-2 rounded-full inline-flex items-center justify-center">
-                    <Check />
+                  <span className="text-red-500 w-4 h-4 mr-2 rounded-full inline-flex items-center justify-center">
+                    01
                   </span>
                   Lets users keep <strong>control</strong> of their data
                 </a>
                 <a className="mb-1">
-                  <span className="bg-blue-100 text-blue-500 w-4 h-4 mr-2 rounded-full inline-flex items-center justify-center">
-                    <Check />
+                  <span className="text-red-500 w-4 h-4 mr-2 rounded-full inline-flex items-center justify-center">
+                    02
                   </span>
                   <strong>Secures</strong> commercial data
                 </a>
                 <a className="mb-1">
-                  <span className="bg-blue-100 text-blue-500 w-4 h-4 mr-2 rounded-full inline-flex items-center justify-center">
-                    <Check />
+                  <span className="text-red-500 w-4 h-4 mr-2 rounded-full inline-flex items-center justify-center">
+                    03
                   </span>
                   Powers secure <strong>monetisation</strong>
                 </a>
                 <a className="mb-1">
-                  <span className="bg-blue-100 text-blue-500 w-4 h-4 mr-2 rounded-full inline-flex items-center justify-center">
-                    <Check />
+                  <span className="text-red-500 w-4 h-4 mr-2 rounded-full inline-flex items-center justify-center">
+                    04
                   </span>
                   Enables secure <strong>collaboration</strong>
                 </a>
                 <a className="mb-1">
-                  <span className="bg-blue-100 text-blue-500 w-4 h-4 mr-2 rounded-full inline-flex items-center justify-center">
-                    <Check />
+                  <span className="w-4 h-4 mr-2 rounded-full inline-flex items-center justify-center text-red-500">
+                    05
                   </span>
                   <strong>Protects</strong> anonymity
                 </a>
@@ -295,16 +295,5 @@ export function Index() {
 export default Index;
 
 const Check = React.memo(() => (
-  <svg
-    fill="none"
-    stroke="currentColor"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    strokeWidth="3"
-    className="w-3 h-3"
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-  >
-    <path d="M20 6L9 17l-5-5"></path>
-  </svg>
+  <p>01</p>
 ));
