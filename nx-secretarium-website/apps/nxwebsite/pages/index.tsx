@@ -169,11 +169,9 @@ export function Index() {
             <div className="mt-11">
               <div className="lg:grid lg:grid-cols-4 lg:gap-8">
                 <div>
-                  <div>
-                    <p className="mt-2 lg:mt-4 text-base xl:text-lg lg:leading-normal leading-6 text-white text-center">
-                      No body sees the data (not even us)
-                    </p>
-                  </div>
+                  <p className="mt-2 lg:mt-4 text-base xl:text-lg lg:leading-normal leading-6 text-white text-center">
+                    No body sees the data (not even us)
+                  </p>
                 </div>
                 <div className="mt-10 lg:mt-0">
                   <div>
@@ -201,104 +199,54 @@ export function Index() {
           </div>
         </div>
 
-        <section className="bg-gray-900 body-font">
-          <div className="py-24 px-4 sm:px-6 lg:px-8  mx-auto container">
-            <div className=" sm:text-center pb-16">
-              <h3 className="text-3xl mx-auto leading-tight font-extrabold tracking-tight text-white sm:text-4xl  lg:leading-none mt-2">
-                Battery-pack Included.
-              </h3>
-              <p className="mt-4 text-xl max-w-3xl mx-auto leading-7 text-gray-300">
-                With Formik, not only is the battery-pack included, but you're
-                taking advantage of our community's collective learnings in
-                security, accessibility, and user experience research.
-              </p>
-            </div>
-            <div>
-              <div className="grid grid-flow-row grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-4 text-white max-w-screen-lg mx-auto text-lg">
-                <a className="mb-2">
+        <section className="bg-white body-font">
+          <div className="py-24 mx-auto container">
+            <div className="grid grid-cols-3 gap-4">
+              <div className="pb-16 col-span-2 ...">
+                <h3 className="text-3xl mx-auto leading-tight font-extrabold tracking-tight sm:text-4xl  lg:leading-none mt-2 text-red-600">
+                  Say hello to total data control
+                </h3>
+                <p className="mt-4 text-xl max-w-3xl mx-auto leading-7 text-gray-700 pr-15">
+                  We believe everyone has the right to control their own data,
+                  people and businesses. The ability to protect sensitive
+                  information during processing opens the door to endless
+                  commercial data opportunities, without compromising individual
+                  privacy.
+                </p>
+              </div>
+              <div className="...">
+              <div className="grid grid-flow-row grid-cols-1 sm:grid-cols-2 gap-4 text-gray-700 max-w-screen-lg mx-auto text-lg">
+                <a className="mb-1">
                   <span className="bg-blue-100 text-blue-500 w-4 h-4 mr-2 rounded-full inline-flex items-center justify-center">
                     <Check />
                   </span>
-                  Form-level Validation
+                  Lets users keep <strong>control</strong> of their data
                 </a>
-                <a className="mb-2">
+                <a className="mb-1">
                   <span className="bg-blue-100 text-blue-500 w-4 h-4 mr-2 rounded-full inline-flex items-center justify-center">
                     <Check />
                   </span>
-                  Error Messages
+                  <strong>Secures</strong> commercial data
                 </a>
-                <a className="mb-2">
+                <a className="mb-1">
                   <span className="bg-blue-100 text-blue-500 w-4 h-4 mr-2 rounded-full inline-flex items-center justify-center">
                     <Check />
                   </span>
-                  Wizards and multi-step forms
+                  Powers secure <strong>monetisation</strong>
                 </a>
-                <a className="mb-2">
+                <a className="mb-1">
                   <span className="bg-blue-100 text-blue-500 w-4 h-4 mr-2 rounded-full inline-flex items-center justify-center">
                     <Check />
                   </span>
-                  Field-level validation
+                  Enables secure <strong>collaboration</strong>
                 </a>
-                <a className="mb-2">
+                <a className="mb-1">
                   <span className="bg-blue-100 text-blue-500 w-4 h-4 mr-2 rounded-full inline-flex items-center justify-center">
                     <Check />
                   </span>
-                  Array Fields
+                  <strong>Protects</strong> anonymity
                 </a>
-                <a className="mb-2">
-                  <span className="bg-blue-100 text-blue-500 w-4 h-4 mr-2 rounded-full inline-flex items-center justify-center">
-                    <Check />
-                  </span>
-                  API Errors
-                </a>
-                <a className="mb-2">
-                  <span className="bg-blue-100 text-blue-500 w-4 h-4 mr-2 rounded-full inline-flex items-center justify-center">
-                    <Check />
-                  </span>
-                  Custom Validation
-                </a>
-                <a className="mb-2">
-                  <span className="bg-blue-100 text-blue-500 w-4 h-4 mr-2 rounded-full inline-flex items-center justify-center">
-                    <Check />
-                  </span>
-                  Internationalization (i18n)
-                </a>
-                <a className="mb-2">
-                  <span className="bg-blue-100 text-blue-500 w-4 h-4 mr-2 rounded-full inline-flex items-center justify-center">
-                    <Check />
-                  </span>
-                  Auto-saving forms
-                </a>
-                <a className="mb-2">
-                  <span className="bg-blue-100 text-blue-500 w-4 h-4 mr-2 rounded-full inline-flex items-center justify-center">
-                    <Check />
-                  </span>
-                  Dependent Validation
-                </a>
-                <a className="mb-2">
-                  <span className="bg-blue-100 text-blue-500 w-4 h-4 mr-2 rounded-full inline-flex items-center justify-center">
-                    <Check />
-                  </span>
-                  Conditional Logic
-                </a>
-                <a className="mb-2">
-                  <span className="bg-blue-100 text-blue-500 w-4 h-4 mr-2 rounded-full inline-flex items-center justify-center">
-                    <Check />
-                  </span>
-                  Dynamic Fields
-                </a>
-                <a className="mb-2">
-                  <span className="bg-blue-100 text-blue-500 w-4 h-4 mr-2 rounded-full inline-flex items-center justify-center">
-                    <Check />
-                  </span>
-                  React Native
-                </a>
-                <a className="mb-2">
-                  <span className="bg-blue-100 text-blue-500 w-4 h-4 mr-2 rounded-full inline-flex items-center justify-center">
-                    <Check />
-                  </span>
-                  Tree shakeable
-                </a>
+              </div>
               </div>
             </div>
           </div>
