@@ -2,7 +2,6 @@ import React from 'react';
 import Image from './Image';
 
 const Card = ({ article }) => {
-  console.log(article);
   return (
     <figure className="mbg-gray-100 rounded-xl p-3">
       <h2 className="text-red-700 pb-3 uppercase text-center">{article.title}</h2>

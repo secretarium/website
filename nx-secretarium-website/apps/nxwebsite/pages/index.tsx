@@ -4,14 +4,10 @@ import Link from 'next/link';
 import Banner from '../components/Banner';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
-import Sticky from '../components/Sticky';
+import Benefits from '../components/Benefits';
+import BlockChain from '../components/BlockChain';
 
 export function Index() {
-  /*
-   * Replace the elements below with your own.
-   *
-   * Note: The corresponding styles are in the ./index.css file.
-   */
   return (
     <>
       <Head>
@@ -56,7 +52,6 @@ export function Index() {
               />
             </svg>
           </div>
-
           <div className="py-24 mx-auto container px-4 sm:mt-12  relative">
             <div className="hidden lg:block absolute lg:w-3/5 right-0 lg:-rotate-30 lg:translate-x-1/3 lg:-translate-y-16 md:w-1/2 sm:w-2/3 top-0  transform  -translate-y-12">
               <img src="/images/hero6.png" width={1042} height={990} />
@@ -154,7 +149,6 @@ export function Index() {
             </div>
           </div>
         </div>
-
         <div className="relative py-24 border-t section-data-processing">
           <div className="mx-auto container">
             <h3 className="text-3xl leading-8 font-extrabold tracking-tight sm:leading-10 lg:leading-none mt-2 text-white sm:text-4xl">
@@ -198,59 +192,7 @@ export function Index() {
             </div>
           </div>
         </div>
-
-        <section className="bg-white body-font">
-          <div className="py-24 mx-auto container">
-            <div className="grid grid-cols-3 gap-4">
-              <div className="pb-16 col-span-2 ...">
-                <h3 className="text-3xl mx-auto leading-tight font-extrabold tracking-tight sm:text-4xl  lg:leading-none mt-2 text-red-600">
-                  Say hello to total data control
-                </h3>
-                <p className="mt-4 text-xl max-w-3xl leading-7 text-gray-700 pr-15">
-                  We believe everyone has the right to control their own data,
-                  people and businesses. The ability to protect sensitive
-                  information during processing opens the door to endless
-                  commercial data opportunities, without compromising individual
-                  privacy.
-                </p>
-              </div>
-              <div className="...">
-              <div className="grid grid-flow-row grid-cols-1 sm:grid-cols-2 gap-4 text-gray-700 max-w-screen-lg mx-auto text-lg">
-                <a className="mb-1">
-                  <span className="text-red-500 w-4 h-4 mr-2 rounded-full inline-flex items-center justify-center">
-                    01
-                  </span>
-                  Lets users keep <strong>control</strong> of their data
-                </a>
-                <a className="mb-1">
-                  <span className="text-red-500 w-4 h-4 mr-2 rounded-full inline-flex items-center justify-center">
-                    02
-                  </span>
-                  <strong>Secures</strong> commercial data
-                </a>
-                <a className="mb-1">
-                  <span className="text-red-500 w-4 h-4 mr-2 rounded-full inline-flex items-center justify-center">
-                    03
-                  </span>
-                  Powers secure <strong>monetisation</strong>
-                </a>
-                <a className="mb-1">
-                  <span className="text-red-500 w-4 h-4 mr-2 rounded-full inline-flex items-center justify-center">
-                    04
-                  </span>
-                  Enables secure <strong>collaboration</strong>
-                </a>
-                <a className="mb-1">
-                  <span className="w-4 h-4 mr-2 rounded-full inline-flex items-center justify-center text-red-500">
-                    05
-                  </span>
-                  <strong>Protects</strong> anonymity
-                </a>
-              </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <Benefits/>
         <div className="bg-gray-50 border-b border-gray-100">
           <div className="container mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 lg:flex lg:items-center lg:justify-between">
             <h2 className="text-3xl leading-9 font-extrabold tracking-tight text-gray-900 sm:text-4xl sm:leading-10">
@@ -275,6 +217,7 @@ export function Index() {
             </div>
           </div>
         </div>
+        <BlockChain />
         <Footer />
         <style jsx global>{`
           .gradient {
