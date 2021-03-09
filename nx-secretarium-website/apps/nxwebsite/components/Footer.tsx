@@ -4,7 +4,7 @@ import { ExternalLink } from './ExternalLink';
 
 const Footer = () => {
   return (
-    <div className="bg-gray-50 border-t border-gray-200">
+    <div className="bg-black">
       <div className="container mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8">
         <div className="lg:grid lg:grid-cols-3 lg:gap-8">
           <div className="lg:grid lg:grid-cols-3 gap-8 lg:col-span-2">
@@ -52,124 +52,120 @@ const Footer = () => {
               </ul>
             </div>
             <div className="mt-12 lg:mt-0">
-              <h4 className="text-sm leading-5 font-semibold tracking-wider text-gray-400 uppercase">
-                Community
-              </h4>
               <ul className="mt-4">
                 <li>
                   <Link href="/users">
-                    <a className="text-base leading-6 text-gray-500 hover:text-gray-900">
-                      User Showcase
+                    <a className="text-base leading-6 text-white hover:text-white">
+                      Home
                     </a>
                   </Link>
                 </li>
                 <li className="mt-4">
                   <Link href="https://opencollective.com/formik">
-                    <a className="text-base leading-6 text-gray-500 hover:text-gray-900">
-                      Funding
+                    <a className="text-base leading-6 text-white hover:text-white">
+                      About Us
                     </a>
                   </Link>
                 </li>
                 <li className="mt-4">
                   <Link href="#">
-                    <a className="text-base leading-6 text-gray-500 hover:text-gray-900">
-                      Community Chat
-                    </a>
-                  </Link>
-                </li>
-                <li className="mt-4">
-                  <Link href="#">
-                    <a className="text-base leading-6 text-gray-500 hover:text-gray-900">
-                      Project Forum
-                    </a>
-                  </Link>
-                </li>
-                <li className="mt-4">
-                  <Link href="#">
-                    <a className="text-base leading-6 text-gray-500 hover:text-gray-900">
-                      Releases
+                    <a className="text-base leading-6 text-white hover:text-white">
+                      Tech
                     </a>
                   </Link>
                 </li>
               </ul>
             </div>
             <div className="mt-12 lg:mt-0">
-              <h4 className="text-sm leading-5 font-semibold tracking-wider text-gray-400 uppercase">
-                About Formium
-              </h4>
               <ul className="mt-4">
                 <li className="mt-4">
                   <ExternalLink
                     href="https://formium.io?utm_source=formik-site&utm_medium=footer-link&utm_campaign=formik-website"
-                    className="text-base leading-6 text-gray-500 hover:text-gray-900"
+                    className="text-base leading-6 text-white hover:text-white"
                   >
-                    Home
+                    Contact Us
                   </ExternalLink>
                 </li>
                 <li className="mt-4">
                   <ExternalLink
                     href="https://github.com/formium"
-                    className="text-base leading-6 text-gray-500 hover:text-gray-900"
+                    className="text-base leading-6 text-white hover:text-white"
                   >
-                    GitHub
+                    Terms &amp; Conditions
                   </ExternalLink>
                 </li>
                 <li className="mt-4">
                   <ExternalLink
                     href="https://twitter.com/formiumhq"
-                    className="text-base leading-6 text-gray-500 hover:text-gray-900"
+                    className="text-base leading-6 text-white hover:text-white"
                   >
-                    Twitter
-                  </ExternalLink>
-                </li>
-                <li className="mt-4">
-                  <ExternalLink
-                    href="https://formium.io/contact/sales?utm_source=formik-site&utm_medium=footer-link&utm_campaign=formik-website"
-                    className="text-base leading-6 text-gray-500 hover:text-gray-900"
-                  >
-                    Contact Sales
+                    Privacy Policy
                   </ExternalLink>
                 </li>
               </ul>
             </div>
           </div>
           <div className="mt-8 lg:mt-0">
-            <h4 className="text-sm leading-5 font-semibold tracking-wider text-gray-400 uppercase">
-              Subscribe to our newsletter
-            </h4>
-            <p className="mt-4 text-gray-500 text-base leading-6">
-              The latest Formik news, articles, and resources, sent to your
-              inbox.
+            <p className="mt-4 text-white text-base leading-6">
+              <strong>Say hello! </strong>
+              <span className="font-light">
+                Sign up to our newsletter for company updates, technical tips,
+                benefits and offers.
+              </span>
             </p>
             <form
               action="https://api.formik.com/submit/palmerhq/formik-newsletter"
               method="post"
               className="mt-4 sm:flex sm:max-w-md"
             >
-              <input type="hidden" name="_honeypot" value="" />
+              <input type="hidden" name="_email" value="" />
               <input
                 aria-label="Email address"
                 type="email"
                 name="email"
                 required={true}
-                className="appearance-none w-full px-4 py-2 border border-gray-300 text-base leading-6 rounded-md text-gray-900 bg-white placeholder-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out lg:max-w-xs"
-                placeholder="Enter your email"
+                className="appearance-none w-full px-4 py-3 border text-base leading-6 text-gray-900 bg-black placeholder-white focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out border-white"
+                placeholder="Email Address"
               />
-              <span className="mt-2 lg:mt-0 lg:ml-3 flex-shrink-0 inline-flex rounded-md shadow-sm">
-                <button
-                  type="button"
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-500 focus:outline-none focus:border-blue-700 focus:shadow-outline-blue active:bg-blue-700 transition ease-in-out duration-150"
-                >
-                  Notify me
-                </button>
-              </span>
             </form>
           </div>
         </div>
-        <div className="mt-8 border-t border-gray-200 pt-8 lg:flex lg:items-center lg:justify-between">
-          <div className="mt-8 text-base leading-6  lg:mt-0 lg:order-1">
-            <div className="text-gray-400 text-xs pt-1">
-              Copyright &copy; 2020 Formium, Inc. All rights reserved.{' '}
+        <div className="mt-8 border-t border-gray-200 pt-8">
+          <div className="lg:grid lg:grid-cols-3 lg:gap-8">
+            <div className="mt-10 lg:mt-0">
+              <div className="text-white text-sm py-3">
+                <span className="text-red-600">&copy; 2020 Secretarium.</span>{' '}
+                All rights reserved.{' '}
+              </div>
+            </div>
+            <div className="mt-10 lg:mt-0">
+              <div className="text-white text-sm py-3 text-center">
+                <span className="text-red-600">&copy; 2020 Secretarium.</span>{' '}
+                All rights reserved.{' '}
+              </div>
+            </div>
+            <div className="mt-10 lg:mt-0">
+              <div className="flex relative w-48 float-right">
+                <label className="flex-initial uppercase tracking-wide text-white text-xs font-bold mb-2 mr-2 my-3">
+                  Language
+                </label>
+                <div className="relative flex-initial w-24">
+                  <select className="block appearance-none w-full bg-black border border-white hover:border-gray-500 px-4 py-2 pr-8 shadow leading-tight focus:outline-none focus:shadow-outline text-white">
+                    <option>English</option>
+                    <option>French</option>
+                    <option>Option 3</option>
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-red-600">
+                    <svg
+                      className="fill-current h-4 w-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
