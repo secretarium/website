@@ -7,52 +7,13 @@ const Footer = () => {
   return (
     <div className="bg-black">
       <div className="container mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8">
-        <div className="lg:grid lg:grid-cols-3 lg:gap-8">
+        <div className="lg:grid lg:grid-cols-3 lg:gap-8 pb-4">
           <div className="lg:grid lg:grid-cols-3 gap-8 lg:col-span-2">
             <div className="mt-12 lg:mt-0">
-              <h4 className="text-sm leading-5 font-semibold tracking-wider text-gray-400 uppercase">
-                Resources
-              </h4>
-              <ul className="mt-4">
-                <li>
-                  <Link href="/docs/overview">
-                    <a className="text-base leading-6 text-gray-500 hover:text-gray-900">
-                      Docs
-                    </a>
-                  </Link>
-                </li>
-                <li className="mt-4">
-                  <Link href="/docs/tutorial">
-                    <a className="text-base leading-6 text-gray-500 hover:text-gray-900">
-                      Learn
-                    </a>
-                  </Link>
-                </li>
-                <li className="mt-4">
-                  <Link href="/docs/guides/validation">
-                    <a className="text-base leading-6 text-gray-500 hover:text-gray-900">
-                      Guides
-                    </a>
-                  </Link>
-                </li>
-                <li className="mt-4">
-                  <Link href="/docs/api/formik">
-                    <a className="text-base leading-6 text-gray-500 hover:text-gray-900">
-                      API Reference
-                    </a>
-                  </Link>
-                </li>
-
-                <li className="mt-4">
-                  <Link href="/blog">
-                    <a className="text-base leading-6 text-gray-500 hover:text-gray-900">
-                      Blog
-                    </a>
-                  </Link>
-                </li>
-              </ul>
+              <img src="/images/secretarium_icon.png" className="mb-3"/>
+              <p className="text-white text-3xl">The secure <br/> cloud.</p>
             </div>
-            <div className="mt-12 lg:mt-0">
+            <div className="mt-12 lg:mt-20">
               <ul className="mt-4">
                 <li>
                   <Link href="/users">
@@ -77,7 +38,7 @@ const Footer = () => {
                 </li>
               </ul>
             </div>
-            <div className="mt-12 lg:mt-0">
+            <div className="mt-12 lg:mt-20">
               <ul className="mt-4">
                 <li className="mt-4">
                   <ExternalLink
