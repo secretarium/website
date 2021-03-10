@@ -7,6 +7,7 @@ import Summary from '../components/Summary';
 import Footer from '../components/Footer';
 import Benefits from '../components/Benefits';
 import BlockChain from '../components/BlockChain';
+import Technology from '../components/Technology';
 
 export function Index() {
   return (
@@ -96,6 +97,7 @@ export function Index() {
         </div>
         <Summary />
         <Benefits />
+        <Technology />
         <BlockChain />
         <Footer />
         <style jsx global>{`

@@ -15,7 +15,7 @@ const ListItem = ({
   return (
     <>
       <a className="mb-1">
-        <span className="text-red-600 w-4 h-4 mr-2 rounded-full inline-flex items-center justify-center text-2xl">
+        <span className="text-red-600 w-4 h-4 mr-3 rounded-full inline-flex items-center justify-center text-2xl">
           {number}
         </span>
         {initial_snippet} <strong>{bold_snippet}</strong> {last_snippet}

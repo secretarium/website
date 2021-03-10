@@ -17,7 +17,10 @@ module.exports = {
         red: {
           '600': '#e21b43'
         }
-      }
+      },
+      backgroundImage: theme => ({
+        'hero-pattern': "url('/images/background_image.jpg')",
+      })
     },
     rotate: {
       ...defaultTheme.rotate,
@@ -34,10 +37,6 @@ module.exports = {
         },
         select: {
           paddingRight: `${theme('spacing.4')}`,
-        },
-        'checkbox, radio': {
-          width: theme('spacing.3'),
-          height: theme('spacing.3'),
         },
       },
     }),

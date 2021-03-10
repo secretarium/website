@@ -1,9 +1,14 @@
 import React from 'react';
 
-const Button = () => {
+export interface ListItemProps {
+  color: string;
+  text: string
+}
+
+const Button = ({color, text}) => {
   return (
-    <button className="bg-red-600 hover:bg-red-700 text-white py-2 px-5 rounded-full">
-      About Us
+    <button className={`bg-${color} hover:bg-${color} text-white py-2 px-5 rounded-full`}>
+      {text}
     </button>
   );
 };
