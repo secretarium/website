@@ -10,7 +10,7 @@ const Benefits = () => {
             <h3 className="text-3xl mx-auto leading-tight font-extrabold tracking-tight sm:text-4xl  lg:leading-none mt-2 text-red-600">
               Say hello to total data control
             </h3>
-            <p className="mt-4 text-xl max-w-3xl leading-7 text-gray-700 pr-15">
+            <p className="mt-4 text-xl max-w-xl leading-7 text-gray-700 pr-15">
               We believe everyone has the right to control their own data,
               people and businesses. The ability to protect sensitive
               information during processing opens the door to endless commercial

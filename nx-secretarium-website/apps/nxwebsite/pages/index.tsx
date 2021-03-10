@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import Banner from '../components/Banner';
 import Nav from '../components/Nav';
+import Summary from '../components/Summary';
 import Footer from '../components/Footer';
 import Benefits from '../components/Benefits';
 import BlockChain from '../components/BlockChain';
@@ -93,130 +94,58 @@ export function Index() {
             </div>
           </div>
         </div>
-        <div className="text-lg border-t border-gray-100 bg-gray-50 ">
-          <div className="py-24">
-            <div className="mx-auto container">
-              <div className="lg:grid lg:grid-cols-3 lg:gap-8">
-                <div>
-                  <div>
-                    <h3 className="text-xl leading-6 xl:text-2xl font-bold text-gray-900">
-                      Declarative
-                    </h3>
-                    <p className="mt-2 lg:mt-4 text-base xl:text-lg lg:leading-normal leading-6 text-gray-600">
-                      Formik takes care of the repetitive and annoying
-                      stuff—keeping track of values/errors/visited fields,
-                      orchestrating validation, and handling submission—so you
-                      don't have to. This means you spend less time wiring up
-                      state and change handlers and more time focusing on your
-                      business logic.
-                    </p>
-                  </div>
-                </div>
-                <div className="mt-10 lg:mt-0">
-                  <div>
-                    <h3 className="text-xl leading-6 xl:text-2xl font-bold text-gray-900">
-                      Intuitive
-                    </h3>
-                    <p className="mt-2  lg:mt-4 text-base xl:text-lg lg:leading-normal leading-6 text-gray-600">
-                      No fancy subscriptions or observables under the hood, just
-                      plain React state and props. By staying within the core
-                      React framework and away from magic, Formik makes
-                      debugging, testing, and reasoning about your forms a
-                      breeze. If you know React, and you know a bit about forms,
-                      you know Formik!
-                    </p>
-                  </div>
-                </div>
-                <div className="mt-10 lg:mt-0">
-                  <div>
-                    <h3 className="text-xl leading-6 xl:text-2xl font-bold text-gray-900">
-                      Adoptable
-                    </h3>
-                    <p className="mt-2  lg:mt-4 text-base xl:text-lg lg:leading-normal leading-6 text-gray-600">
-                      Since form state is inherently local and ephemeral, Formik
-                      does not use external state management libraries like
-                      Redux or MobX. This also makes Formik easy to adopt
-                      incrementally and keeps bundle size to a minimum.
-                    </p>
+        <div className="relative">
+          <Summary />
+          <div className="static">
+            <div className="relative py-24 border-t section-data-processing">
+              <div className="mx-auto container">
+                <h3 className="text-3xl leading-8 font-extrabold tracking-tight sm:leading-10 lg:leading-none mt-2 text-white sm:text-4xl md:max-w-xs lg:max-w-md xl:max-w-2xl">
+                  Truly secure data processing
+                </h3>
+                <p className="my-4 text-xl leading-7 text-white md:max-w-xs lg:max-w-md xl:max-w-2xl">
+                  Secretarium secure cloud technology uses a combination of
+                  secure hardware and cryptography to ensure total data privacy.
+                  It’s the only technology that can guarantee data encryption
+                  during processing.
+                </p>
+                <div className="mt-11">
+                  <div className="lg:grid lg:grid-cols-4 lg:gap-8">
+                    <div>
+                      <p className="mt-2 lg:mt-4 text-base xl:text-lg lg:leading-normal leading-6 text-white text-center">
+                        No body sees the data (not even us)
+                      </p>
+                    </div>
+                    <div className="mt-10 lg:mt-0">
+                      <div>
+                        <p className="mt-2  lg:mt-4 text-base xl:text-lg lg:leading-normal leading-6 text-white text-center">
+                          No single point of failure
+                        </p>
+                      </div>
+                    </div>
+                    <div className="mt-10 lg:mt-0">
+                      <div>
+                        <p className="mt-2  lg:mt-4 text-base xl:text-lg lg:leading-normal leading-6 text-white text-center">
+                          Cryptographic proof of integrity
+                        </p>
+                      </div>
+                    </div>
+                    <div className="mt-10 lg:mt-0">
+                      <div>
+                        <p className="mt-2 lg:mt-4 text-base xl:text-lg lg:leading-normal leading-6 text-white text-center">
+                          Removes risk of data leakage
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="py-6">
-            <div className="uppercase tracking-wider text-sm font-semibold text-center  text-gray-400">
-              Trusted in Production by
+            <div className="absolute h-64 top-48 left-2/4 right-3.5">
+              <img src="/images/placeholder_600x360.png" className="rounded-lg" />
             </div>
           </div>
         </div>
-        <div className="relative py-24 border-t section-data-processing">
-          <div className="mx-auto container">
-            <h3 className="text-3xl leading-8 font-extrabold tracking-tight sm:leading-10 lg:leading-none mt-2 text-white sm:text-4xl">
-              Truly secure data processing
-            </h3>
-            <p className="my-4 text-xl leading-7 text-white max-w-2xl">
-              Secretarium secure cloud technology uses a combination of secure
-              hardware and cryptography to ensure total data privacy. It’s the
-              only technology that can guarantee data encryption during
-              processing.
-            </p>
-            <div className="mt-11">
-              <div className="lg:grid lg:grid-cols-4 lg:gap-8">
-                <div>
-                  <p className="mt-2 lg:mt-4 text-base xl:text-lg lg:leading-normal leading-6 text-white text-center">
-                    No body sees the data (not even us)
-                  </p>
-                </div>
-                <div className="mt-10 lg:mt-0">
-                  <div>
-                    <p className="mt-2  lg:mt-4 text-base xl:text-lg lg:leading-normal leading-6 text-white text-center">
-                      No single point of failure
-                    </p>
-                  </div>
-                </div>
-                <div className="mt-10 lg:mt-0">
-                  <div>
-                    <p className="mt-2  lg:mt-4 text-base xl:text-lg lg:leading-normal leading-6 text-white text-center">
-                      Cryptographic proof of integrity
-                    </p>
-                  </div>
-                </div>
-                <div className="mt-10 lg:mt-0">
-                  <div>
-                    <p className="mt-2  lg:mt-4 text-base xl:text-lg lg:leading-normal leading-6 text-white text-center">
-                      Removes risk of data leakage
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <Benefits/>
-        <div className="bg-gray-50 border-b border-gray-100">
-          <div className="container mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 lg:flex lg:items-center lg:justify-between">
-            <h2 className="text-3xl leading-9 font-extrabold tracking-tight text-gray-900 sm:text-4xl sm:leading-10">
-              Ready to dive in?
-            </h2>
-            <div className="mt-8 flex lg:flex-shrink-0 lg:mt-0">
-              <div className="inline-flex rounded-md shadow">
-                <Link href="/docs/overview">
-                  <a className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-500 focus:outline-none focus:shadow-outline transition duration-150 ease-in-out">
-                    Get Started
-                  </a>
-                </Link>
-              </div>
-              <div className="ml-3 inline-flex rounded-md shadow">
-                <a
-                  href="#"
-                  className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base leading-6 font-medium rounded-md text-blue-600 bg-white hover:text-blue-500 focus:outline-none focus:shadow-outline transition duration-150 ease-in-out"
-                >
-                  GitHub
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Benefits />
         <BlockChain />
         <Footer />
         <style jsx global>{`
@@ -236,7 +165,3 @@ export function Index() {
 }
 
 export default Index;
-
-const Check = React.memo(() => (
-  <p>01</p>
-));
