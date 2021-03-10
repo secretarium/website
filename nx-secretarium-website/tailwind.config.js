@@ -12,6 +12,13 @@ module.exports = {
       xl: '1400px',
       betterhover: { raw: '(hover: hover)' },
     },
+    extend: {
+      colors: {
+        red: {
+          '600': '#e21b43'
+        }
+      }
+    },
     rotate: {
       ...defaultTheme.rotate,
       '-30': '-30deg',

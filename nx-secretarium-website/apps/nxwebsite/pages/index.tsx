@@ -94,57 +94,7 @@ export function Index() {
             </div>
           </div>
         </div>
-        <div className="relative">
-          <Summary />
-          <div className="static">
-            <div className="relative py-24 border-t section-data-processing">
-              <div className="mx-auto container">
-                <h3 className="text-3xl leading-8 font-extrabold tracking-tight sm:leading-10 lg:leading-none mt-2 text-white sm:text-4xl md:max-w-xs lg:max-w-md xl:max-w-2xl">
-                  Truly secure data processing
-                </h3>
-                <p className="my-4 text-xl leading-7 text-white md:max-w-xs lg:max-w-md xl:max-w-2xl">
-                  Secretarium secure cloud technology uses a combination of
-                  secure hardware and cryptography to ensure total data privacy.
-                  It’s the only technology that can guarantee data encryption
-                  during processing.
-                </p>
-                <div className="mt-11">
-                  <div className="lg:grid lg:grid-cols-4 lg:gap-8">
-                    <div>
-                      <p className="mt-2 lg:mt-4 text-base xl:text-lg lg:leading-normal leading-6 text-white text-center">
-                        No body sees the data (not even us)
-                      </p>
-                    </div>
-                    <div className="mt-10 lg:mt-0">
-                      <div>
-                        <p className="mt-2  lg:mt-4 text-base xl:text-lg lg:leading-normal leading-6 text-white text-center">
-                          No single point of failure
-                        </p>
-                      </div>
-                    </div>
-                    <div className="mt-10 lg:mt-0">
-                      <div>
-                        <p className="mt-2  lg:mt-4 text-base xl:text-lg lg:leading-normal leading-6 text-white text-center">
-                          Cryptographic proof of integrity
-                        </p>
-                      </div>
-                    </div>
-                    <div className="mt-10 lg:mt-0">
-                      <div>
-                        <p className="mt-2 lg:mt-4 text-base xl:text-lg lg:leading-normal leading-6 text-white text-center">
-                          Removes risk of data leakage
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="absolute h-64 top-48 left-2/4 right-3.5">
-              <img src="/images/placeholder_600x360.png" className="rounded-lg" />
-            </div>
-          </div>
-        </div>
+        <Summary />
         <Benefits />
         <BlockChain />
         <Footer />

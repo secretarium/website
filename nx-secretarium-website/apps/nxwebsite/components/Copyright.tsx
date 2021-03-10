@@ -18,7 +18,7 @@ const Copyright = () => {
         </div>
         <div className="mt-10 lg:mt-0">
           <div className="flex relative w-48 float-right">
-            <label className="flex-initial uppercase tracking-wide text-white text-xs font-bold mb-2 mr-2 my-3">
+            <label className="flex-initial capilalize tracking-wide text-white text-xs font-bold mb-2 mr-2 my-3">
               Language
             </label>
             <div className="relative flex-initial">
