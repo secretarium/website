@@ -2,17 +2,14 @@ import React from 'react';
 import { AppProps } from 'next/app';
 import App from "next/app";
 import Head from 'next/head';
-import './styles.css';
-
 import { createContext } from "react";
-import { getStrapiMedia } from "@nx-secretarium-website/store/ui-media";
 import { fetchAPI } from "@nx-secretarium-website/store/ui-data";
+import './styles.css';
 
 // Store Strapi Global object in context
 export const GlobalContext = createContext({});
 
 function CustomApp({ Component, pageProps }: AppProps) {
-  console.log('jkjkj', pageProps.global);
   return (
     <>
       <Head>
