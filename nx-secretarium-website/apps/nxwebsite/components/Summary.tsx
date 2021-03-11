@@ -10,7 +10,7 @@ const Summary = () => {
             <h3 className="text-3xl leading-8 font-extrabold tracking-tight sm:leading-10 lg:leading-none mt-2 text-red-600 sm:text-4xl md:max-w-xs lg:max-w-md xl:max-w-2xl">
                 Proven confidential app hosting in the cloud
               </h3>
-              <p className="my-4 text-base xl:text-lg lg:leading-normal leading-6 text-gray-600 md:max-w-xs lg:max-w-md xl:max-w-2xl">
+              <p className="my-4 text-base xl:text-lg lg:leading-normal leading-6 text-gray-600 md:max-w-xs lg:max-w-md xl:max-w-xl">
                 Secretarium secure cloud technology is powering a new wave of
                 privacy-respecting products. Empowering individuals and
                 businesses by guaranteeing data privacy.
