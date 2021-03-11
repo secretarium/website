@@ -72,10 +72,10 @@ const Copyright = () => {
               Language
             </label>
             <div className="relative flex-initial">
-              <select className="block appearance-none w-full bg-black border border-white hover:border-gray-500 px-4 py-2 pr-8 shadow leading-tight focus:outline-none focus:shadow-outline text-white">
+              <select className="block appearance-none w-full bg-black border border-white hover:border-red-600 px-4 py-2 pr-8 shadow leading-tight focus:outline-none focus:shadow-outline text-white">
                 <option>English</option>
                 <option>French</option>
-                <option>Option 3</option>
+                <option>Italian</option>
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-red-600">
                 <svg
