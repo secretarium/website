@@ -12,11 +12,12 @@ import { fetchAPI } from "@nx-secretarium-website/store/ui-data";
 export const GlobalContext = createContext({});
 
 function CustomApp({ Component, pageProps }: AppProps) {
+  console.log('jkjkj', pageProps.global);
   return (
     <>
       <Head>
         <title>Welcome to strapiwebsite!</title>
-        <link rel="shortcut icon" href={getStrapiMedia(pageProps.global.favicon)}/>
+        <link rel="shortcut icon" href={`/images/secretarium_icon.png`}/>
         <link rel="preconnect" href="https://fonts.gstatic.com"/>
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet"/>
       </Head>
